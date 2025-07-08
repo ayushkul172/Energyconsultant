@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -94,9 +93,22 @@
       const { useState, useEffect, useRef, useId, Fragment } = React;
 
       // --- DATA CONSTANTS ---
+      const featuredProject = {
+          title: "Upstream AI Analyzer Tool",
+          situation: "In the upstream oil & gas industry, decision-makers rely on timely insights from news sources. However, manually scanning, extracting, and analyzing key information is tedious, error-prone, and time-consuming, leading to missed updates and difficulties in building structured dashboards.",
+          task: "My objective was to design and build a tool that could automatically collect upstream news, extract specific entities (projects, operators, delays), summarize articles, and visually present the analysis in an interactive dashboard—all accessible to non-technical users.",
+          action: "I built the Upstream AI Analyzer, a full-featured Python desktop application. The tool's workflow involves a user selecting a date range, which triggers automated web scraping of news articles. Each article is then processed through a custom NLP extraction pipeline to pull over 14 categories of information, including field names, companies, contract types, and budget values. Finally, the structured results are rendered in a dynamic, graphical dashboard.",
+          techStack: ["PyQt5", "Selenium", "spaCy", "Regex", "Matplotlib", "Python"],
+          results: [
+              { metric: "90%", description: "Reduction in manual analysis time for upstream analysts." },
+              { metric: "100%", description: "Automation of intelligence gathering from unstructured news." },
+              { metric: "1-Click", description: "Deployment, launched from a single desktop icon for non-technical users." }
+          ]
+      };
+
       const projects = [
           {
-              title: 'Case Study 1: AI-Powered News Intelligence Pipeline',
+              title: 'AI-Powered News Intelligence Pipeline',
               challenge: 'The upstream analysis team spent 12 hours weekly on manual news gathering, causing delays and inconsistent outputs.',
               action: 'I architected a fully automated Python pipeline using <strong>Selenium</strong> and <strong>BeautifulSoup</strong> for web scraping, and an AI summarization engine with <strong>Newspaper3k</strong> and <strong>spaCy</strong> to generate concise briefs. The process was integrated with <strong>Microsoft Copilot</strong> for seamless delivery.',
               result: {
@@ -105,7 +117,7 @@
               }
           },
           {
-              title: 'Case Study 2: Generative AI for Accelerated Secondary Research',
+              title: 'Generative AI for Accelerated Secondary Research',
               challenge: "KPMG's ENR team was hampered by time-consuming and inefficient manual data gathering for research projects.",
               action: 'I developed a custom solution by integrating a <strong>Generative AI tool</strong> directly into the team\'s workflow. I created a powerful <strong>Excel VBA macro</strong> that acted as a bridge, allowing analysts to automate a significant portion of their data gathering and synthesis tasks.',
               result: {
@@ -123,7 +135,7 @@
       ];
 
       const skills = [
-          'Microsoft Office (Excel, PowerPoint, Word)', 'Excel Dashboards', 'Google Analytics', 'Python', 'VBA', 'Gen AI Tools (ChatGPT, Bing AI, Bard)'
+          'Microsoft Office (Excel, PowerPoint, Word)', 'Excel Dashboards', 'Google Analytics', 'Python', 'VBA', 'PyQt5', 'Selenium', 'spaCy', 'Gen AI Tools (ChatGPT, Bing AI, Bard)'
       ];
 
       const experiences = [
@@ -131,7 +143,7 @@
               company: 'Wood Mackenzie',
               title: 'Upstream Production Analyst',
               date: '2024 - Present',
-              description: 'Leading initiatives to enhance upstream data analysis through automation and AI. Responsible for managing infield product data, subsea contract analysis, and providing strategic insights into market trends.'
+              description: "Responsible for managing infield product data and subsea contract analysis. Conceived and developed the 'Upstream AI Analyzer Tool', an end-to-end Python application that automates news scraping and NLP-based data extraction to provide strategic insights and reduce manual analysis time by over 90%."
           },
           {
               company: 'KPMG Global Services',
@@ -153,10 +165,10 @@
           { icon: 'fa-solid fa-award', title: 'AI for Everyone: Master the Basics', issuer: 'Issued by IBM' },
           { icon: 'fa-solid fa-award', title: 'Introduction to Generative AI', issuer: 'Issued by IBM' },
           { icon: 'fa-solid fa-award', title: 'Introduction to Prompt Engineering', issuer: 'Issued by IBM' },
-          { icon: 'fa-solid fa-award', title: 'Advancing the Digital Economy for Sustainable Growth in Asia', issuer: 'Issued by ADBI' },
-          { icon: 'fa-solid fa-award', title: 'Fostering Growth and Inclusion in Asia’s Cities', issuer: 'Issued by ADBI' },
-          { icon: 'fa-solid fa-award', title: 'Business Analysis: Essential Tools and Techniques', issuer: 'Issued by IIBA Egypt Chapter' },
-          { icon: 'fa-solid fa-award', title: 'Python Essential Training', issuer: 'Issued by LinkedIn Learning' }
+          { icon: 'fa-solid fa-award', 'title': 'Advancing the Digital Economy for Sustainable Growth in Asia', issuer: 'Issued by ADBI' },
+          { icon: 'fa-solid fa-award', 'title': 'Fostering Growth and Inclusion in Asia’s Cities', issuer: 'Issued by ADBI' },
+          { icon: 'fa-solid fa-award', 'title': 'Business Analysis: Essential Tools and Techniques', issuer: 'Issued by IIBA Egypt Chapter' },
+          { icon: 'fa-solid fa-award', 'title': 'Python Essential Training', issuer: 'Issued by LinkedIn Learning' }
       ];
 
 
@@ -206,10 +218,9 @@
           const navLinks = [
               { href: '#home', label: 'Home' },
               { href: '#about', label: 'About' },
+              { href: '#spotlight', label: 'Spotlight' },
               { href: '#projects', label: 'Projects' },
-              { href: '#expertise', label: 'Expertise' },
               { href: '#experience', label: 'Experience' },
-              { href: '#certifications', label: 'Certifications' },
               { href: '#contact', label: 'Contact' }
           ];
           const [isScrolled, setIsScrolled] = useState(false);
@@ -225,7 +236,20 @@
               e.preventDefault();
               const href = e.currentTarget.getAttribute('href');
               if (href) {
-                  document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+                  const element = document.querySelector(href);
+                  if (element) {
+                     // Add slight offset for fixed navbar
+                     const offset = 80;
+                     const bodyRect = document.body.getBoundingClientRect().top;
+                     const elementRect = element.getBoundingClientRect().top;
+                     const elementPosition = elementRect - bodyRect;
+                     const offsetPosition = elementPosition - offset;
+
+                     window.scrollTo({
+                         top: offsetPosition,
+                         behavior: 'smooth'
+                     });
+                  }
               }
               setIsMobileMenuOpen(false);
           };
@@ -304,8 +328,8 @@
                               <p className="text-slate-200 text-sm">In-depth analysis of supply/demand trends, subsea developments, and contractor performance.</p>
                           </div>
                           <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 text-left">
-                              <h4 className="font-montserrat text-lg font-bold text-cyan-300 pb-2 mb-2">Data Automation & AI</h4>
-                              <p className="text-slate-200 text-sm">Architecting Python and AI pipelines that automate research and reduce manual effort by 90%.</p>
+                              <h4 className="font-montserrat text-lg font-bold text-cyan-300 pb-2 mb-2">AI-Powered Automation</h4>
+                              <p className="text-slate-200 text-sm">Architecting AI-powered solutions that automate research, extract critical intel, and reduce manual effort by over 90%.</p>
                           </div>
                           <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 text-left">
                               <h4 className="font-montserrat text-lg font-bold text-cyan-300 pb-2 mb-2">Strategic Consulting</h4>
@@ -313,8 +337,8 @@
                           </div>
                       </div>
 
-                      <a href="#projects" onClick={handleNavClick} className="mt-12 inline-block bg-secondary-dark text-white py-3 px-8 rounded-full font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 hover:bg-cyan-300 hover:text-slate-900 shadow-lg opacity-0 animate-fadeInUp" style={{ animationDelay: '0.7s' }}>
-                          Explore My Work <i className="fa-solid fa-arrow-right-long ml-2"></i>
+                      <a href="#spotlight" onClick={handleNavClick} className="mt-12 inline-block bg-secondary-dark text-white py-3 px-8 rounded-full font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 hover:bg-cyan-300 hover:text-slate-900 shadow-lg opacity-0 animate-fadeInUp" style={{ animationDelay: '0.7s' }}>
+                          View Featured Project <i className="fa-solid fa-arrow-right-long ml-2"></i>
                       </a>
                   </div>
               </section>
@@ -358,6 +382,66 @@
               </Section>
           );
       };
+
+      {/* --- MODIFIED PROJECT SPOTLIGHT COMPONENT --- */}
+      const ProjectShowcase = ({ project }) => {
+          return (
+              <Section id="spotlight">
+                  <div className="text-center mb-16">
+                      <p className="font-montserrat font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-widest mb-2">Project Spotlight</p>
+                      <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark">{project.title}</h2>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-12 items-start">
+                      {/* Left Column: Description & Details */}
+                      <div className="space-y-8">
+                          <div>
+                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">⭐ Situation</h4>
+                              <p className="text-light-subtle dark:text-dark-subtle">{project.situation}</p>
+                          </div>
+                          <div>
+                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">🎯 Task</h4>
+                              <p className="text-light-subtle dark:text-dark-subtle">{project.task}</p>
+                          </div>
+                          <div>
+                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">🔧 Action</h4>
+                              <p className="text-light-subtle dark:text-dark-subtle">{project.action}</p>
+                          </div>
+                          <div>
+                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">Technology Stack</h4>
+                               <div className="flex flex-wrap justify-start gap-3">
+                                  {project.techStack.map((tech, index) => (
+                                      <span key={index} className="bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-300 py-1 px-3 rounded-full text-sm font-medium ring-1 ring-cyan-200 dark:ring-cyan-800">{tech}</span>
+                                  ))}
+                              </div>
+                          </div>
+                      </div>
+
+                      {/* Right Column: Visual & Results */}
+                      <div className="space-y-8">
+                          {/* --- THIS IS THE NEW IMAGE ELEMENT --- */}
+                          <img 
+                            src="./tool-screenshot.png" 
+                            alt="Screenshot of the Upstream AI Analyzer Tool dashboard"
+                            className="rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 w-full h-auto"
+                          />
+                          
+                          <div>
+                              <h4 className="font-montserrat text-xl font-bold mb-4 text-light-text dark:text-dark-text">✅ Key Outcomes</h4>
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                                  {project.results.map((res, index) => (
+                                      <div key={index} className="bg-light-card dark:bg-dark-card p-4 rounded-lg shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                                          <p className="text-3xl font-bold font-montserrat text-secondary-light dark:text-secondary-dark">{res.metric}</p>
+                                          <p className="text-sm text-light-subtle dark:text-dark-subtle">{res.description}</p>
+                                      </div>
+                                  ))}
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </Section>
+          );
+      };
       
       const ProjectCard = ({ project }) => {
           return (
@@ -377,10 +461,10 @@
           );
       };
       const Projects = () => (
-          <Section id="projects">
+          <Section id="projects" className="bg-light-card dark:bg-dark-card">
               <div className="text-center">
-                  <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Case Studies: From Concept to Impact</h2>
-                  <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">Here are some examples of how I've turned complex challenges into measurable successes.</p>
+                  <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Additional Case Studies</h2>
+                  <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">Here are more examples of how I've turned complex challenges into measurable successes.</p>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {projects.map((project, index) => <ProjectCard key={index} project={project} />)}
@@ -388,15 +472,8 @@
           </Section>
       );
 
-      const CompetencyCard = ({ competency }) => (
-          <div className="bg-light-card dark:bg-dark-card p-6 text-center rounded-xl shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ring-1 ring-slate-200 dark:ring-slate-700">
-              <i className={`${competency.icon} text-4xl text-secondary-dark mb-4`}></i>
-              <h4 className="font-montserrat text-lg font-bold text-primary-light dark:text-primary-dark mb-2">{competency.title}</h4>
-              <p className="text-sm text-light-subtle dark:text-dark-subtle">{competency.description}</p>
-          </div>
-      );
       const Expertise = () => (
-          <Section id="expertise" className="bg-light-card dark:bg-dark-card">
+          <Section id="expertise">
               <div className="text-center">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Core Competencies & Technical Toolkit</h2>
                   <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">I leverage a blend of strategic analysis and technical skill to deliver powerful results.</p>
@@ -406,7 +483,7 @@
                   {competencies.map((item, index) => <CompetencyCard key={index} competency={item} />)}
               </div>
               
-              <div className="text-center mb-16">
+              <div className="text-center">
                   <h3 className="font-montserrat text-2xl font-bold text-primary-light dark:text-primary-dark text-center mb-6">Technical Toolkit</h3>
                   <div className="flex flex-wrap justify-center gap-3">
                       {skills.map((skill, index) => (
@@ -414,27 +491,17 @@
                       ))}
                   </div>
               </div>
-
-              <div className="python-showcase">
-                  <h3 className="font-montserrat text-2xl font-bold text-primary-light dark:text-primary-dark text-center mb-6">Python & AI Capabilities Showcase</h3>
-                  <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto text-center text-light-subtle dark:text-dark-subtle">
-                      <div className="bg-light-bg dark:bg-dark-bg p-6 rounded-lg">
-                          <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">1. Intelligence Gathering</h4>
-                          <p>I build autonomous Python scripts that act as a 24/7 research team, using <code className="bg-slate-200 dark:bg-slate-700 text-pink-600 dark:text-pink-400 py-0.5 px-1.5 rounded-md font-mono text-sm">Selenium</code> and NLP with <code className="bg-slate-200 dark:bg-slate-700 text-pink-600 dark:text-pink-400 py-0.5 px-1.5 rounded-md font-mono text-sm">spaCy</code> to extract and summarize key information.</p>
-                      </div>
-                      <div className="bg-light-bg dark:bg-dark-bg p-6 rounded-lg">
-                          <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">2. Generative AI Integration</h4>
-                          <p>I architect custom workflows that embed Generative AI directly into business processes, using bridge solutions with <code className="bg-slate-200 dark:bg-slate-700 text-pink-600 dark:text-pink-400 py-0.5 px-1.5 rounded-md font-mono text-sm">Python</code> or <code className="bg-slate-200 dark:bg-slate-700 text-pink-600 dark:text-pink-400 py-0.5 px-1.5 rounded-md font-mono text-sm">VBA</code> to empower non-technical users.</p>
-                      </div>
-                       <div className="bg-light-bg dark:bg-dark-bg p-6 rounded-lg">
-                          <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">3. End-to-End Automation</h4>
-                          <p>I build robust data pipelines using <code className="bg-slate-200 dark:bg-slate-700 text-pink-600 dark:text-pink-400 py-0.5 px-1.5 rounded-md font-mono text-sm">Pandas</code> that automate entire workflows from data download to final reporting, complete with error handling and simple GUIs.</p>
-                      </div>
-                  </div>
-              </div>
           </Section>
       );
       
+      const CompetencyCard = ({ competency }) => (
+          <div className="bg-light-card dark:bg-dark-card p-6 text-center rounded-xl shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ring-1 ring-slate-200 dark:ring-slate-700">
+              <i className={`${competency.icon} text-4xl text-secondary-dark mb-4`}></i>
+              <h4 className="font-montserrat text-lg font-bold text-primary-light dark:text-primary-dark mb-2">{competency.title}</h4>
+              <p className="text-sm text-light-subtle dark:text-dark-subtle">{competency.description}</p>
+          </div>
+      );
+
       const TimelineItem = ({ item, isActive, onClick }) => {
           const contentId = useId();
           return (
@@ -474,7 +541,7 @@
           };
 
           return (
-              <Section id="experience">
+              <Section id="experience" className="bg-light-card dark:bg-dark-card">
                   <div className="text-center">
                       <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Career Journey</h2>
                       <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">A timeline of my professional growth and key responsibilities.</p>
@@ -490,17 +557,8 @@
           );
       };
 
-      const CertificationCard = ({ cert }) => (
-          <div className="bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg border-l-4 border-secondary-light dark:border-secondary-dark transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl flex flex-col items-start">
-              <div className="w-12 h-12 mb-4 rounded-lg bg-secondary-light/10 dark:bg-secondary-dark/10 flex items-center justify-center">
-                  <i className={`${cert.icon} text-2xl text-secondary-light dark:text-secondary-dark`}></i>
-              </div>
-              <h4 className="font-montserrat text-lg font-bold text-primary-light dark:text-primary-dark mb-1">{cert.title}</h4>
-              <p className="text-light-subtle dark:text-dark-subtle">{cert.issuer}</p>
-          </div>
-      );
       const Certifications = () => (
-          <Section id="certifications" className="bg-light-card dark:bg-dark-card">
+          <Section id="certifications">
               <div className="text-center">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Certifications & Credentials</h2>
                   <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">A collection of my professional certifications and continued learning achievements.</p>
@@ -510,14 +568,23 @@
               </div>
           </Section>
       );
+      const CertificationCard = ({ cert }) => (
+          <div className="bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg border-l-4 border-secondary-light dark:border-secondary-dark transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl flex flex-col items-start">
+              <div className="w-12 h-12 mb-4 rounded-lg bg-secondary-light/10 dark:bg-secondary-dark/10 flex items-center justify-center">
+                  <i className={`${cert.icon} text-2xl text-secondary-light dark:text-secondary-dark`}></i>
+              </div>
+              <h4 className="font-montserrat text-lg font-bold text-primary-light dark:text-primary-dark mb-1">{cert.title}</h4>
+              <p className="text-light-subtle dark:text-dark-subtle">{cert.issuer}</p>
+          </div>
+      );
       
       const Contact = () => (
-          <Section id="contact">
+          <Section id="contact" className="bg-light-card dark:bg-dark-card">
               <div className="text-center max-w-3xl mx-auto">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Let's Talk</h2>
                   <p className="mb-12 text-light-subtle dark:text-dark-subtle">I am always open to discussing new opportunities, projects, and collaborations. Please get in touch using the form below or through my social channels.</p>
                   
-                  <div className="bg-light-card dark:bg-dark-card p-8 rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700">
+                  <div className="bg-light-bg dark:bg-dark-bg p-8 rounded-xl shadow-2xl ring-1 ring-slate-300 dark:ring-slate-600">
                       <form action="https://formspree.io/f/myzjobjp" method="POST" className="text-left space-y-6">
                           <div>
                               <label htmlFor="name" className="block mb-2 font-medium text-light-text dark:text-dark-text">Your Name</label>
@@ -624,6 +691,7 @@
                   <main>
                       <Hero />
                       <About />
+                      <ProjectShowcase project={featuredProject} />
                       <Projects />
                       <Expertise />
                       <Experience />
@@ -641,6 +709,5 @@
       const root = ReactDOM.createRoot(rootElement);
       root.render(<App />);
     </script>
-<script type="module" src="/index.tsx"></script>
 </body>
 </html>
