@@ -382,29 +382,29 @@
       const About = () => {
          return (
               <Section 
-                id="about" 
+              id="about" 
           className="bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md ring-1 ring-white/10"
         >
             <div className="grid md:grid-cols-5 gap-10 items-center">
               
-              {/* ✅ START: REPLACEMENT FOR THE IMAGE SECTION */}
               <div className="md:col-span-2 flex items-center justify-center">
-                {/* 1. The container acts as the "frame". It has the border and the outer glow. */}
+                {/* The container is unchanged. */}
                 <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full bg-light-card dark:bg-dark-card p-2 transition-all duration-300
                                 border-4 border-primary-light dark:border-primary-dark 
                                 shadow-[0_15px_40px_-10px_rgba(8,145,178,0.4)] dark:shadow-[0_15px_40px_-10px_rgba(34,211,238,0.2)]">
                   <img 
-                    src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/ChatGPT%20Image%20Jul%2012%2C%202025%2C%2001_57_05%20PM.png"
+                    src="https://github.com/ayushkul172/Energyconsultant/blob/main/Ayushprofile.png"
                     alt="A professional headshot of Ayush Kulshrestha"
-                    // 2. The image itself. It has a drop-shadow to make it look "lifted" off the frame.
-                    // The hover effect now scales the image *within* the frame for a cool 3D effect.
-                    className="w-full h-full rounded-full object-cover object-top
-                                transition-all duration-500 ease-out hover:scale-105
-                                [filter:drop-shadow(0px_4px_8px_rgba(0,0,0,0.3))]"
+                    
+                    // ✅ --- THIS LINE IS UPDATED --- ✅
+                    className="w-full h-full rounded-full object-cover
+                               object-top          // <-- 1. This shows the top part of the image.
+                               scale-125           // <-- 2. This zooms the image in by 25%.
+                               transition-all duration-500 ease-out hover:scale-[1.30] // <-- Adjusted hover for a nice effect
+                               [filter:drop-shadow(0px_4px_8px_rgba(0,0,0,0.3))]"
                   />
                 </div>
               </div>
-              {/* ✅ END: REPLACEMENT FOR THE IMAGE SECTION */}
 
                 <div className="md:col-span-3">
                     <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4 animate-reveal">
@@ -437,6 +437,7 @@
                           className="inline-flex items-center gap-3 bg-light-card dark:bg-dark-card text-secondary-light dark:text-secondary-dark py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-md ring-2 ring-inset ring-secondary-light dark:ring-secondary-dark hover:bg-secondary-light/10 dark:hover:bg-secondary-dark/10"
                       >
                           <i className="fa-solid fa-file-arrow-down text-xl"></i>
+                          <span>Download CV</span>
                                 <span>Download CV</span>
                             </a>
                           </div>
