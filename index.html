@@ -379,72 +379,71 @@
           );
       };
 
-      const About = () => {
+const About = () => {
          return (
               <Section 
               id="about" 
-          className="bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md ring-1 ring-white/10"
-        >
-            <div className="grid md:grid-cols-5 gap-10 items-center">
-              
-              <div className="md:col-span-2 flex items-center justify-center">
-                {/* The container is unchanged. */}
-                <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full bg-light-card dark:bg-dark-card p-2 transition-all duration-300
-                                border-4 border-primary-light dark:border-primary-dark 
-                                shadow-[0_15px_40px_-10px_rgba(8,145,178,0.4)] dark:shadow-[0_15px_40px_-10px_rgba(34,211,238,0.2)]">
-                  <img 
-                    src="https://github.com/ayushkul172/Energyconsultant/blob/main/Ayushprofile.png"
-                    alt="A professional headshot of Ayush Kulshrestha"
-                    
-                    // ✅ --- THIS LINE IS UPDATED --- ✅
-                    className="w-full h-full rounded-full object-cover
-                               object-top          // <-- 1. This shows the top part of the image.
-                               scale-125           // <-- 2. This zooms the image in by 25%.
-                               transition-all duration-500 ease-out hover:scale-[1.30] // <-- Adjusted hover for a nice effect
-                               [filter:drop-shadow(0px_4px_8px_rgba(0,0,0,0.3))]"
-                  />
-                </div>
-              </div>
-
-                <div className="md:col-span-3">
-                    <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4 animate-reveal">
-                        Bridging Engineering, Business, and Data Science
-                    </h2>
-                    <div className="space-y-4 text-light-subtle dark:text-dark-subtle text-lg">
-                        <p>
-                            My career is driven by a fascination with the intersection of technology, data, and the global energy landscape. With a foundation in <strong className="text-light-text dark:text-dark-text font-semibold">Mechanical Engineering (B.Tech)</strong> and a strategic perspective from an <strong className="text-light-text dark:text-dark-text font-semibold">MBA in Marketing & International Business</strong>, I am uniquely positioned to understand not just the *what*, but the *why* behind market movements.
-                        </p>
-                        <p>
-                            I don't just analyze data; I build systems to make it smarter. My approach is to identify inefficiencies, architect solutions with <strong className="text-light-text dark:text-dark-text font-semibold">Python, VBA, and Generative AI</strong>, and deliver clear, actionable intelligence that empowers leadership to act with confidence. I am passionate about building data-driven strategies that create a competitive edge.
-                        </p>
+              className="bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md ring-1 ring-white/10"
+              >
+                <div className="grid md:grid-cols-5 gap-10 items-center">
+                  
+                  <div className="md:col-span-2 flex items-center justify-center">
+                    <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full bg-light-card dark:bg-dark-card p-2 transition-all duration-300
+                                    border-4 border-primary-light dark:border-primary-dark 
+                                    shadow-[0_15px_40px_-10px_rgba(8,145,178,0.4)] dark:shadow-[0_15px_40px_-10px_rgba(34,211,238,0.2)]">
+                      <img 
+                        // ✅ FIX: Corrected the image URL to point to the raw file.
+                        src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/Ayushprofile.png"
+                        alt="A professional headshot of Ayush Kulshrestha"
+                        
+                        className="w-full h-full rounded-full object-cover
+                                   object-top
+                                   scale-125
+                                   transition-all duration-500 ease-out hover:scale-[1.30]
+                                   [filter:drop-shadow(0px_4px_8px_rgba(0,0,0,0.3))]"
+                      />
                     </div>
-                    
-                    <div className="mt-8 flex flex-wrap gap-4 items-center">
-                      <a 
-                          href="https://www.linkedin.com/in/ayush-k-5641461b2/" 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="inline-flex items-center gap-3 bg-secondary-light dark:bg-secondary-dark text-white py-3 px-6 rounded-lg font-semibold transition-transform duration-300 hover:scale-105 shadow-md"
-                      >
-                          <i className="fa-brands fa-linkedin text-xl"></i>
-                          <span>Let's Connect</span>
-                      </a>
-                      <a 
-                          href="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/THE%20CV.docx" 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          download="Ayush_Kulshrestha_CV.docx"
-                          className="inline-flex items-center gap-3 bg-light-card dark:bg-dark-card text-secondary-light dark:text-secondary-dark py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-md ring-2 ring-inset ring-secondary-light dark:ring-secondary-dark hover:bg-secondary-light/10 dark:hover:bg-secondary-dark/10"
-                      >
-                          <i className="fa-solid fa-file-arrow-down text-xl"></i>
-                          <span>Download CV</span>
-                                <span>Download CV</span>
-                            </a>
-                          </div>
-
-                      </div>
                   </div>
-              </Section>
+
+                    <div className="md:col-span-3">
+                        <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4 animate-reveal">
+                            Bridging Engineering, Business, and Data Science
+                        </h2>
+                        <div className="space-y-4 text-light-subtle dark:text-dark-subtle text-lg">
+                            <p>
+                                My career is driven by a fascination with the intersection of technology, data, and the global energy landscape. With a foundation in <strong className="text-light-text dark:text-dark-text font-semibold">Mechanical Engineering (B.Tech)</strong> and a strategic perspective from an <strong className="text-light-text dark:text-dark-text font-semibold">MBA in Marketing & International Business</strong>, I am uniquely positioned to understand not just the *what*, but the *why* behind market movements.
+                            </p>
+                            <p>
+                                I don't just analyze data; I build systems to make it smarter. My approach is to identify inefficiencies, architect solutions with <strong className="text-light-text dark:text-dark-text font-semibold">Python, VBA, and Generative AI</strong>, and deliver clear, actionable intelligence that empowers leadership to act with confidence. I am passionate about building data-driven strategies that create a competitive edge.
+                            </p>
+                        </div>
+                        
+                        <div className="mt-8 flex flex-wrap gap-4 items-center">
+                          <a 
+                              href="https://www.linkedin.com/in/ayush-k-5641461b2/" 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="inline-flex items-center gap-3 bg-secondary-light dark:bg-secondary-dark text-white py-3 px-6 rounded-lg font-semibold transition-transform duration-300 hover:scale-105 shadow-md"
+                          >
+                              <i className="fa-brands fa-linkedin text-xl"></i>
+                              <span>Let's Connect</span>
+                          </a>
+                          <a 
+                              href="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/THE%20CV.docx" 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              download="Ayush_Kulshrestha_CV.docx"
+                              className="inline-flex items-center gap-3 bg-light-card dark:bg-dark-card text-secondary-light dark:text-secondary-dark py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-md ring-2 ring-inset ring-secondary-light dark:ring-secondary-dark hover:bg-secondary-light/10 dark:hover:bg-secondary-dark/10"
+                          >
+                              <i className="fa-solid fa-file-arrow-down text-xl"></i>
+                              {/* ✅ FIX: Removed duplicate "Download CV" text. */}
+                              <span>Download CV</span>
+                          </a>
+                        </div>
+
+                    </div>
+                </div>
+            </Section>
           );
       };
 
