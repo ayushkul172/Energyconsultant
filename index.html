@@ -84,7 +84,40 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-<link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="/index.css">
+
+    <!-- ✅ STYLE BLOCK FOR BACKGROUND IMAGE WITH OVERLAY -->
+    <style>
+      body::before {
+        content: '';
+        position: fixed; /* Stays in place */
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: -1; /* Puts the background behind your content */
+
+        /* The background image */
+        background-image: url('https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/oil%20and%20gas.png');
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        
+        /* Dims the image to make text readable */
+        filter: brightness(0.35);
+      }
+
+      /* This sets the fallback background color and makes the body's own background transparent */
+      body {
+        background-color: #0f172a; /* Fallback for dark mode */
+      }
+      html.light body {
+        background-color: #f1f5f9; /* Fallback for light mode */
+      }
+      body {
+        background-color: transparent !important; /* Makes body transparent so the ::before element shows through */
+      }
+    </style>
 </head>
 <body class="bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text transition-colors duration-300">
     <div id="root"></div>
@@ -261,7 +294,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
           };
 
           return (
-              <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out ${isScrolled ? 'py-3 bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-lg shadow-xl' : 'py-6 bg-transparent'}`}>
+              <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out ${isScrolled ? 'py-3 bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-lg shadow-xl' : 'py-6 bg-transparent'}`}>
                   <div className="container mx-auto px-6 md:px-8 flex justify-between items-center">
                       <a href="#home" onClick={handleNavClick} className="flex items-center justify-center w-12 h-12 bg-primary-light dark:bg-primary-dark text-white font-montserrat font-bold text-xl rounded-full transition-transform duration-300 hover:scale-110 hover:rotate-12">AK</a>
                       
@@ -351,10 +384,9 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
           );
       };
 
-      {/* --- MODIFIED ABOUT COMPONENT --- */}
       const About = () => {
          return (
-              <Section id="about" className="bg-light-card dark:bg-dark-card">
+              <Section id="about" className="bg-light-card/90 dark:bg-dark-card/90 backdrop-blur-sm">
                   <div className="grid md:grid-cols-5 gap-10 items-center">
                     <div className="md:col-span-2 flex items-center justify-center">
                       <img 
@@ -376,7 +408,6 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
                               </p>
                           </div>
                           
-                          {/* --- BUTTON CONTAINER --- */}
                           <div className="mt-8 flex flex-wrap gap-4 items-center">
                             <a 
                                 href="https://www.linkedin.com/in/ayush-k-5641461b2/" 
@@ -388,11 +419,9 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
                                 <span>Let's Connect</span>
                             </a>
                             <a 
-                                // This link now points to your .docx file
                                 href="https://github.com/ayushkul172/Energyconsultant/raw/main/THE%20CV.docx" 
                                 target="_blank" 
                                 rel="noopener noreferrer" 
-                                // The suggested download filename is now .docx
                                 download="Ayush_Kulshrestha_CV.docx"
                                 className="inline-flex items-center gap-3 bg-light-card dark:bg-dark-card text-secondary-light dark:text-secondary-dark py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-md ring-2 ring-inset ring-secondary-light dark:ring-secondary-dark hover:bg-secondary-light/10 dark:hover:bg-secondary-dark/10"
                             >
@@ -409,14 +438,13 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
 
       const ProjectShowcase = ({ project }) => {
           return (
-              <Section id="spotlight">
+              <Section id="spotlight" className="bg-light-bg/90 dark:bg-dark-bg/90 backdrop-blur-sm">
                   <div className="text-center mb-16">
                       <p className="font-montserrat font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-widest mb-2">Project Spotlight</p>
                       <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark">{project.title}</h2>
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-12 items-start">
-                      {/* Left Column: Description & Details */}
                       <div className="space-y-8">
                           <div>
                               <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">⭐ Situation</h4>
@@ -440,7 +468,6 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
                           </div>
                       </div>
 
-                      {/* Right Column: Visual & Results */}
                       <div className="space-y-8">
                           <img 
                             src="https://github.com/ayushkul172/Energyconsultant/raw/main/AI%20tool%20analysis.jpg" 
@@ -483,7 +510,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
           );
       };
       const Projects = () => (
-          <Section id="projects" className="bg-light-card dark:bg-dark-card">
+          <Section id="projects" className="bg-light-card/90 dark:bg-dark-card/90 backdrop-blur-sm">
               <div className="text-center">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Additional Case Studies</h2>
                   <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">Here are more examples of how I've turned complex challenges into measurable successes.</p>
@@ -495,7 +522,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
       );
 
       const Expertise = () => (
-          <Section id="expertise">
+          <Section id="expertise" className="bg-light-bg/90 dark:bg-dark-bg/90 backdrop-blur-sm">
               <div className="text-center">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Core Competencies & Technical Toolkit</h2>
                   <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">I leverage a blend of strategic analysis and technical skill to deliver powerful results.</p>
@@ -528,7 +555,6 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
           const contentId = useId();
           return (
               <div className="relative pl-12 pb-10">
-                  {/* Timeline Dot */}
                   <div className="absolute left-[-9px] top-1 w-6 h-6 bg-light-bg dark:bg-dark-bg border-4 border-secondary-light dark:border-secondary-dark rounded-full z-10 transition-transform duration-300 group-hover:scale-110"></div>
                   
                   <button 
@@ -563,13 +589,12 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
           };
 
           return (
-              <Section id="experience" className="bg-light-card dark:bg-dark-card">
+              <Section id="experience" className="bg-light-card/90 dark:bg-dark-card/90 backdrop-blur-sm">
                   <div className="text-center">
                       <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Career Journey</h2>
                       <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">A timeline of my professional growth and key responsibilities.</p>
                   </div>
                   <div className="relative max-w-3xl mx-auto">
-                      {/* Timeline Line */}
                       <div className="absolute left-0 top-2 h-full w-1 bg-slate-200 dark:bg-slate-700 rounded" style={{ transform: 'translateX(2px)' }}></div>
                       {experiences.map((item, index) => (
                           <TimelineItem key={index} item={item} isActive={activeIndex === index} onClick={() => handleItemClick(index)} />
@@ -580,7 +605,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
       };
 
       const Certifications = () => (
-          <Section id="certifications">
+          <Section id="certifications" className="bg-light-bg/90 dark:bg-dark-bg/90 backdrop-blur-sm">
               <div className="text-center">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Certifications & Credentials</h2>
                   <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">A collection of my professional certifications and continued learning achievements.</p>
@@ -601,7 +626,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
       );
       
       const Contact = () => (
-          <Section id="contact" className="bg-light-card dark:bg-dark-card">
+          <Section id="contact" className="bg-light-card/90 dark:bg-dark-card/90 backdrop-blur-sm">
               <div className="text-center max-w-3xl mx-auto">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Let's Talk</h2>
                   <p className="mb-12 text-light-subtle dark:text-dark-subtle">I am always open to discussing new opportunities, projects, and collaborations. Please get in touch using the form below or through my social channels.</p>
@@ -646,7 +671,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
       );
       
       const Footer = () => (
-          <footer className="bg-dark-card text-dark-subtle text-center py-6">
+          <footer className="bg-dark-card/90 backdrop-blur-sm text-dark-subtle text-center py-6">
               <p>© {new Date().getFullYear()} Ayush Kulshrestha. All Rights Reserved.</p>
           </footer>
       );
