@@ -442,10 +442,11 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
 
       const ProjectShowcase = ({ project }) => {
           return (
+               return (
               <Section 
                 id="spotlight" 
                 className="bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-md ring-1 ring-white/10"
-              > {/* ✅ GLASSMORPHISM CLASSES ADDED */}
+              >
                   <div className="text-center mb-16">
                       <p className="font-montserrat font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-widest mb-2">Project Spotlight</p>
                       <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark">{project.title}</h2>
@@ -477,7 +478,8 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
 
                       <div className="space-y-8">
                           <img 
-                            src="https://github.com/ayushkul172/Energyconsultant/raw/main/AI%20tool%20analysis.jpg" 
+                            // ✅ --- CORRECTED THE FILE EXTENSION TO .png --- ✅
+                            src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20tool%20analysis.png" 
                             alt="Screenshot of the Upstream AI Analyzer Tool dashboard"
                             className="rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 w-full h-auto"
                           />
