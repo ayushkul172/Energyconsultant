@@ -351,6 +351,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
           );
       };
 
+      {/* --- MODIFIED ABOUT COMPONENT --- */}
       const About = () => {
           return (
               <Section id="about" className="bg-light-card dark:bg-dark-card">
@@ -361,7 +362,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
                         alt="A professional headshot of Ayush Kulshrestha" 
                         className="w-64 h-64 md:w-72 md:h-72 rounded-full object-cover object-top border-4 border-primary-light dark:border-primary-dark shadow-2xl transition-transform duration-300 hover:scale-105"
                           />
-                           </div>
+                    </div>
                       <div className="md:col-span-3">
                           <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4 animate-reveal">
                               Bridging Engineering, Business, and Data Science
@@ -374,22 +375,38 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
                                   I don't just analyze data; I build systems to make it smarter. My approach is to identify inefficiencies, architect solutions with <strong className="text-light-text dark:text-dark-text font-semibold">Python, VBA, and Generative AI</strong>, and deliver clear, actionable intelligence that empowers leadership to act with confidence. I am passionate about building data-driven strategies that create a competitive edge.
                               </p>
                           </div>
-                          <a 
-                              href="https://www.linkedin.com/in/ayush-k-5641461b2/" 
-                              target="_blank" 
-                              rel="noopener noreferrer" 
-                              className="mt-8 inline-flex items-center gap-3 bg-secondary-light dark:bg-secondary-dark text-white py-3 px-6 rounded-lg font-semibold transition-transform duration-300 hover:scale-105 shadow-md"
-                          >
-                              <i className="fa-brands fa-linkedin text-xl"></i>
-                              Let's Connect on LinkedIn
-                          </a>
+                          
+                          {/* --- NEW BUTTON CONTAINER --- */}
+                          <div className="mt-8 flex flex-wrap gap-4 items-center">
+                            <a 
+                                href="https://www.linkedin.com/in/ayush-k-5641461b2/" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="inline-flex items-center gap-3 bg-secondary-light dark:bg-secondary-dark text-white py-3 px-6 rounded-lg font-semibold transition-transform duration-300 hover:scale-105 shadow-md"
+                            >
+                                <i className="fa-brands fa-linkedin text-xl"></i>
+                                <span>Let's Connect</span>
+                            </a>
+                            <a 
+                                // IMPORTANT: Replace this placeholder with the actual URL to your hosted PDF resume.
+                                // For example, upload it to your GitHub repo and use the "raw" link.
+                                href="YOUR_RESUME_URL_HERE" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                download="Ayush_Kulshrestha_Resume.pdf"
+                                className="inline-flex items-center gap-3 bg-light-card dark:bg-dark-card text-secondary-light dark:text-secondary-dark py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-md ring-2 ring-inset ring-secondary-light dark:ring-secondary-dark hover:bg-secondary-light/10 dark:hover:bg-secondary-dark/10"
+                            >
+                                <i className="fa-solid fa-file-arrow-down text-xl"></i>
+                                <span>Download CV</span>
+                            </a>
+                          </div>
+
                       </div>
                   </div>
               </Section>
           );
       };
 
-      {/* --- MODIFIED PROJECT SPOTLIGHT COMPONENT --- */}
       const ProjectShowcase = ({ project }) => {
           return (
               <Section id="spotlight">
@@ -425,7 +442,6 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
 
                       {/* Right Column: Visual & Results */}
                       <div className="space-y-8">
-                          {/* --- THIS IS THE NEW IMAGE ELEMENT --- */}
                           <img 
                             src="https://github.com/ayushkul172/Energyconsultant/raw/main/AI%20tool%20analysis.jpg" 
                             alt="Screenshot of the Upstream AI Analyzer Tool dashboard"
