@@ -83,19 +83,19 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <link rel="stylesheet" href="/index.css">
-
+    
     <!-- ✅ STYLE BLOCK FOR BACKGROUND IMAGE WITH OVERLAY -->
+    <!-- This style creates a fixed background image that stays in place while the content scrolls over it. -->
+    <!-- The glassmorphism effect on the sections will blur this background. -->
     <style>
       body::before {
         content: '';
-        position: fixed; /* Stays in place */
+        position: fixed; /* Stays in place during scroll */
         left: 0;
         right: 0;
         top: 0;
         bottom: 0;
-        z-index: -1; /* Puts the background behind your content */
+        z-index: -1; /* Puts the pseudo-element behind all other content */
 
         /* The background image */
         background-image: url('https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/oil%20and%20gas.png');
@@ -103,19 +103,20 @@
         background-position: center center;
         background-repeat: no-repeat;
         
-        /* Dims the image to make text readable - INCREASED TO 75% FOR MORE VISIBILITY */
+        /* Dims the image to make text readable */
         filter: brightness(0.75);
       }
 
-      /* This sets the fallback background color and makes the body's own background transparent */
+      /* Fallback background color for the page */
       body {
         background-color: #0f172a; /* Fallback for dark mode */
       }
       html.light body {
         background-color: #f1f5f9; /* Fallback for light mode */
       }
+      /* This makes the body's own background transparent so the ::before pseudo-element can show through. */
       body {
-        background-color: transparent !important; /* Makes body transparent so the ::before element shows through */
+        background-color: transparent !important;
       }
     </style>
 </head>
@@ -176,19 +177,13 @@
               company: 'Wood Mackenzie',
               title: 'Upstream Production Analyst',
               date: '2024 - Present',
-              description: `Spearheading advanced upstream intelligence, I integrate geospatial analytics (ArcGIS) and AI-driven automation to streamline subsea contract forecasting and news synthesis, driving data-centric decisions.
-I architect end-to-end Python pipelines for real-time intelligence capture, radically enhancing efficiency and strategic foresight in offshore asset monitoring.
-My domain specialization encompasses infield product lifecycle management, SURF/umbilical/platform documentation, and upstream contractual intelligence to optimize client deliverables.
-I orchestrate cross-functional collaborations and global data harmonization to elevate database integrity, workflow resilience, and market analytics across critical rig and USC development landscapes.`
+              description: `Spearheading advanced upstream intelligence, I integrate geospatial analytics (ArcGIS) and AI-driven automation to streamline subsea contract forecasting and news synthesis, driving data-centric decisions. I architect end-to-end Python pipelines for real-time intelligence capture, radically enhancing efficiency and strategic foresight in offshore asset monitoring. My domain specialization encompasses infield product lifecycle management, SURF/umbilical/platform documentation, and upstream contractual intelligence to optimize client deliverables. I orchestrate cross-functional collaborations and global data harmonization to elevate database integrity, workflow resilience, and market analytics across critical rig and USC development landscapes.`
           },
           {
               company: 'KPMG Global Services',
               title: 'Business Associate, ENR',
               date: '2022 - 2024',
-              description: `At the nexus of analytics and strategy, I architected dynamic Power BI dashboards and automated data pipelines (Python, VBA) to decode market complexities across the Energy & Natural Resources (ENR) sector.
-I engineered pricing intelligence frameworks through rigorous benchmarking, statistical modeling, and peer analysis, optimizing client positioning and revenue architecture.
-Synthesizing macro trends and granular metrics, I authored strategic industry reports and conducted deep market diagnostics, positioning KPMG as a trusted advisory partner.
-By championing agile methodologies and technological innovation (AWS, APIs), I streamlined data operations, elevated modeling precision, and drove enterprise-wide analytical excellence.`
+              description: `At the nexus of analytics and strategy, I architected dynamic Power BI dashboards and automated data pipelines (Python, VBA) to decode market complexities across the Energy & Natural Resources (ENR) sector. I engineered pricing intelligence frameworks through rigorous benchmarking, statistical modeling, and peer analysis, optimizing client positioning and revenue architecture. Synthesizing macro trends and granular metrics, I authored strategic industry reports and conducted deep market diagnostics, positioning KPMG as a trusted advisory partner. By championing agile methodologies and technological innovation (AWS, APIs), I streamlined data operations, elevated modeling precision, and drove enterprise-wide analytical excellence.`
           },
           {
               company: 'ACS Global Tech Solutions',
@@ -349,7 +344,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
           };
           
           return (
-              <section id="home" className="relative h-screen bg-cover bg-center bg-fixed flex flex-col justify-center items-center text-center text-white px-5" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1533134486753-c833f0ed4866?q=80&w=1920')" }}>
+              <section id="home" className="relative h-screen bg-cover bg-center bg-fixed flex flex-col justify-center items-center text-center text-white px-5">
                   <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 to-cyan-900/70"></div>
                   
                   <div className="relative z-10 max-w-5xl mx-auto">
@@ -389,15 +384,15 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
               <Section 
                 id="about" 
                 className="bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md ring-1 ring-white/10"
-              > {/* ✅ GLASSMORPHISM CLASSES ADDED */}
+              >
                   <div className="grid md:grid-cols-5 gap-10 items-center">
                     <div className="md:col-span-2 flex items-center justify-center">
                       <img 
-                        src="https://github.com/ayushkul172/Energyconsultant/blob/main/ChatGPT%20Image%20Jul%2012%2C%202025%2C%2001_57_05%20PM.png"
+                        // ✅ CORRECTION 1: Changed the URL from github.com to raw.githubusercontent.com to properly load the image.
+                        src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/ChatGPT%20Image%20Jul%2012%2C%202025%2C%2001_57_05%20PM.png"
                         alt="A professional headshot of Ayush Kulshrestha" 
-                        // ✅ --- THIS LINE IS UPDATED --- ✅
                         className="w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full object-cover object-top border-4 border-primary-light dark:border-primary-dark shadow-2xl transition-transform duration-300 hover:scale-105"
-                          />
+                      />
                     </div>
                       <div className="md:col-span-3">
                           <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4 animate-reveal">
@@ -423,7 +418,8 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
                                 <span>Let's Connect</span>
                             </a>
                             <a 
-                                href="https://github.com/ayushkul172/Energyconsultant/raw/main/THE%20CV.docx" 
+                                // ✅ CORRECTION 2: Changed the URL to point to the raw file for direct download.
+                                href="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/THE%20CV.docx" 
                                 target="_blank" 
                                 rel="noopener noreferrer" 
                                 download="Ayush_Kulshrestha_CV.docx"
@@ -441,8 +437,8 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
       };
 
       const ProjectShowcase = ({ project }) => {
+          // ✅ CORRECTION 3: Removed a redundant 'return' statement that caused a syntax error.
           return (
-               return (
               <Section 
                 id="spotlight" 
                 className="bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-md ring-1 ring-white/10"
@@ -478,7 +474,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
 
                       <div className="space-y-8">
                           <img 
-                            // ✅ --- CORRECTED THE FILE EXTENSION TO .png --- ✅
+                            // ✅ CORRECTION 4: Changed file extension from .jpg to .png to match the actual file in the repo.
                             src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20tool%20analysis.png" 
                             alt="Screenshot of the Upstream AI Analyzer Tool dashboard"
                             className="rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 w-full h-auto"
@@ -522,7 +518,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
           <Section 
             id="projects" 
             className="bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md ring-1 ring-white/10"
-          > {/* ✅ GLASSMORPHISM CLASSES ADDED */}
+          >
               <div className="text-center">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Additional Case Studies</h2>
                   <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">Here are more examples of how I've turned complex challenges into measurable successes.</p>
@@ -537,7 +533,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
           <Section 
             id="expertise" 
             className="bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-md ring-1 ring-white/10"
-          > {/* ✅ GLASSMORPHISM CLASSES ADDED */}
+          >
               <div className="text-center">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Core Competencies & Technical Toolkit</h2>
                   <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">I leverage a blend of strategic analysis and technical skill to deliver powerful results.</p>
@@ -607,7 +603,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
               <Section 
                 id="experience" 
                 className="bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md ring-1 ring-white/10"
-              > {/* ✅ GLASSMORPHISM CLASSES ADDED */}
+              >
                   <div className="text-center">
                       <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Career Journey</h2>
                       <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">A timeline of my professional growth and key responsibilities.</p>
@@ -626,7 +622,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
           <Section 
             id="certifications" 
             className="bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-md ring-1 ring-white/10"
-          > {/* ✅ GLASSMORPHISM CLASSES ADDED */}
+          >
               <div className="text-center">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Certifications & Credentials</h2>
                   <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">A collection of my professional certifications and continued learning achievements.</p>
@@ -650,7 +646,7 @@ By championing agile methodologies and technological innovation (AWS, APIs), I s
           <Section 
             id="contact" 
             className="bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md ring-1 ring-white/10"
-          > {/* ✅ GLASSMORPHISM CLASSES ADDED */}
+          >
               <div className="text-center max-w-3xl mx-auto">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Let's Talk</h2>
                   <p className="mb-12 text-light-subtle dark:text-dark-subtle">I am always open to discussing new opportunities, projects, and collaborations. Please get in touch using the form below or through my social channels.</p>
