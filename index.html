@@ -249,7 +249,7 @@
       };
       
       const Navbar = ({ theme, toggleTheme }) => {
-          const navLinks = [
+        const navLinks = [
               { href: '#home', label: 'Home' },
               { href: '#about', label: 'About' },
               { href: '#spotlight', label: 'Spotlight' },
@@ -291,7 +291,18 @@
           return (
               <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out ${isScrolled ? 'py-3 bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md shadow-xl' : 'py-6 bg-transparent'}`}>
                   <div className="container mx-auto px-6 md:px-8 flex justify-between items-center">
-                      <a href="#home" onClick={handleNavClick} className="flex items-center justify-center w-12 h-12 bg-primary-light dark:bg-primary-dark text-white font-montserrat font-bold text-xl rounded-full transition-transform duration-300 hover:scale-110 hover:rotate-12">AK</a>
+                      
+                      {/* ✅ START: LOGO SECTION WITH YOUR CORRECTED LINK */}
+                      <a href="#home" onClick={handleNavClick} className="block transition-transform duration-300 hover:scale-110 focus:outline-none">
+                          <img 
+                            // This is the correct, direct link to your logo image.
+                            src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/logo.png" 
+                            alt="Ayush Kulshrestha Logo"
+                            // The logo is set to a height of 48px (h-12). The width adjusts automatically.
+                            className="h-12 w-auto" 
+                          />
+                      </a>
+                      {/* ✅ END: LOGO SECTION */}
                       
                       <nav className="flex items-center gap-4">
                           <ul className="hidden md:flex list-none gap-2">
