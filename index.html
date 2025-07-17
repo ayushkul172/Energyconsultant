@@ -84,27 +84,23 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <!-- ✅ STYLE BLOCK FOR BACKGROUND IMAGE WITH OVERLAY -->
-    <!-- This style creates a fixed background image that stays in place while the content scrolls over it. -->
-    <!-- The glassmorphism effect on the sections will blur this background. -->
+    <!-- ✅ MODIFIED: STYLE BLOCK FOR BACKGROUND VIDEO -->
+    <!-- This style targets the <video> element to create a fixed background that stays in place. -->
+    <!-- The glassmorphism effect on the sections will blur this moving background. -->
     <style>
-      body::before {
-        content: '';
+      #background-video {
         position: fixed; /* Stays in place during scroll */
-        left: 0;
         right: 0;
-        top: 0;
         bottom: 0;
-        z-index: -1; /* Puts the pseudo-element behind all other content */
-
-        /* The background image */
-        background-image: url('https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/oil%20and%20gas.png');
-        background-size: cover;
-        background-position: center center;
-        background-repeat: no-repeat;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: -1; /* Puts the video behind all other content */
+        object-fit: cover; /* Ensures video covers the screen without distortion */
         
-        /* Dims the image to make text readable */
-        filter: brightness(0.75);
+        /* Dims the video to make text readable. Adjust as needed. */
+        filter: brightness(0.65);
       }
 
       /* Fallback background color for the page */
@@ -114,13 +110,21 @@
       html.light body {
         background-color: #f1f5f9; /* Fallback for light mode */
       }
-      /* This makes the body's own background transparent so the ::before pseudo-element can show through. */
+      /* This makes the body's own background transparent so the video can show through. */
       body {
         background-color: transparent !important;
       }
     </style>
 </head>
 <body class="bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text transition-colors duration-300">
+    
+    <!-- ✅ ADDED: Background Video Element -->
+    <!-- Note: The GitHub URL has been converted to a raw content link for direct access to the video file. -->
+    <video id="background-video" autoplay loop muted playsinline>
+        <source src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/Generated%20File%20July%2017%2C%202025%20-%201_18PM.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
     <div id="root"></div>
 
     <script type="text/babel">
@@ -292,17 +296,13 @@
               <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out ${isScrolled ? 'py-3 bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md shadow-xl' : 'py-6 bg-transparent'}`}>
                   <div className="container mx-auto px-6 md:px-8 flex justify-between items-center">
                       
-                      {/* ✅ START: LOGO SECTION WITH YOUR CORRECTED LINK */}
                       <a href="#home" onClick={handleNavClick} className="block transition-transform duration-300 hover:scale-110 focus:outline-none">
                           <img 
-                            // This is the correct, direct link to your logo image.
                             src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/logo.png" 
                             alt="Ayush Kulshrestha Logo"
-                            // The logo is set to a height of 48px (h-12). The width adjusts automatically.
                             className="h-12 w-auto" 
                           />
                       </a>
-                      {/* ✅ END: LOGO SECTION */}
                       
                       <nav className="flex items-center gap-4">
                           <ul className="hidden md:flex list-none gap-2">
@@ -403,10 +403,8 @@ const About = () => {
                                     border-4 border-primary-light dark:border-primary-dark 
                                     shadow-[0_15px_40px_-10px_rgba(8,145,178,0.4)] dark:shadow-[0_15px_40px_-10px_rgba(34,211,238,0.2)]">
                       <img 
-                        // ✅ FIX: Corrected the image URL to point to the raw file.
                         src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/Ayushprofile.png"
                         alt="A professional headshot of Ayush Kulshrestha"
-                        
                         className="w-full h-full rounded-full object-cover
                                    object-top
                                    scale-125
@@ -447,7 +445,6 @@ const About = () => {
                               className="inline-flex items-center gap-3 bg-light-card dark:bg-dark-card text-secondary-light dark:text-secondary-dark py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-md ring-2 ring-inset ring-secondary-light dark:ring-secondary-dark hover:bg-secondary-light/10 dark:hover:bg-secondary-dark/10"
                           >
                               <i className="fa-solid fa-file-arrow-down text-xl"></i>
-                              {/* ✅ FIX: Removed duplicate "Download CV" text. */}
                               <span>Download CV</span>
                           </a>
                         </div>
@@ -459,7 +456,6 @@ const About = () => {
       };
 
       const ProjectShowcase = ({ project }) => {
-          // ✅ CORRECTION 3: Removed a redundant 'return' statement that caused a syntax error.
           return (
               <Section 
                 id="spotlight" 
@@ -496,7 +492,6 @@ const About = () => {
 
                       <div className="space-y-8">
                           <img 
-                            // ✅ CORRECTION 4: Changed file extension from .jpg to .png to match the actual file in the repo.
                             src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20tool%20analysis.jpg" 
                             alt="Screenshot of the Upstream AI Analyzer Tool dashboard"
                             className="rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 w-full h-auto"
