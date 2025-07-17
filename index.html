@@ -84,33 +84,28 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <!-- ✅ MODIFIED: STYLE BLOCK FOR BACKGROUND VIDEO -->
-    <!-- This style targets the <video> element to create a fixed background that stays in place. -->
-    <!-- The glassmorphism effect on the sections will blur this moving background. -->
     <style>
       #background-video {
-        position: fixed; /* Stays in place during scroll */
+        position: fixed;
         right: 0;
         bottom: 0;
         min-width: 100%;
         min-height: 100%;
         width: auto;
         height: auto;
-        z-index: -1; /* Puts the video behind all other content */
-        object-fit: cover; /* Ensures video covers the screen without distortion */
+        z-index: -1;
+        object-fit: cover;
         
-        /* Dims the video to make text readable. Adjust as needed. */
-        filter: brightness(0.65);
+        /* ✅ MODIFIED: Increased brightness to make the video more visible */
+        filter: brightness(0.8);
       }
 
-      /* Fallback background color for the page */
       body {
         background-color: #0f172a; /* Fallback for dark mode */
       }
       html.light body {
         background-color: #f1f5f9; /* Fallback for light mode */
       }
-      /* This makes the body's own background transparent so the video can show through. */
       body {
         background-color: transparent !important;
       }
@@ -118,8 +113,6 @@
 </head>
 <body class="bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text transition-colors duration-300">
     
-    <!-- ✅ ADDED: Background Video Element -->
-    <!-- Note: The GitHub URL has been converted to a raw content link for direct access to the video file. -->
     <video id="background-video" autoplay loop muted playsinline>
         <source src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/Generated%20File%20July%2017%2C%202025%20-%201_18PM.mp4" type="video/mp4">
         Your browser does not support the video tag.
@@ -356,7 +349,8 @@
           
           return (
               <section id="home" className="relative h-screen bg-cover bg-center bg-fixed flex flex-col justify-center items-center text-center text-white px-5">
-                  <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 to-cyan-900/70"></div>
+                  {/* ✅ MODIFIED: Made the gradient overlay more transparent */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-slate-900/70 to-cyan-900/60"></div>
                   
                   <div className="relative z-10 max-w-5xl mx-auto">
                       <h1 className="font-montserrat text-5xl md:text-7xl font-extrabold text-white animate-fadeInUp" style={{ animationDelay: '0.1s' }}>
@@ -394,7 +388,8 @@ const About = () => {
          return (
               <Section 
               id="about" 
-              className="bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md ring-1 ring-white/10"
+              // ✅ MODIFIED: Reduced background opacity from /80 to /75
+              className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
               >
                 <div className="grid md:grid-cols-5 gap-10 items-center">
                   
@@ -459,7 +454,8 @@ const About = () => {
           return (
               <Section 
                 id="spotlight" 
-                className="bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-md ring-1 ring-white/10"
+                // ✅ MODIFIED: Reduced background opacity from /80 to /75
+                className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
               >
                   <div className="text-center mb-16">
                       <p className="font-montserrat font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-widest mb-2">Project Spotlight</p>
@@ -534,7 +530,8 @@ const About = () => {
       const Projects = () => (
           <Section 
             id="projects" 
-            className="bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md ring-1 ring-white/10"
+            // ✅ MODIFIED: Reduced background opacity from /80 to /75
+            className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
           >
               <div className="text-center">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Additional Case Studies</h2>
@@ -549,7 +546,8 @@ const About = () => {
       const Expertise = () => (
           <Section 
             id="expertise" 
-            className="bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-md ring-1 ring-white/10"
+            // ✅ MODIFIED: Reduced background opacity from /80 to /75
+            className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
           >
               <div className="text-center">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Core Competencies & Technical Toolkit</h2>
@@ -619,7 +617,8 @@ const About = () => {
           return (
               <Section 
                 id="experience" 
-                className="bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md ring-1 ring-white/10"
+                // ✅ MODIFIED: Reduced background opacity from /80 to /75
+                className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
               >
                   <div className="text-center">
                       <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Career Journey</h2>
@@ -638,7 +637,8 @@ const About = () => {
       const Certifications = () => (
           <Section 
             id="certifications" 
-            className="bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-md ring-1 ring-white/10"
+            // ✅ MODIFIED: Reduced background opacity from /80 to /75
+            className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
           >
               <div className="text-center">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Certifications & Credentials</h2>
@@ -662,7 +662,8 @@ const About = () => {
       const Contact = () => (
           <Section 
             id="contact" 
-            className="bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md ring-1 ring-white/10"
+            // ✅ MODIFIED: Reduced background opacity from /80 to /75
+            className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
           >
               <div className="text-center max-w-3xl mx-auto">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Let's Talk</h2>
