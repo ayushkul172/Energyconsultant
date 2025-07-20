@@ -95,8 +95,6 @@
         height: auto;
         z-index: -1;
         object-fit: cover;
-        
-        /* ✅ MODIFIED: Increased brightness to make the video more visible */
         filter: brightness(0.8);
       }
 
@@ -205,6 +203,50 @@
 
 
       // --- REUSABLE COMPONENTS ---
+
+      // ✅ NEW: Marketing Modal Component
+      const MarketingModal = ({ isOpen, onClose, onCtaClick }) => {
+        if (!isOpen) return null;
+
+        return (
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-[100] transition-opacity duration-300"
+            onClick={onClose}
+          >
+            <div 
+              className="bg-light-card dark:bg-dark-card rounded-2xl shadow-2xl max-w-lg w-full m-6 p-8 relative animate-fadeInUp text-center ring-1 ring-slate-200 dark:ring-slate-700"
+              onClick={e => e.stopPropagation()} // Prevent closing when clicking inside modal
+            >
+              <button 
+                onClick={onClose} 
+                className="absolute top-3 right-3 w-10 h-10 flex items-center justify-center text-xl text-light-subtle dark:text-dark-subtle rounded-full transition-colors duration-300 hover:bg-black/10 dark:hover:bg-white/10"
+                aria-label="Close dialog"
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+              
+              <div className="w-16 h-16 mb-5 mx-auto rounded-full bg-secondary-light/10 dark:bg-secondary-dark/10 flex items-center justify-center ring-4 ring-secondary-light/20 dark:ring-secondary-dark/20">
+                <i className="fa-solid fa-rocket text-3xl text-secondary-light dark:text-secondary-dark"></i>
+              </div>
+              
+              <h2 className="text-2xl lg:text-3xl font-montserrat font-bold text-primary-light dark:text-primary-dark mb-3">
+                Need a Modern Website Solution?
+              </h2>
+              
+              <p className="text-light-subtle dark:text-dark-subtle mb-8 text-lg">
+                As an <strong className="font-semibold text-light-text dark:text-dark-text">IBM-certified Web Developer</strong>, I offer end-to-end website services—from initial concept and design to final deployment. Let's build a powerful digital presence for your business.
+              </p>
+              
+              <button 
+                onClick={onCtaClick} 
+                className="w-full bg-secondary-light dark:bg-secondary-dark text-white py-3 px-8 rounded-lg font-bold transition-all duration-300 hover:scale-105 hover:bg-primary-light dark:hover:bg-primary-dark shadow-lg"
+              >
+                Request a Consultation
+              </button>
+            </div>
+          </div>
+        );
+      };
 
       const Section = ({ children, id, className = '' }) => {
           const [isVisible, setIsVisible] = useState(false);
@@ -350,7 +392,6 @@
           
           return (
               <section id="home" className="relative h-screen bg-cover bg-center bg-fixed flex flex-col justify-center items-center text-center text-white px-5">
-                  {/* ✅ MODIFIED: Made the gradient overlay more transparent */}
                   <div className="absolute inset-0 bg-gradient-to-br from-slate-900/70 to-cyan-900/60"></div>
                   
                   <div className="relative z-10 max-w-5xl mx-auto">
@@ -385,12 +426,11 @@
           );
       };
 
-const About = () => {
+      const About = () => {
          return (
               <Section 
-              id="about" 
-              // ✅ MODIFIED: Reduced background opacity from /80 to /75
-              className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
+                id="about" 
+                className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
               >
                 <div className="grid md:grid-cols-5 gap-10 items-center">
                   
@@ -444,7 +484,6 @@ const About = () => {
                               <span>Download CV</span>
                           </a>
                         </div>
-
                     </div>
                 </div>
             </Section>
@@ -455,14 +494,12 @@ const About = () => {
           return (
               <Section 
                 id="spotlight" 
-                // ✅ MODIFIED: Reduced background opacity from /80 to /75
                 className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
               >
                   <div className="text-center mb-16">
                       <p className="font-montserrat font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-widest mb-2">Project Spotlight</p>
                       <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark">{project.title}</h2>
                   </div>
-
                   <div className="grid md:grid-cols-2 gap-12 items-start">
                       <div className="space-y-8">
                           <div>
@@ -486,14 +523,12 @@ const About = () => {
                               </div>
                           </div>
                       </div>
-
                       <div className="space-y-8">
                           <img 
                             src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20tool%20analysis.jpg" 
                             alt="Screenshot of the Upstream AI Analyzer Tool dashboard"
                             className="rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 w-full h-auto"
                           />
-                          
                           <div>
                               <h4 className="font-montserrat text-xl font-bold mb-4 text-light-text dark:text-dark-text">✅ Key Outcomes</h4>
                               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
@@ -531,7 +566,6 @@ const About = () => {
       const Projects = () => (
           <Section 
             id="projects" 
-            // ✅ MODIFIED: Reduced background opacity from /80 to /75
             className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
           >
               <div className="text-center">
@@ -547,7 +581,6 @@ const About = () => {
       const Expertise = () => (
           <Section 
             id="expertise" 
-            // ✅ MODIFIED: Reduced background opacity from /80 to /75
             className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
           >
               <div className="text-center">
@@ -618,7 +651,6 @@ const About = () => {
           return (
               <Section 
                 id="experience" 
-                // ✅ MODIFIED: Reduced background opacity from /80 to /75
                 className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
               >
                   <div className="text-center">
@@ -638,7 +670,6 @@ const About = () => {
       const Certifications = () => (
           <Section 
             id="certifications" 
-            // ✅ MODIFIED: Reduced background opacity from /80 to /75
             className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
           >
               <div className="text-center">
@@ -663,7 +694,6 @@ const About = () => {
       const Contact = () => (
           <Section 
             id="contact" 
-            // ✅ MODIFIED: Reduced background opacity from /80 to /75
             className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
           >
               <div className="text-center max-w-3xl mx-auto">
@@ -757,6 +787,9 @@ const About = () => {
               }
               return 'dark'; // default
           });
+          
+          // ✅ NEW: State for the marketing modal
+          const [isModalOpen, setIsModalOpen] = useState(false);
 
           useEffect(() => {
               if (theme === 'dark') {
@@ -766,13 +799,43 @@ const About = () => {
               }
               localStorage.setItem('theme', theme);
           }, [theme]);
+          
+          // ✅ NEW: Effect to show the modal once per session
+          useEffect(() => {
+              const hasSeenModal = sessionStorage.getItem('hasSeenConsultationModal');
+              if (!hasSeenModal) {
+                  const timer = setTimeout(() => {
+                      setIsModalOpen(true);
+                      sessionStorage.setItem('hasSeenConsultationModal', 'true');
+                  }, 2500); // Show modal after 2.5 seconds
+                  return () => clearTimeout(timer); // Cleanup timer
+              }
+          }, []);
+
 
           const toggleTheme = () => {
               setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
           };
+          
+          // ✅ NEW: Handlers for modal actions
+          const handleModalClose = () => setIsModalOpen(false);
+          const handleModalCtaClick = () => {
+              setIsModalOpen(false);
+              const contactSection = document.querySelector('#contact');
+              if (contactSection) {
+                  contactSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+          };
 
           return (
               <Fragment>
+                  {/* ✅ NEW: Render the Marketing Modal */}
+                  <MarketingModal 
+                    isOpen={isModalOpen}
+                    onClose={handleModalClose}
+                    onCtaClick={handleModalCtaClick}
+                  />
+
                   <Navbar theme={theme} toggleTheme={toggleTheme} />
                   <main>
                       <Hero />
