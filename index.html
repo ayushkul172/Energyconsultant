@@ -65,14 +65,25 @@
                 'from': { opacity: 0, transform: 'translateY(20px)' },
                 'to': { opacity: 1, transform: 'translateY(0)' },
               },
+              // ✅ ADDED: A standard fadeIn animation for the scroll prompt
+              fadeIn: {
+                'from': { opacity: 0 },
+                'to': { opacity: 1 },
+              },
               reveal: {
                 'from': { clipPath: 'inset(0 100% 0 0)' },
                 'to': { clipPath: 'inset(0 0 0 0)' },
+              },
+              bounceSlow: {
+                '0%, 100%': { transform: 'translateY(-25%)', animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)' },
+                '50%': { transform: 'translateY(0)', animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)' },
               }
             },
             animation: {
               fadeInUp: 'fadeInUp 0.8s ease-out forwards',
+              fadeIn: 'fadeIn 1s ease-in forwards', // ✅ ADDED
               reveal: 'reveal 1s ease-in-out forwards',
+              bounceSlow: 'bounceSlow 2s infinite',
             }
           }
         }
@@ -134,7 +145,6 @@
               { metric: "1-Click", description: "Deployment, launched from a single desktop icon for non-technical users." }
           ]
       };
-
       const projects = [
           {
               title: 'AI-Powered News Intelligence Pipeline',
@@ -155,18 +165,15 @@
               }
           }
       ];
-
       const competencies = [
           { icon: 'fa-solid fa-magnifying-glass-chart', title: 'Upstream Market Analysis', description: 'Supply/demand forecasting, contract analysis, and competitor performance tracking.' },
           { icon: 'fa-solid fa-robot', title: 'Data Automation', description: 'Building intelligent systems with Python & VBA to eliminate manual work and drive efficiency.' },
           { icon: 'fa-solid fa-chart-pie', title: 'Business Intelligence', description: 'Transforming complex data into clear, actionable dashboards with Power BI and ArcGIS.' },
           { icon: 'fa-solid fa-bullseye', title: 'Commercial Strategy', description: 'Data-backed insights for pricing, market share analysis, and industry benchmarking.' }
       ];
-
       const skills = [
           'Microsoft Office (Excel, PowerPoint, Word)', 'Excel Dashboards', 'Google Analytics', 'Python', 'VBA', 'PyQt5', 'Selenium', 'spaCy', 'Gen AI Tools (ChatGPT, Bing AI, Bard)'
       ];
-
       const experiences = [
           {
               company: 'Wood Mackenzie',
@@ -187,7 +194,6 @@
               description: 'Analyzed market dynamics and competitor landscapes in the industrial manufacturing sector, focusing on digital technologies and product mapping.'
           }
       ];
-
       const certifications = [
           { icon: 'fa-solid fa-award', title: 'Lean Six Sigma', issuer: 'Issued by KPMG' },
           { icon: 'fa-solid fa-award', title: 'Fundamentals of Digital Marketing', issuer: 'Issued by Google' },
@@ -204,10 +210,21 @@
 
       // --- REUSABLE COMPONENTS ---
 
-      // ✅ NEW: Marketing Modal Component
+      // Helper function for smooth scrolling
+      const smoothScrollTo = (selector) => {
+        const element = document.querySelector(selector);
+        if (element) {
+            const offset = 80; // Navbar height
+            const bodyRect = document.body.getBoundingClientRect().top;
+            const elementRect = element.getBoundingClientRect().top;
+            const elementPosition = elementRect - bodyRect;
+            const offsetPosition = elementPosition - offset;
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        }
+      };
+
       const MarketingModal = ({ isOpen, onClose, onCtaClick }) => {
         if (!isOpen) return null;
-
         return (
           <div 
             className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-[100] transition-opacity duration-300"
@@ -215,7 +232,7 @@
           >
             <div 
               className="bg-light-card dark:bg-dark-card rounded-2xl shadow-2xl max-w-lg w-full m-6 p-8 relative animate-fadeInUp text-center ring-1 ring-slate-200 dark:ring-slate-700"
-              onClick={e => e.stopPropagation()} // Prevent closing when clicking inside modal
+              onClick={e => e.stopPropagation()}
             >
               <button 
                 onClick={onClose} 
@@ -224,19 +241,15 @@
               >
                 <i className="fa-solid fa-xmark"></i>
               </button>
-              
               <div className="w-16 h-16 mb-5 mx-auto rounded-full bg-secondary-light/10 dark:bg-secondary-dark/10 flex items-center justify-center ring-4 ring-secondary-light/20 dark:ring-secondary-dark/20">
                 <i className="fa-solid fa-rocket text-3xl text-secondary-light dark:text-secondary-dark"></i>
               </div>
-              
               <h2 className="text-2xl lg:text-3xl font-montserrat font-bold text-primary-light dark:text-primary-dark mb-3">
                 Need a Modern Website Solution?
               </h2>
-              
               <p className="text-light-subtle dark:text-dark-subtle mb-8 text-lg">
                 As an <strong className="font-semibold text-light-text dark:text-dark-text">IBM-certified Web Developer</strong>, I offer end-to-end website services—from initial concept and design to final deployment. Let's build a powerful digital presence for your business.
               </p>
-              
               <button 
                 onClick={onCtaClick} 
                 className="w-full bg-secondary-light dark:bg-secondary-dark text-white py-3 px-8 rounded-lg font-bold transition-all duration-300 hover:scale-105 hover:bg-primary-light dark:hover:bg-primary-dark shadow-lg"
@@ -251,7 +264,6 @@
       const Section = ({ children, id, className = '' }) => {
           const [isVisible, setIsVisible] = useState(false);
           const sectionRef = useRef(null);
-
           useEffect(() => {
               const observer = new IntersectionObserver(
                   ([entry]) => {
@@ -262,19 +274,16 @@
                   },
                   { threshold: 0.1 }
               );
-
               const currentRef = sectionRef.current;
               if (currentRef) {
                   observer.observe(currentRef);
               }
-
               return () => {
                   if (currentRef) {
                       observer.unobserve(currentRef);
                   }
               };
           }, []);
-
           return (
               <section
                   id={id}
@@ -287,8 +296,28 @@
               </section>
           );
       };
+
+      // ✅ ENHANCED: Component for guiding users to the next section
+      const NextSectionLink = ({ href, text }) => {
+          const handleScroll = (e) => {
+              e.preventDefault();
+              smoothScrollTo(href);
+          };
+          return (
+              <div className="mt-20 text-center">
+                  <a
+                      href={href}
+                      onClick={handleScroll}
+                      className="inline-flex items-center gap-3 font-semibold text-light-subtle dark:text-dark-subtle hover:text-primary-light dark:hover:text-primary-dark transition-all duration-300 group text-lg"
+                  >
+                      <span>{text}</span>
+                      <i className="fa-solid fa-arrow-down transition-transform duration-300 group-hover:translate-y-1"></i>
+                  </a>
+              </div>
+          );
+      };
       
-      const Navbar = ({ theme, toggleTheme }) => {
+      const Navbar = ({ theme, toggleTheme, activeSection }) => {
         const navLinks = [
               { href: '#home', label: 'Home' },
               { href: '#about', label: 'About' },
@@ -299,39 +328,22 @@
           ];
           const [isScrolled, setIsScrolled] = useState(false);
           const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
           useEffect(() => {
               const handleScroll = () => setIsScrolled(window.scrollY > 20);
               window.addEventListener('scroll', handleScroll);
               return () => window.removeEventListener('scroll', handleScroll);
           }, []);
-          
           const handleNavClick = (e) => {
               e.preventDefault();
               const href = e.currentTarget.getAttribute('href');
               if (href) {
-                  const element = document.querySelector(href);
-                  if (element) {
-                     // Add slight offset for fixed navbar
-                     const offset = 80;
-                     const bodyRect = document.body.getBoundingClientRect().top;
-                     const elementRect = element.getBoundingClientRect().top;
-                     const elementPosition = elementRect - bodyRect;
-                     const offsetPosition = elementPosition - offset;
-
-                     window.scrollTo({
-                         top: offsetPosition,
-                         behavior: 'smooth'
-                     });
-                  }
+                  smoothScrollTo(href);
               }
               setIsMobileMenuOpen(false);
           };
-
           return (
               <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out ${isScrolled ? 'py-3 bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md shadow-xl' : 'py-6 bg-transparent'}`}>
                   <div className="container mx-auto px-6 md:px-8 flex justify-between items-center">
-                      
                       <a href="#home" onClick={handleNavClick} className="block transition-transform duration-300 hover:scale-110 focus:outline-none">
                           <img 
                             src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/logo.png" 
@@ -339,20 +351,26 @@
                             className="h-12 w-auto" 
                           />
                       </a>
-                      
                       <nav className="flex items-center gap-4">
                           <ul className="hidden md:flex list-none gap-2">
-                              {navLinks.map(link => (
+                              {navLinks.map(link => {
+                                const isActive = link.href === `#${activeSection}`;
+                                return (
                                   <li key={link.href}>
-                                      <a href={link.href} onClick={handleNavClick} className="px-4 py-2 font-medium text-light-text dark:text-dark-text rounded-md transition-colors duration-300 hover:text-primary-light dark:hover:text-primary-dark hover:bg-black/5 dark:hover:bg-white/5">{link.label}</a>
+                                      <a href={link.href} 
+                                         onClick={handleNavClick} 
+                                         className={`px-4 py-2 font-medium rounded-md transition-all duration-300 ${isActive ? 'text-primary-light dark:text-primary-dark bg-black/10 dark:bg-white/10 font-bold' : 'text-light-text dark:text-dark-text hover:text-primary-light dark:hover:text-primary-dark hover:bg-black/5 dark:hover:bg-white/5'}`}
+                                         aria-current={isActive ? 'page' : undefined}
+                                      >
+                                        {link.label}
+                                      </a>
                                   </li>
-                              ))}
+                                );
+                              })}
                           </ul>
-                          
                           <button onClick={toggleTheme} title="Toggle dark mode" className="w-10 h-10 flex items-center justify-center text-xl text-light-text dark:text-dark-text rounded-full transition-colors duration-300 hover:text-primary-light dark:hover:text-primary-dark hover:bg-black/5 dark:hover:bg-white/5">
                               {theme === 'dark' ? <i className="fa-solid fa-sun"></i> : <i className="fa-solid fa-moon"></i>}
                           </button>
-                          
                           <button 
                               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
                               className="md:hidden w-10 h-10 flex items-center justify-center text-2xl text-light-text dark:text-dark-text rounded-full transition-colors duration-300 hover:bg-black/5 dark:hover:bg-white/5" 
@@ -364,17 +382,25 @@
                           </button>
                       </nav>
                   </div>
-                  
                   <div 
                       id="mobile-menu"
                       className={`transition-all duration-500 ease-in-out md:hidden bg-light-card/90 dark:bg-dark-card/90 backdrop-blur-md mt-2 mx-6 rounded-lg shadow-lg ${isMobileMenuOpen ? 'max-h-screen py-2' : 'max-h-0'} overflow-hidden`}
                   >
                       <ul className="flex flex-col list-none">
-                          {navLinks.map(link => (
+                          {navLinks.map(link => {
+                            const isActive = link.href === `#${activeSection}`;
+                            return (
                               <li key={link.href} className="w-full">
-                                  <a href={link.href} onClick={handleNavClick} className="block text-center py-3 text-light-text dark:text-dark-text transition-colors duration-300 hover:bg-primary-light/10 dark:hover:bg-primary-dark/10">{link.label}</a>
+                                  <a href={link.href} 
+                                     onClick={handleNavClick} 
+                                     className={`block text-center py-3 text-light-text dark:text-dark-text transition-colors duration-300 ${isActive ? 'text-primary-light dark:text-primary-dark bg-primary-light/10 dark:bg-primary-dark/10 font-bold' : 'hover:bg-primary-light/10 dark:hover:bg-primary-dark/10'}`}
+                                     aria-current={isActive ? 'page' : undefined}
+                                  >
+                                    {link.label}
+                                  </a>
                               </li>
-                          ))}
+                            );
+                          })}
                       </ul>
                   </div>
               </header>
@@ -382,27 +408,21 @@
       };
       
       const Hero = () => {
-          const handleNavClick = (e) => {
+          const handleScrollClick = (e) => {
               e.preventDefault();
               const href = e.currentTarget.getAttribute('href');
-              if (href) {
-                  document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-              }
+              smoothScrollTo(href);
           };
-          
           return (
               <section id="home" className="relative h-screen bg-cover bg-center bg-fixed flex flex-col justify-center items-center text-center text-white px-5">
                   <div className="absolute inset-0 bg-gradient-to-br from-slate-900/70 to-cyan-900/60"></div>
-                  
                   <div className="relative z-10 max-w-5xl mx-auto">
                       <h1 className="font-montserrat text-5xl md:text-7xl font-extrabold text-white animate-fadeInUp" style={{ animationDelay: '0.1s' }}>
                           Ayush Kulshrestha
                       </h1>
-                      
                       <p className="text-xl md:text-2xl mt-5 mb-8 text-cyan-200 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
                           Energy Consultant & Data Scientist | AI-Driven Analytics for the Energy Sector
                       </p>
-                      
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.5s' }}>
                           <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 text-left">
                               <h4 className="font-montserrat text-lg font-bold text-cyan-300 pb-2 mb-2">Upstream Market Intel</h4>
@@ -417,11 +437,21 @@
                               <p className="text-slate-200 text-sm">Utilizing market benchmarking and data visualization to enhance competitive positioning.</p>
                           </div>
                       </div>
-
-                      <a href="#spotlight" onClick={handleNavClick} className="mt-12 inline-block bg-secondary-dark text-white py-3 px-8 rounded-full font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 hover:bg-cyan-300 hover:text-slate-900 shadow-lg opacity-0 animate-fadeInUp" style={{ animationDelay: '0.7s' }}>
+                      <a href="#spotlight" onClick={handleScrollClick} className="mt-12 inline-block bg-secondary-dark text-white py-3 px-8 rounded-full font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 hover:bg-cyan-300 hover:text-slate-900 shadow-lg opacity-0 animate-fadeInUp" style={{ animationDelay: '0.7s' }}>
                           View Featured Project <i className="fa-solid fa-arrow-right-long ml-2"></i>
                       </a>
                   </div>
+                  {/* ✅ FIXED: Scroll down prompt is now visible */}
+                  <a
+                      href="#about"
+                      onClick={handleScrollClick}
+                      className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 cursor-pointer animate-fadeIn [animation-delay:2s] animate-bounceSlow"
+                      aria-label="Scroll to about section"
+                  >
+                      <div className="w-10 h-10 flex items-center justify-center text-3xl text-white/70 hover:text-white transition-colors duration-300">
+                          <i className="fa-solid fa-chevron-down"></i>
+                      </div>
+                  </a>
               </section>
           );
       };
@@ -433,7 +463,6 @@
                 className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
               >
                 <div className="grid md:grid-cols-5 gap-10 items-center">
-                  
                   <div className="md:col-span-2 flex items-center justify-center">
                     <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full bg-light-card dark:bg-dark-card p-2 transition-all duration-300
                                     border-4 border-primary-light dark:border-primary-dark 
@@ -441,51 +470,32 @@
                       <img 
                         src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/Ayushprofile.png"
                         alt="A professional headshot of Ayush Kulshrestha"
-                        className="w-full h-full rounded-full object-cover
-                                   object-top
-                                   scale-125
-                                   transition-all duration-500 ease-out hover:scale-[1.30]
-                                   [filter:drop-shadow(0px_4px_8px_rgba(0,0,0,0.3))]"
+                        className="w-full h-full rounded-full object-cover object-top scale-125 transition-all duration-500 ease-out hover:scale-[1.30] [filter:drop-shadow(0px_4px_8px_rgba(0,0,0,0.3))]"
                       />
                     </div>
                   </div>
-
-                    <div className="md:col-span-3">
-                        <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4 animate-reveal">
-                            Bridging Engineering, Business, and Data Science
-                        </h2>
-                        <div className="space-y-4 text-light-subtle dark:text-dark-subtle text-lg">
-                            <p>
-                                My career is driven by a fascination with the intersection of technology, data, and the global energy landscape. With a foundation in <strong className="text-light-text dark:text-dark-text font-semibold">Mechanical Engineering (B.Tech)</strong> and a strategic perspective from an <strong className="text-light-text dark:text-dark-text font-semibold">MBA in Marketing & International Business</strong>, I am uniquely positioned to understand not just the *what*, but the *why* behind market movements.
-                            </p>
-                            <p>
-                                I don't just analyze data; I build systems to make it smarter. My approach is to identify inefficiencies, architect solutions with <strong className="text-light-text dark:text-dark-text font-semibold">Python, VBA, and Generative AI</strong>, and deliver clear, actionable intelligence that empowers leadership to act with confidence. I am passionate about building data-driven strategies that create a competitive edge.
-                            </p>
-                        </div>
-                        
-                        <div className="mt-8 flex flex-wrap gap-4 items-center">
-                          <a 
-                              href="https://www.linkedin.com/in/ayush-k-5641461b2/" 
-                              target="_blank" 
-                              rel="noopener noreferrer" 
-                              className="inline-flex items-center gap-3 bg-secondary-light dark:bg-secondary-dark text-white py-3 px-6 rounded-lg font-semibold transition-transform duration-300 hover:scale-105 shadow-md"
-                          >
-                              <i className="fa-brands fa-linkedin text-xl"></i>
-                              <span>Let's Connect</span>
-                          </a>
-                          <a 
-                              href="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/THE%20CV.docx" 
-                              target="_blank" 
-                              rel="noopener noreferrer" 
-                              download="Ayush_Kulshrestha_CV.docx"
-                              className="inline-flex items-center gap-3 bg-light-card dark:bg-dark-card text-secondary-light dark:text-secondary-dark py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-md ring-2 ring-inset ring-secondary-light dark:ring-secondary-dark hover:bg-secondary-light/10 dark:hover:bg-secondary-dark/10"
-                          >
-                              <i className="fa-solid fa-file-arrow-down text-xl"></i>
-                              <span>Download CV</span>
-                          </a>
-                        </div>
-                    </div>
+                  <div className="md:col-span-3">
+                      <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4 animate-reveal">
+                          Bridging Engineering, Business, and Data Science
+                      </h2>
+                      <div className="space-y-4 text-light-subtle dark:text-dark-subtle text-lg">
+                          <p>My career is driven by a fascination with the intersection of technology, data, and the global energy landscape. With a foundation in <strong className="text-light-text dark:text-dark-text font-semibold">Mechanical Engineering (B.Tech)</strong> and a strategic perspective from an <strong className="text-light-text dark:text-dark-text font-semibold">MBA in Marketing & International Business</strong>, I am uniquely positioned to understand not just the *what*, but the *why* behind market movements.</p>
+                          <p>I don't just analyze data; I build systems to make it smarter. My approach is to identify inefficiencies, architect solutions with <strong className="text-light-text dark:text-dark-text font-semibold">Python, VBA, and Generative AI</strong>, and deliver clear, actionable intelligence that empowers leadership to act with confidence. I am passionate about building data-driven strategies that create a competitive edge.</p>
+                      </div>
+                      <div className="mt-8 flex flex-wrap gap-4 items-center">
+                        <a href="https://www.linkedin.com/in/ayush-k-5641461b2/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 bg-secondary-light dark:bg-secondary-dark text-white py-3 px-6 rounded-lg font-semibold transition-transform duration-300 hover:scale-105 shadow-md">
+                            <i className="fa-brands fa-linkedin text-xl"></i>
+                            <span>Let's Connect</span>
+                        </a>
+                        <a href="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/THE%20CV.docx" target="_blank" rel="noopener noreferrer" download="Ayush_Kulshrestha_CV.docx" className="inline-flex items-center gap-3 bg-light-card dark:bg-dark-card text-secondary-light dark:text-secondary-dark py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-md ring-2 ring-inset ring-secondary-light dark:ring-secondary-dark hover:bg-secondary-light/10 dark:hover:bg-secondary-dark/10">
+                            <i className="fa-solid fa-file-arrow-down text-xl"></i>
+                            <span>Download CV</span>
+                        </a>
+                      </div>
+                  </div>
                 </div>
+                {/* ✅ This link guides users to the next section */}
+                <NextSectionLink href="#spotlight" text="View my featured work" />
             </Section>
           );
       };
@@ -542,6 +552,8 @@
                           </div>
                       </div>
                   </div>
+                  {/* ✅ This link guides users to the next section */}
+                  <NextSectionLink href="#projects" text="Explore more case studies" />
               </Section>
           );
       };
@@ -575,6 +587,8 @@
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {projects.map((project, index) => <ProjectCard key={index} project={project} />)}
               </div>
+              {/* ✅ This link guides users to the next section */}
+              <NextSectionLink href="#expertise" text="See my technical skills" />
           </Section>
       );
 
@@ -587,11 +601,9 @@
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Core Competencies & Technical Toolkit</h2>
                   <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">I leverage a blend of strategic analysis and technical skill to deliver powerful results.</p>
               </div>
-              
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
                   {competencies.map((item, index) => <CompetencyCard key={index} competency={item} />)}
               </div>
-              
               <div className="text-center">
                   <h3 className="font-montserrat text-2xl font-bold text-primary-light dark:text-primary-dark text-center mb-6">Technical Toolkit</h3>
                   <div className="flex flex-wrap justify-center gap-3">
@@ -600,6 +612,8 @@
                       ))}
                   </div>
               </div>
+              {/* ✅ This link guides users to the next section */}
+              <NextSectionLink href="#experience" text="Review my career journey" />
           </Section>
       );
       
@@ -616,7 +630,6 @@
           return (
               <div className="relative pl-12 pb-10">
                   <div className="absolute left-[-9px] top-1 w-6 h-6 bg-light-bg dark:bg-dark-bg border-4 border-secondary-light dark:border-secondary-dark rounded-full z-10 transition-transform duration-300 group-hover:scale-110"></div>
-                  
                   <button 
                       onClick={onClick} 
                       className="w-full text-left cursor-pointer group focus:outline-none focus-visible:ring-2 ring-primary-light rounded-md p-1"
@@ -629,7 +642,6 @@
                       </div>
                       <p className="text-light-subtle dark:text-dark-subtle italic mb-2">{item.date}</p>
                   </button>
-                  
                   <div 
                       id={contentId}
                       className={`grid transition-all duration-500 ease-in-out ${isActive ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0'}`}
@@ -643,11 +655,9 @@
       };
       const Experience = () => {
           const [activeIndex, setActiveIndex] = useState(0);
-
           const handleItemClick = (index) => {
               setActiveIndex(activeIndex === index ? null : index);
           };
-
           return (
               <Section 
                 id="experience" 
@@ -663,6 +673,8 @@
                           <TimelineItem key={index} item={item} isActive={activeIndex === index} onClick={() => handleItemClick(index)} />
                       ))}
                   </div>
+                  {/* ✅ This link guides users to the next section */}
+                  <NextSectionLink href="#certifications" text="View my credentials" />
               </Section>
           );
       };
@@ -679,6 +691,8 @@
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                   {certifications.map((cert, index) => <CertificationCard key={index} cert={cert} />)}
               </div>
+              {/* ✅ This link guides users to the final section */}
+              <NextSectionLink href="#contact" text="Ready to connect?" />
           </Section>
       );
       const CertificationCard = ({ cert }) => (
@@ -699,7 +713,6 @@
               <div className="text-center max-w-3xl mx-auto">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Let's Talk</h2>
                   <p className="mb-12 text-light-subtle dark:text-dark-subtle">I am always open to discussing new opportunities, projects, and collaborations. Please get in touch using the form below or through my social channels.</p>
-                  
                   <div className="bg-light-bg dark:bg-dark-bg p-8 rounded-xl shadow-2xl ring-1 ring-slate-300 dark:ring-slate-600">
                       <form action="https://formspree.io/f/myzjobjp" method="POST" className="text-left space-y-6">
                           <div>
@@ -717,7 +730,6 @@
                           <button type="submit" className="w-full bg-secondary-light dark:bg-secondary-dark text-white py-3 px-8 rounded-lg font-bold transition-all duration-300 hover:scale-105 hover:bg-primary-light dark:hover:bg-primary-dark shadow-lg">Send Message</button>
                       </form>
                   </div>
-
                   <div className="mt-16">
                       <p className="font-medium mb-6 text-light-subtle dark:text-dark-subtle">Or reach out directly:</p>
                       <ul className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 text-md">
@@ -747,7 +759,6 @@
 
       const ScrollToTopButton = () => {
           const [isVisible, setIsVisible] = useState(false);
-
           useEffect(() => {
               const toggleVisibility = () => {
                   if (window.scrollY > 300) {
@@ -759,11 +770,9 @@
               window.addEventListener('scroll', toggleVisibility);
               return () => window.removeEventListener('scroll', toggleVisibility);
           }, []);
-
           const scrollToTop = () => {
               window.scrollTo({ top: 0, behavior: 'smooth' });
           };
-
           return (
               <button
                   onClick={scrollToTop}
@@ -772,6 +781,82 @@
               >
                   <i className="fa-solid fa-arrow-up"></i>
               </button>
+          );
+      };
+
+      // --- MODIFIED: Interactive Navigation Guidance Overlay (bottom-right, no blur during navigation) ---
+      const NavigationGuide = ({ visible, onClose }) => {
+          const navSteps = [
+              { selector: '#home', label: 'Welcome! This is the Hero section.' },
+              { selector: '#about', label: 'Learn more about my background.' },
+              { selector: '#spotlight', label: 'See my featured project.' },
+              { selector: '#projects', label: 'Browse additional case studies.' },
+              { selector: '#expertise', label: 'Explore my technical skills.' },
+              { selector: '#experience', label: 'Review my career journey.' },
+              { selector: '#certifications', label: 'Check out my certifications.' },
+              { selector: '#contact', label: 'Let\'s get in touch!' },
+          ];
+          const [step, setStep] = useState(0);
+
+          useEffect(() => {
+              if (!visible) return;
+              const el = document.querySelector(navSteps[step].selector);
+              if (el) {
+                  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+          }, [step, visible]);
+
+          if (!visible) return null;
+          return (
+              <div className="fixed bottom-8 right-8 z-[200] pointer-events-none">
+                  <div className="relative max-w-xs w-[340px] bg-light-card dark:bg-dark-card rounded-2xl shadow-2xl p-6 text-center ring-2 ring-primary-light dark:ring-primary-dark animate-fadeInUp pointer-events-auto border border-primary-light/20 dark:border-primary-dark/20">
+                      <button
+                          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center text-xl text-light-subtle dark:text-dark-subtle rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition"
+                          onClick={onClose}
+                          aria-label="Close guidance"
+                          style={{ pointerEvents: 'auto' }}
+                      >
+                          <i className="fa-solid fa-xmark"></i>
+                      </button>
+                      <div className="mb-3 flex justify-center">
+                          <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-secondary-light/20 dark:bg-secondary-dark/20 text-2xl text-secondary-light dark:text-secondary-dark shadow-lg">
+                              <i className="fa-solid fa-compass"></i>
+                          </span>
+                      </div>
+                      <h2 className="font-montserrat text-xl font-bold text-primary-light dark:text-primary-dark mb-2">Quick Tour</h2>
+                      <p className="text-light-subtle dark:text-dark-subtle mb-4">{navSteps[step].label}</p>
+                      <div className="flex justify-between items-center gap-2 mb-2">
+                          <button
+                              className="bg-light-bg dark:bg-dark-bg text-secondary-light dark:text-secondary-dark px-3 py-1 rounded-lg font-semibold shadow transition hover:bg-secondary-light/10 dark:hover:bg-secondary-dark/10 disabled:opacity-50"
+                              onClick={() => setStep(s => Math.max(0, s - 1))}
+                              disabled={step === 0}
+                              style={{ pointerEvents: 'auto' }}
+                          >
+                              <i className="fa-solid fa-arrow-left mr-1"></i> Prev
+                          </button>
+                          {step < navSteps.length - 1 ? (
+                              <button
+                                  className="bg-secondary-light dark:bg-secondary-dark text-white px-4 py-1 rounded-lg font-bold shadow transition hover:scale-105"
+                                  onClick={() => setStep(s => s + 1)}
+                                  style={{ pointerEvents: 'auto' }}
+                              >
+                                  Next <i className="fa-solid fa-arrow-right ml-1"></i>
+                              </button>
+                          ) : (
+                              <button
+                                  className="bg-primary-light dark:bg-primary-dark text-white px-4 py-1 rounded-lg font-bold shadow transition hover:scale-105"
+                                  onClick={onClose}
+                                  style={{ pointerEvents: 'auto' }}
+                              >
+                                  Finish <i className="fa-solid fa-flag-checkered ml-1"></i>
+                              </button>
+                          )}
+                      </div>
+                      <div className="mt-2 text-xs text-light-subtle dark:text-dark-subtle">
+                          Step {step + 1} of {navSteps.length}
+                      </div>
+                  </div>
+              </div>
           );
       };
 
@@ -785,11 +870,11 @@
                   }
                   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
               }
-              return 'dark'; // default
+              return 'dark';
           });
-          
-          // ✅ NEW: State for the marketing modal
           const [isModalOpen, setIsModalOpen] = useState(false);
+          const [activeSection, setActiveSection] = useState('home');
+          const [showGuide, setShowGuide] = useState(false);
 
           useEffect(() => {
               if (theme === 'dark') {
@@ -800,43 +885,76 @@
               localStorage.setItem('theme', theme);
           }, [theme]);
           
-          // ✅ NEW: Effect to show the modal once per session
           useEffect(() => {
               const hasSeenModal = sessionStorage.getItem('hasSeenConsultationModal');
               if (!hasSeenModal) {
                   const timer = setTimeout(() => {
                       setIsModalOpen(true);
                       sessionStorage.setItem('hasSeenConsultationModal', 'true');
-                  }, 2500); // Show modal after 2.5 seconds
-                  return () => clearTimeout(timer); // Cleanup timer
+                  }, 3000);
+                  return () => clearTimeout(timer);
               }
           }, []);
 
+          // ✅ FIXED: This effect now correctly tracks the active section
+          useEffect(() => {
+            const sectionIds = ['home', 'about', 'spotlight', 'projects', 'expertise', 'experience', 'certifications', 'contact'];
+            const sections = sectionIds.map(id => document.getElementById(id));
+
+            const handleScroll = () => {
+              const scrollPosition = window.scrollY;
+              const windowHeight = window.innerHeight;
+              const bodyHeight = document.body.offsetHeight;
+              
+              // A point about 30% down the viewport, good for triggering section changes
+              const triggerPoint = scrollPosition + windowHeight * 0.3;
+
+              // Special case for the bottom of the page
+              if (scrollPosition + windowHeight >= bodyHeight - 50) {
+                  setActiveSection('contact');
+                  return;
+              }
+
+              let currentSection = 'home';
+              for (const section of sections) {
+                  if (section && section.offsetTop <= triggerPoint) {
+                      currentSection = section.id;
+                  }
+              }
+              setActiveSection(currentSection);
+            };
+
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            handleScroll(); // Set initial state
+            return () => window.removeEventListener('scroll', handleScroll);
+          }, []); // Empty dependency array is correct here, as it sets up the listener once.
 
           const toggleTheme = () => {
               setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
           };
           
-          // ✅ NEW: Handlers for modal actions
           const handleModalClose = () => setIsModalOpen(false);
           const handleModalCtaClick = () => {
               setIsModalOpen(false);
-              const contactSection = document.querySelector('#contact');
-              if (contactSection) {
-                  contactSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }
+              smoothScrollTo('#contact');
           };
+
+          // Optionally, show the guide automatically for first-time users
+          useEffect(() => {
+              if (!sessionStorage.getItem('hasSeenNavGuide')) {
+                  setTimeout(() => setShowGuide(true), 1500);
+                  sessionStorage.setItem('hasSeenNavGuide', 'true');
+              }
+          }, []);
 
           return (
               <Fragment>
-                  {/* ✅ NEW: Render the Marketing Modal */}
                   <MarketingModal 
                     isOpen={isModalOpen}
                     onClose={handleModalClose}
                     onCtaClick={handleModalCtaClick}
                   />
-
-                  <Navbar theme={theme} toggleTheme={toggleTheme} />
+                  <Navbar theme={theme} toggleTheme={toggleTheme} activeSection={activeSection} />
                   <main>
                       <Hero />
                       <About />
@@ -849,6 +967,16 @@
                   </main>
                   <Footer />
                   <ScrollToTopButton />
+                  <NavigationGuide visible={showGuide} onClose={() => setShowGuide(false)} />
+                  <button
+                      className="fixed left-4 bottom-8 z-50 bg-primary-light dark:bg-primary-dark text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 font-semibold hover:scale-105 transition-all duration-300"
+                      style={{ pointerEvents: 'auto' }}
+                      onClick={() => setShowGuide(true)}
+                      aria-label="Show navigation guidance"
+                  >
+                      <i className="fa-solid fa-compass"></i>
+                      Guide Me
+                  </button>
               </Fragment>
           );
       };
