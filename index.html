@@ -29,7 +29,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     
     <script>
       tailwind.config = {
@@ -204,7 +204,6 @@
 
       // --- REUSABLE COMPONENTS ---
 
-      // ✅ NEW: Marketing Modal Component
       const MarketingModal = ({ isOpen, onClose, onCtaClick }) => {
         if (!isOpen) return null;
 
@@ -215,7 +214,7 @@
           >
             <div 
               className="bg-light-card dark:bg-dark-card rounded-2xl shadow-2xl max-w-lg w-full m-6 p-8 relative animate-fadeInUp text-center ring-1 ring-slate-200 dark:ring-slate-700"
-              onClick={e => e.stopPropagation()} // Prevent closing when clicking inside modal
+              onClick={e => e.stopPropagation()}
             >
               <button 
                 onClick={onClose} 
@@ -279,7 +278,7 @@
               <section
                   id={id}
                   ref={sectionRef}
-                  className={`py-20 md:py-28 transition-opacity duration-1000 ease-out rounded-xl ${isVisible ? 'opacity-100' : 'opacity-0'} ${className}`}
+                  className={`py-20 md:py-28 transition-opacity duration-1000 ease-out ${isVisible ? 'opacity-100' : 'opacity-0'} ${className}`}
               >
                   <div className="container mx-auto px-6 md:px-8">
                       {children}
@@ -312,7 +311,6 @@
               if (href) {
                   const element = document.querySelector(href);
                   if (element) {
-                     // Add slight offset for fixed navbar
                      const offset = 80;
                      const bodyRect = document.body.getBoundingClientRect().top;
                      const elementRect = element.getBoundingClientRect().top;
@@ -329,7 +327,7 @@
           };
 
           return (
-              <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out ${isScrolled ? 'py-3 bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-md shadow-xl' : 'py-6 bg-transparent'}`}>
+              <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out ${isScrolled ? 'py-3 bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-lg shadow-xl' : 'py-6 bg-transparent'}`}>
                   <div className="container mx-auto px-6 md:px-8 flex justify-between items-center">
                       
                       <a href="#home" onClick={handleNavClick} className="block transition-transform duration-300 hover:scale-110 focus:outline-none">
@@ -490,9 +488,8 @@
           );
       };
 
+      // --- IMPROVED PROJECT SPOTLIGHT COMPONENT ---
       const ProjectShowcase = ({ project }) => {
-         const ProjectShowcase = ({ project }) => {
-          // An array to make rendering the narrative section cleaner
           const narrativeItems = [
               { icon: 'fa-solid fa-map-location-dot', title: 'Situation', content: project.situation },
               { icon: 'fa-solid fa-bullseye-arrow', title: 'Task', content: project.task },
@@ -582,7 +579,7 @@
       
       const ProjectCard = ({ project }) => {
           return (
-              <div className="bg-light-card dark:bg-dark-card p-8 rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700">
+              <div className="bg-light-card dark:bg-dark-card p-8 rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary-dark/10 ring-1 ring-slate-200 dark:ring-slate-700">
                   <h3 className="font-montserrat text-xl font-bold text-primary-light dark:text-primary-dark mb-4">{project.title}</h3>
                   <div className="space-y-4">
                       <p className="text-light-subtle dark:text-dark-subtle"><strong className="text-light-text dark:text-dark-text font-semibold">Challenge:</strong> {project.challenge}</p>
@@ -638,7 +635,7 @@
       );
       
       const CompetencyCard = ({ competency }) => (
-          <div className="bg-light-card dark:bg-dark-card p-6 text-center rounded-xl shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ring-1 ring-slate-200 dark:ring-slate-700">
+          <div className="bg-light-card dark:bg-dark-card p-6 text-center rounded-xl shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary-dark/10 ring-1 ring-slate-200 dark:ring-slate-700">
               <i className={`${competency.icon} text-4xl text-secondary-dark mb-4`}></i>
               <h4 className="font-montserrat text-lg font-bold text-primary-light dark:text-primary-dark mb-2">{competency.title}</h4>
               <p className="text-sm text-light-subtle dark:text-dark-subtle">{competency.description}</p>
@@ -822,7 +819,6 @@
               return 'dark'; // default
           });
           
-          // ✅ NEW: State for the marketing modal
           const [isModalOpen, setIsModalOpen] = useState(false);
 
           useEffect(() => {
@@ -834,15 +830,14 @@
               localStorage.setItem('theme', theme);
           }, [theme]);
           
-          // ✅ NEW: Effect to show the modal once per session
           useEffect(() => {
               const hasSeenModal = sessionStorage.getItem('hasSeenConsultationModal');
               if (!hasSeenModal) {
                   const timer = setTimeout(() => {
                       setIsModalOpen(true);
                       sessionStorage.setItem('hasSeenConsultationModal', 'true');
-                  }, 2500); // Show modal after 2.5 seconds
-                  return () => clearTimeout(timer); // Cleanup timer
+                  }, 2500);
+                  return () => clearTimeout(timer);
               }
           }, []);
 
@@ -851,7 +846,6 @@
               setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
           };
           
-          // ✅ NEW: Handlers for modal actions
           const handleModalClose = () => setIsModalOpen(false);
           const handleModalCtaClick = () => {
               setIsModalOpen(false);
@@ -863,7 +857,6 @@
 
           return (
               <Fragment>
-                  {/* ✅ NEW: Render the Marketing Modal */}
                   <MarketingModal 
                     isOpen={isModalOpen}
                     onClose={handleModalClose}
