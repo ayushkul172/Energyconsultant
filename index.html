@@ -491,55 +491,89 @@
       };
 
       const ProjectShowcase = ({ project }) => {
+         const ProjectShowcase = ({ project }) => {
+          // An array to make rendering the narrative section cleaner
+          const narrativeItems = [
+              { icon: 'fa-solid fa-map-location-dot', title: 'Situation', content: project.situation },
+              { icon: 'fa-solid fa-bullseye-arrow', title: 'Task', content: project.task },
+              { icon: 'fa-solid fa-gears', title: 'Action', content: project.action }
+          ];
+
           return (
               <Section 
                 id="spotlight" 
-                className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
+                className="bg-gradient-to-br from-slate-900 via-dark-bg to-dark-bg dark:bg-gradient-to-br dark:from-slate-900 dark:via-dark-bg dark:to-dark-bg ring-1 ring-slate-200/10 dark:ring-slate-700/50"
               >
+                  {/* --- SECTION HEADER --- */}
                   <div className="text-center mb-16">
-                      <p className="font-montserrat font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-widest mb-2">Project Spotlight</p>
-                      <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark">{project.title}</h2>
+                      <p className="font-montserrat font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-widest mb-2 animate-fadeInUp" style={{animationDelay: '100ms'}}>
+                          Project Spotlight
+                      </p>
+                      <h2 
+                        className="font-montserrat text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-primary-dark via-cyan-300 to-secondary-dark dark:from-primary-dark dark:via-cyan-300 dark:to-secondary-dark bg-clip-text text-transparent animate-fadeInUp" 
+                        style={{animationDelay: '200ms'}}
+                      >
+                          {project.title}
+                      </h2>
                   </div>
-                  <div className="grid md:grid-cols-2 gap-12 items-start">
-                      <div className="space-y-8">
-                          <div>
-                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">⭐ Situation</h4>
-                              <p className="text-light-subtle dark:text-dark-subtle">{project.situation}</p>
+
+                  {/* --- MAIN CONTENT GRID --- */}
+                  <div className="grid lg:grid-cols-5 gap-12 items-start">
+
+                      {/* --- LEFT COLUMN: THE NARRATIVE --- */}
+                      <div className="lg:col-span-3 space-y-6">
+                          {narrativeItems.map((item, index) => (
+                              <div 
+                                key={item.title} 
+                                className="bg-dark-card/50 dark:bg-dark-card/50 backdrop-blur-sm rounded-xl p-6 ring-1 ring-slate-200/10 dark:ring-slate-700/50 transition-all duration-300 hover:ring-secondary-dark dark:hover:ring-secondary-dark hover:-translate-y-2 hover:shadow-2xl hover:shadow-secondary-dark/10 animate-fadeInUp"
+                                style={{animationDelay: `${300 + index * 150}ms`}}
+                              >
+                                  <div className="flex items-center gap-4 mb-3">
+                                      <i className={`${item.icon} text-2xl text-secondary-dark dark:text-secondary-dark`}></i>
+                                      <h4 className="font-montserrat text-xl font-bold text-light-text dark:text-dark-text">{item.title}</h4>
+                                  </div>
+                                  <p className="text-light-subtle dark:text-dark-subtle text-base leading-relaxed">{item.content}</p>
+                              </div>
+                          ))}
+                      </div>
+
+                      {/* --- RIGHT COLUMN: THE EVIDENCE --- */}
+                      <div className="lg:col-span-2 space-y-8">
+                          
+                          {/* Image with Hover Effect */}
+                          <div className="group rounded-xl overflow-hidden ring-1 ring-slate-700/50 shadow-2xl shadow-black/30 animate-fadeInUp" style={{animationDelay: '400ms'}}>
+                              <img 
+                                src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20tool%20analysis.jpg" 
+                                alt="Screenshot of the Upstream AI Analyzer Tool dashboard"
+                                className="w-full h-auto transition-transform duration-500 ease-in-out group-hover:scale-105"
+                              />
                           </div>
-                          <div>
-                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">🎯 Task</h4>
-                              <p className="text-light-subtle dark:text-dark-subtle">{project.task}</p>
-                          </div>
-                          <div>
-                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">🔧 Action</h4>
-                              <p className="text-light-subtle dark:text-dark-subtle">{project.action}</p>
-                          </div>
-                          <div>
-                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">Technology Stack</h4>
-                               <div className="flex flex-wrap justify-start gap-3">
-                                  {project.techStack.map((tech, index) => (
-                                      <span key={index} className="bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-300 py-1 px-3 rounded-full text-sm font-medium ring-1 ring-cyan-200 dark:ring-cyan-800">{tech}</span>
+
+                          {/* Tech Stack */}
+                          <div className="animate-fadeInUp" style={{animationDelay: '550ms'}}>
+                              <h4 className="font-montserrat text-lg font-bold mb-3 text-light-text dark:text-dark-text">Technology Stack</h4>
+                               <div className="flex flex-wrap justify-start gap-2">
+                                  {project.techStack.map((tech) => (
+                                      <span key={tech} className="bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full text-xs font-semibold ring-1 ring-cyan-800">{tech}</span>
                                   ))}
                               </div>
                           </div>
-                      </div>
-                      <div className="space-y-8">
-                          <img 
-                            src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20tool%20analysis.jpg" 
-                            alt="Screenshot of the Upstream AI Analyzer Tool dashboard"
-                            className="rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 w-full h-auto"
-                          />
-                          <div>
-                              <h4 className="font-montserrat text-xl font-bold mb-4 text-light-text dark:text-dark-text">✅ Key Outcomes</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-                                  {project.results.map((res, index) => (
-                                      <div key={index} className="bg-light-card dark:bg-dark-card p-4 rounded-lg shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                                          <p className="text-3xl font-bold font-montserrat text-secondary-light dark:text-secondary-dark">{res.metric}</p>
-                                          <p className="text-sm text-light-subtle dark:text-dark-subtle">{res.description}</p>
+
+                          {/* Key Outcomes */}
+                          <div className="animate-fadeInUp" style={{animationDelay: '700ms'}}>
+                              <h4 className="font-montserrat text-lg font-bold mb-3 text-light-text dark:text-dark-text">✅ Key Outcomes</h4>
+                              <div className="grid grid-cols-1 gap-4">
+                                  {project.results.map((res) => (
+                                      <div key={res.metric} className="bg-gradient-to-br from-dark-card to-slate-800/80 p-5 rounded-lg ring-1 ring-slate-700 flex items-center gap-5 transition-all duration-300 hover:ring-primary-dark">
+                                          <p className="text-4xl lg:text-5xl font-bold font-montserrat bg-gradient-to-r from-cyan-400 to-teal-300 bg-clip-text text-transparent flex-shrink-0 w-24 text-center">
+                                              {res.metric}
+                                          </p>
+                                          <p className="text-sm text-dark-subtle">{res.description}</p>
                                       </div>
                                   ))}
                               </div>
                           </div>
+
                       </div>
                   </div>
               </Section>
