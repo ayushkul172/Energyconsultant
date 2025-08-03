@@ -3,22 +3,29 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ayush Kulshrestha | Energy Data & Strategy</title>
+    <!-- ✅ SEO: Optimized Title -->
+    <title>Ayush Kulshrestha | Energy Data Analyst & AI Consultant</title>
 
-    <meta name="description" content="A modern, interactive portfolio website for Ayush Kulshrestha, showcasing expertise in energy data analysis, automation, and strategic consulting." />
+    <!-- ✅ SEO: Optimized Meta Description with Keywords -->
+    <meta name="description" content="Energy Consultant and Data Scientist specializing in AI-powered energy market analysis, renewable energy forecasting, and Oil & Gas data analytics solutions." />
+    <meta name="keywords" content="Ayush Kulshrestha, Energy Data Analyst, Energy Consultant India, Energy Market AI, Renewable Energy Forecasting, Oil & Gas Data Analytics, AI in Energy Sector, Python, Power BI, Upstream Analysis" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://ayush-kulshrestha-portfolio.dev/">
-    <meta property="og:title" content="Ayush Kulshrestha | Energy Data & Strategy">
-    <meta property="og:description" content="A modern, interactive portfolio website for Ayush Kulshrestha, showcasing expertise in energy data analysis, automation, and strategic consulting.">
+    <!-- ✅ SEO: Optimized OG Title -->
+    <meta property="og:title" content="Ayush Kulshrestha | Energy Data Analyst & AI Consultant">
+    <!-- ✅ SEO: Optimized OG Description -->
+    <meta property="og:description" content="Energy Consultant and Data Scientist specializing in AI-powered energy market analysis, renewable energy forecasting, and Oil & Gas data analytics solutions.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1533134486753-c833f0ed4866?q=80&w=1200&h=630&fit=crop">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://ayush-kulshrestha-portfolio.dev/">
-    <meta property="twitter:title" content="Ayush Kulshrestha | Energy Data & Strategy">
-    <meta property="twitter:description" content="A modern, interactive portfolio website for Ayush Kulshrestha, showcasing expertise in energy data analysis, automation, and strategic consulting.">
+    <!-- ✅ SEO: Optimized Twitter Title -->
+    <meta property="twitter:title" content="Ayush Kulshrestha | Energy Data Analyst & AI Consultant">
+    <!-- ✅ SEO: Optimized Twitter Description -->
+    <meta property="twitter:description" content="Energy Consultant and Data Scientist specializing in AI-powered energy market analysis, renewable energy forecasting, and Oil & Gas data analytics solutions.">
     <meta property="twitter:image" content="https://images.unsplash.com/photo-1533134486753-c833f0ed4866?q=80&w=1200&h=630&fit=crop">
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
@@ -60,18 +67,35 @@
               sans: ['Roboto', 'sans-serif'],
               montserrat: ['Montserrat', 'sans-serif'],
             },
+            // ✅ ANIMATION: New keyframes for more dynamic effects
             keyframes: {
               fadeInUp: {
                 'from': { opacity: 0, transform: 'translateY(20px)' },
                 'to': { opacity: 1, transform: 'translateY(0)' },
+              },
+              slideInLeft: {
+                'from': { opacity: 0, transform: 'translateX(-30px)' },
+                'to': { opacity: 1, transform: 'translateX(0)' },
+              },
+              slideInRight: {
+                'from': { opacity: 0, transform: 'translateX(30px)' },
+                'to': { opacity: 1, transform: 'translateX(0)' },
+              },
+              scaleIn: {
+                'from': { opacity: 0, transform: 'scale(0.95)' },
+                'to': { opacity: 1, transform: 'scale(1)' },
               },
               reveal: {
                 'from': { clipPath: 'inset(0 100% 0 0)' },
                 'to': { clipPath: 'inset(0 0 0 0)' },
               }
             },
+            // ✅ ANIMATION: New animation utilities
             animation: {
               fadeInUp: 'fadeInUp 0.8s ease-out forwards',
+              slideInLeft: 'slideInLeft 0.8s ease-out forwards',
+              slideInRight: 'slideInRight 0.8s ease-out forwards',
+              scaleIn: 'scaleIn 0.6s ease-out forwards',
               reveal: 'reveal 1s ease-in-out forwards',
             }
           }
@@ -79,7 +103,6 @@
       }
     </script>
     
-    <!-- React, ReactDOM, and Babel for in-browser JSX transpilation -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -107,6 +130,10 @@
       body {
         background-color: transparent !important;
       }
+      /* ✅ ANIMATION: Utility class for animation delays */
+      .animation-delay-200 { animation-delay: 200ms; }
+      .animation-delay-400 { animation-delay: 400ms; }
+      .animation-delay-600 { animation-delay: 600ms; }
     </style>
 </head>
 <body class="bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text transition-colors duration-300">
@@ -157,10 +184,11 @@
       ];
 
       const competencies = [
-          { icon: 'fa-solid fa-magnifying-glass-chart', title: 'Upstream Market Analysis', description: 'Supply/demand forecasting, contract analysis, and competitor performance tracking.' },
-          { icon: 'fa-solid fa-robot', title: 'Data Automation', description: 'Building intelligent systems with Python & VBA to eliminate manual work and drive efficiency.' },
-          { icon: 'fa-solid fa-chart-pie', title: 'Business Intelligence', description: 'Transforming complex data into clear, actionable dashboards with Power BI and ArcGIS.' },
-          { icon: 'fa-solid fa-bullseye', title: 'Commercial Strategy', description: 'Data-backed insights for pricing, market share analysis, and industry benchmarking.' }
+          // ✅ SEO: Keywords integrated
+          { icon: 'fa-solid fa-magnifying-glass-chart', title: 'Upstream Market Analysis', description: 'Deep-dive supply/demand forecasting, contract analysis, and competitor performance tracking in the Oil & Gas data analytics space.' },
+          { icon: 'fa-solid fa-robot', title: 'Data Automation & AI', description: 'Building intelligent systems with Python & VBA to eliminate manual work. A key area of focus in the AI in Energy Sector.' },
+          { icon: 'fa-solid fa-chart-pie', title: 'Business Intelligence', description: 'Transforming complex data into clear, actionable dashboards with Power BI, ArcGIS, and providing renewable energy forecasting visuals.' },
+          { icon: 'fa-solid fa-bullseye', title: 'Commercial Strategy', description: 'Data-backed insights for pricing, market share analysis, and industry benchmarking. Your trusted Energy Consultant in India.' }
       ];
 
       const skills = [
@@ -187,7 +215,32 @@
               description: 'Analyzed market dynamics and competitor landscapes in the industrial manufacturing sector, focusing on digital technologies and product mapping.'
           }
       ];
-
+      
+      // ✅ NEW: Insights data for the new section
+      const insights = [
+        {
+          title: 'The Role of AI in Renewable Energy Forecasting',
+          category: 'AI & RENEWABLES',
+          date: 'August 2024',
+          description: 'A deep dive into how machine learning models are revolutionizing solar and wind energy forecasting, leading to more stable and efficient power grids.',
+          link: '#'
+        },
+        {
+          title: 'Automating Upstream Intelligence: A Python & NLP Case Study',
+          category: 'OIL & GAS DATA',
+          date: 'July 2024',
+          description: 'Exploring the technical architecture behind building automated pipelines to extract and analyze data from unstructured news sources in the energy sector.',
+          link: '#'
+        },
+        {
+          title: 'Beyond the Dashboard: The Future of BI in the Energy Sector',
+          category: 'BUSINESS INTELLIGENCE',
+          date: 'June 2024',
+          description: 'Moving past simple visualizations to predictive and prescriptive analytics. How to leverage tools like Power BI and ArcGIS for strategic foresight.',
+          link: '#'
+        }
+      ];
+      
       const certifications = [
           { icon: 'fa-solid fa-award', title: 'Lean Six Sigma', issuer: 'Issued by KPMG' },
           { icon: 'fa-solid fa-award', title: 'Fundamentals of Digital Marketing', issuer: 'Issued by Google' },
@@ -204,7 +257,6 @@
 
       // --- REUSABLE COMPONENTS ---
 
-      // ✅ NEW: Marketing Modal Component
       const MarketingModal = ({ isOpen, onClose, onCtaClick }) => {
         if (!isOpen) return null;
 
@@ -214,8 +266,8 @@
             onClick={onClose}
           >
             <div 
-              className="bg-light-card dark:bg-dark-card rounded-2xl shadow-2xl max-w-lg w-full m-6 p-8 relative animate-fadeInUp text-center ring-1 ring-slate-200 dark:ring-slate-700"
-              onClick={e => e.stopPropagation()} // Prevent closing when clicking inside modal
+              className="bg-light-card dark:bg-dark-card rounded-2xl shadow-2xl max-w-lg w-full m-6 p-8 relative animate-scaleIn text-center ring-1 ring-slate-200 dark:ring-slate-700"
+              onClick={e => e.stopPropagation()}
             >
               <button 
                 onClick={onClose} 
@@ -248,9 +300,10 @@
         );
       };
 
+      // ✅ ANIMATION: Section component passes visibility state to children
       const Section = ({ children, id, className = '' }) => {
-          const [isVisible, setIsVisible] = useState(false);
           const sectionRef = useRef(null);
+          const [isVisible, setIsVisible] = useState(false);
 
           useEffect(() => {
               const observer = new IntersectionObserver(
@@ -260,7 +313,7 @@
                           observer.unobserve(entry.target);
                       }
                   },
-                  { threshold: 0.1 }
+                  { rootMargin: '-100px 0px', threshold: 0.1 }
               );
 
               const currentRef = sectionRef.current;
@@ -279,22 +332,27 @@
               <section
                   id={id}
                   ref={sectionRef}
-                  className={`py-20 md:py-28 transition-opacity duration-1000 ease-out rounded-xl ${isVisible ? 'opacity-100' : 'opacity-0'} ${className}`}
+                  className={`py-20 md:py-28 rounded-xl ${className}`}
               >
                   <div className="container mx-auto px-6 md:px-8">
-                      {children}
+                     {React.Children.map(children, child =>
+                        React.isValidElement(child)
+                          ? React.cloneElement(child, { isVisible: isVisible })
+                          : child
+                      )}
                   </div>
               </section>
           );
       };
       
       const Navbar = ({ theme, toggleTheme }) => {
+        // ✅ NEW: Added "Insights" to nav
         const navLinks = [
               { href: '#home', label: 'Home' },
               { href: '#about', label: 'About' },
               { href: '#spotlight', label: 'Spotlight' },
-              { href: '#projects', label: 'Projects' },
               { href: '#experience', label: 'Experience' },
+              { href: '#insights', label: 'Insights'},
               { href: '#contact', label: 'Contact' }
           ];
           const [isScrolled, setIsScrolled] = useState(false);
@@ -312,7 +370,6 @@
               if (href) {
                   const element = document.querySelector(href);
                   if (element) {
-                     // Add slight offset for fixed navbar
                      const offset = 80;
                      const bodyRect = document.body.getBoundingClientRect().top;
                      const elementRect = element.getBoundingClientRect().top;
@@ -399,20 +456,21 @@
                           Ayush Kulshrestha
                       </h1>
                       
+                      {/* ✅ SEO: Keyword-rich subtitle */}
                       <p className="text-xl md:text-2xl mt-5 mb-8 text-cyan-200 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
-                          Energy Consultant & Data Scientist | AI-Driven Analytics for the Energy Sector
+                          Energy Data Analyst | Specializing in AI for Oil & Gas Data Analytics and Renewable Energy Forecasting
                       </p>
                       
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.5s' }}>
-                          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 text-left">
+                          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 text-left transition-all duration-300 hover:bg-white/20 hover:-translate-y-1">
                               <h4 className="font-montserrat text-lg font-bold text-cyan-300 pb-2 mb-2">Upstream Market Intel</h4>
                               <p className="text-slate-200 text-sm">In-depth analysis of supply/demand trends, subsea developments, and contractor performance.</p>
                           </div>
-                          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 text-left">
-                              <h4 className="font-montserrat text-lg font-bold text-cyan-300 pb-2 mb-2">AI-Powered Automation</h4>
-                              <p className="text-slate-200 text-sm">Architecting AI-powered solutions that automate research, extract critical intel, and reduce manual effort by over 90%.</p>
+                          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 text-left transition-all duration-300 hover:bg-white/20 hover:-translate-y-1">
+                              <h4 className="font-montserrat text-lg font-bold text-cyan-300 pb-2 mb-2">AI in Energy Sector</h4>
+                              <p className="text-slate-200 text-sm">Architecting AI solutions that automate research, extract critical intel, and reduce manual effort by over 90%.</p>
                           </div>
-                          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 text-left">
+                          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 text-left transition-all duration-300 hover:bg-white/20 hover:-translate-y-1">
                               <h4 className="font-montserrat text-lg font-bold text-cyan-300 pb-2 mb-2">Strategic Consulting</h4>
                               <p className="text-slate-200 text-sm">Utilizing market benchmarking and data visualization to enhance competitive positioning.</p>
                           </div>
@@ -426,7 +484,7 @@
           );
       };
 
-      const About = () => {
+      const About = ({ isVisible }) => {
          return (
               <Section 
                 id="about" 
@@ -434,13 +492,13 @@
               >
                 <div className="grid md:grid-cols-5 gap-10 items-center">
                   
-                  <div className="md:col-span-2 flex items-center justify-center">
+                  <div className={`md:col-span-2 flex items-center justify-center opacity-0 ${isVisible && 'animate-slideInLeft'}`}>
                     <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full bg-light-card dark:bg-dark-card p-2 transition-all duration-300
                                     border-4 border-primary-light dark:border-primary-dark 
                                     shadow-[0_15px_40px_-10px_rgba(8,145,178,0.4)] dark:shadow-[0_15px_40px_-10px_rgba(34,211,238,0.2)]">
                       <img 
                         src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/Ayushprofile.png"
-                        alt="A professional headshot of Ayush Kulshrestha"
+                        alt="A professional headshot of Ayush Kulshrestha, Energy Data Analyst"
                         className="w-full h-full rounded-full object-cover
                                    object-top
                                    scale-125
@@ -450,20 +508,20 @@
                     </div>
                   </div>
 
-                    <div className="md:col-span-3">
+                    <div className={`md:col-span-3 opacity-0 ${isVisible && 'animate-slideInRight'}`}>
                         <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4 animate-reveal">
                             Bridging Engineering, Business, and Data Science
                         </h2>
                         <div className="space-y-4 text-light-subtle dark:text-dark-subtle text-lg">
                             <p>
-                                My career is driven by a fascination with the intersection of technology, data, and the global energy landscape. With a foundation in <strong className="text-light-text dark:text-dark-text font-semibold">Mechanical Engineering (B.Tech)</strong> and a strategic perspective from an <strong className="text-light-text dark:text-dark-text font-semibold">MBA in Marketing & International Business</strong>, I am uniquely positioned to understand not just the *what*, but the *why* behind market movements.
+                                As an experienced <strong className="text-light-text dark:text-dark-text font-semibold">Energy Data Analyst</strong>, my career is driven by the intersection of technology, data, and the global energy landscape. With a foundation in <strong className="text-light-text dark:text-dark-text font-semibold">Mechanical Engineering (B.Tech)</strong> and a strategic perspective from an <strong className="text-light-text dark:text-dark-text font-semibold">MBA</strong>, I am uniquely positioned to understand not just the *what*, but the *why* behind market movements.
                             </p>
                             <p>
-                                I don't just analyze data; I build systems to make it smarter. My approach is to identify inefficiencies, architect solutions with <strong className="text-light-text dark:text-dark-text font-semibold">Python, VBA, and Generative AI</strong>, and deliver clear, actionable intelligence that empowers leadership to act with confidence. I am passionate about building data-driven strategies that create a competitive edge.
+                                I don't just analyze data; I build systems to make it smarter. My approach is to identify inefficiencies and architect solutions with <strong className="text-light-text dark:text-dark-text font-semibold">Python, VBA, and Generative AI</strong>. I specialize in <strong className="text-light-text dark:text-dark-text font-semibold">AI in the energy sector</strong>, delivering clear intelligence that empowers leadership to act with confidence.
                             </p>
                         </div>
                         
-                        <div className="mt-8 flex flex-wrap gap-4 items-center">
+                        <div className={`mt-8 flex flex-wrap gap-4 items-center opacity-0 ${isVisible && 'animate-fadeInUp animation-delay-400'}`}>
                           <a 
                               href="https://www.linkedin.com/in/ayush-k-5641461b2/" 
                               target="_blank" 
@@ -490,31 +548,22 @@
           );
       };
 
-      const ProjectShowcase = ({ project }) => {
+      const ProjectShowcase = ({ project, isVisible }) => {
           return (
               <Section 
                 id="spotlight" 
                 className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
               >
-                  <div className="text-center mb-16">
+                  <div className={`text-center mb-16 opacity-0 ${isVisible && 'animate-fadeInUp'}`}>
                       <p className="font-montserrat font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-widest mb-2">Project Spotlight</p>
                       <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark">{project.title}</h2>
                   </div>
                   <div className="grid md:grid-cols-2 gap-12 items-start">
                       <div className="space-y-8">
-                          <div>
-                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">⭐ Situation</h4>
-                              <p className="text-light-subtle dark:text-dark-subtle">{project.situation}</p>
-                          </div>
-                          <div>
-                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">🎯 Task</h4>
-                              <p className="text-light-subtle dark:text-dark-subtle">{project.task}</p>
-                          </div>
-                          <div>
-                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">🔧 Action</h4>
-                              <p className="text-light-subtle dark:text-dark-subtle">{project.action}</p>
-                          </div>
-                          <div>
+                          <div className={`opacity-0 ${isVisible && 'animate-slideInLeft'}`}><h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">⭐ Situation</h4><p className="text-light-subtle dark:text-dark-subtle">{project.situation}</p></div>
+                          <div className={`opacity-0 ${isVisible && 'animate-slideInLeft animation-delay-200'}`}><h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">🎯 Task</h4><p className="text-light-subtle dark:text-dark-subtle">{project.task}</p></div>
+                          <div className={`opacity-0 ${isVisible && 'animate-slideInLeft animation-delay-400'}`}><h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">🔧 Action</h4><p className="text-light-subtle dark:text-dark-subtle">{project.action}</p></div>
+                          <div className={`opacity-0 ${isVisible && 'animate-slideInLeft animation-delay-600'}`}>
                               <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">Technology Stack</h4>
                                <div className="flex flex-wrap justify-start gap-3">
                                   {project.techStack.map((tech, index) => (
@@ -527,9 +576,9 @@
                           <img 
                             src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20tool%20analysis.jpg" 
                             alt="Screenshot of the Upstream AI Analyzer Tool dashboard"
-                            className="rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 w-full h-auto"
+                            className={`rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 w-full h-auto opacity-0 ${isVisible && 'animate-slideInRight'}`}
                           />
-                          <div>
+                          <div className={`opacity-0 ${isVisible && 'animate-fadeInUp animation-delay-200'}`}>
                               <h4 className="font-montserrat text-xl font-bold mb-4 text-light-text dark:text-dark-text">✅ Key Outcomes</h4>
                               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
                                   {project.results.map((res, index) => (
@@ -546,9 +595,9 @@
           );
       };
       
-      const ProjectCard = ({ project }) => {
+      const ProjectCard = ({ project, isVisible, delay }) => {
           return (
-              <div className="bg-light-card dark:bg-dark-card p-8 rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700">
+              <div className={`bg-light-card dark:bg-dark-card p-8 rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-500/10 dark:hover:shadow-cyan-400/10 ring-1 ring-slate-200 dark:ring-slate-700 opacity-0 ${isVisible && 'animate-fadeInUp'}`} style={{ animationDelay: delay }}>
                   <h3 className="font-montserrat text-xl font-bold text-primary-light dark:text-primary-dark mb-4">{project.title}</h3>
                   <div className="space-y-4">
                       <p className="text-light-subtle dark:text-dark-subtle"><strong className="text-light-text dark:text-dark-text font-semibold">Challenge:</strong> {project.challenge}</p>
@@ -563,36 +612,36 @@
               </div>
           );
       };
-      const Projects = () => (
+      const Projects = ({ isVisible }) => (
           <Section 
             id="projects" 
             className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
           >
-              <div className="text-center">
+              <div className={`text-center opacity-0 ${isVisible && 'animate-fadeInUp'}`}>
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Additional Case Studies</h2>
                   <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">Here are more examples of how I've turned complex challenges into measurable successes.</p>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  {projects.map((project, index) => <ProjectCard key={index} project={project} />)}
+                  {projects.map((project, index) => <ProjectCard key={index} project={project} isVisible={isVisible} delay={`${index * 200}ms`} />)}
               </div>
           </Section>
       );
 
-      const Expertise = () => (
+      const Expertise = ({ isVisible }) => (
           <Section 
             id="expertise" 
             className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
           >
-              <div className="text-center">
+              <div className={`text-center opacity-0 ${isVisible && 'animate-fadeInUp'}`}>
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Core Competencies & Technical Toolkit</h2>
                   <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">I leverage a blend of strategic analysis and technical skill to deliver powerful results.</p>
               </div>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-                  {competencies.map((item, index) => <CompetencyCard key={index} competency={item} />)}
+                  {competencies.map((item, index) => <CompetencyCard key={index} competency={item} isVisible={isVisible} delay={`${index * 150}ms`} />)}
               </div>
               
-              <div className="text-center">
+              <div className={`text-center opacity-0 ${isVisible && 'animate-fadeInUp animation-delay-600'}`}>
                   <h3 className="font-montserrat text-2xl font-bold text-primary-light dark:text-primary-dark text-center mb-6">Technical Toolkit</h3>
                   <div className="flex flex-wrap justify-center gap-3">
                       {skills.map((skill, index) => (
@@ -603,18 +652,18 @@
           </Section>
       );
       
-      const CompetencyCard = ({ competency }) => (
-          <div className="bg-light-card dark:bg-dark-card p-6 text-center rounded-xl shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ring-1 ring-slate-200 dark:ring-slate-700">
+      const CompetencyCard = ({ competency, isVisible, delay }) => (
+          <div className={`bg-light-card dark:bg-dark-card p-6 text-center rounded-xl shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-cyan-500/10 dark:hover:shadow-cyan-400/10 ring-1 ring-slate-200 dark:ring-slate-700 opacity-0 ${isVisible && 'animate-scaleIn'}`} style={{ animationDelay: delay }}>
               <i className={`${competency.icon} text-4xl text-secondary-dark mb-4`}></i>
               <h4 className="font-montserrat text-lg font-bold text-primary-light dark:text-primary-dark mb-2">{competency.title}</h4>
               <p className="text-sm text-light-subtle dark:text-dark-subtle">{competency.description}</p>
           </div>
       );
 
-      const TimelineItem = ({ item, isActive, onClick }) => {
+      const TimelineItem = ({ item, isActive, onClick, isVisible }) => {
           const contentId = useId();
           return (
-              <div className="relative pl-12 pb-10">
+              <div className={`relative pl-12 pb-10 opacity-0 ${isVisible && 'animate-fadeInUp'}`}>
                   <div className="absolute left-[-9px] top-1 w-6 h-6 bg-light-bg dark:bg-dark-bg border-4 border-secondary-light dark:border-secondary-dark rounded-full z-10 transition-transform duration-300 group-hover:scale-110"></div>
                   
                   <button 
@@ -641,7 +690,7 @@
               </div>
           );
       };
-      const Experience = () => {
+      const Experience = ({ isVisible }) => {
           const [activeIndex, setActiveIndex] = useState(0);
 
           const handleItemClick = (index) => {
@@ -653,54 +702,84 @@
                 id="experience" 
                 className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
               >
-                  <div className="text-center">
+                  <div className={`text-center opacity-0 ${isVisible && 'animate-fadeInUp'}`}>
                       <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Career Journey</h2>
                       <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">A timeline of my professional growth and key responsibilities.</p>
                   </div>
                   <div className="relative max-w-3xl mx-auto">
-                      <div className="absolute left-0 top-2 h-full w-1 bg-slate-200 dark:bg-slate-700 rounded" style={{ transform: 'translateX(2px)' }}></div>
+                      <div className={`absolute left-0 top-2 h-full w-1 bg-slate-200 dark:bg-slate-700 rounded transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`} style={{ transform: 'translateX(2px)' }}></div>
                       {experiences.map((item, index) => (
-                          <TimelineItem key={index} item={item} isActive={activeIndex === index} onClick={() => handleItemClick(index)} />
+                          <TimelineItem key={index} item={item} isActive={activeIndex === index} onClick={() => handleItemClick(index)} isVisible={isVisible} />
                       ))}
                   </div>
               </Section>
           );
       };
+      
+      // ✅ NEW: Insights Section & Card Components
+      const InsightCard = ({ insight, isVisible, delay }) => (
+          <a href={insight.link} target="_blank" rel="noopener noreferrer" className={`block bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg border-l-4 border-secondary-light dark:border-secondary-dark transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-500/10 dark:hover:shadow-cyan-400/10 flex flex-col group opacity-0 ${isVisible && 'animate-fadeInUp'}`} style={{ animationDelay: delay }}>
+              <div className="mb-3">
+                  <span className="text-xs font-bold uppercase tracking-widest text-secondary-light dark:text-secondary-dark">{insight.category}</span>
+                  <span className="text-xs text-light-subtle dark:text-dark-subtle ml-3">{insight.date}</span>
+              </div>
+              <h4 className="font-montserrat text-lg font-bold text-primary-light dark:text-primary-dark mb-2 group-hover:text-secondary-light dark:group-hover:text-secondary-dark transition-colors">{insight.title}</h4>
+              <p className="text-light-subtle dark:text-dark-subtle text-sm flex-grow">{insight.description}</p>
+              <div className="mt-4 font-semibold text-secondary-light dark:text-secondary-dark">
+                  Read More <i className="fa-solid fa-arrow-right-long ml-1 transition-transform duration-300 group-hover:translate-x-1"></i>
+              </div>
+          </a>
+      );
 
-      const Certifications = () => (
+      const Insights = ({ isVisible }) => (
           <Section 
-            id="certifications" 
+            id="insights" 
             className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
           >
-              <div className="text-center">
+              <div className={`text-center opacity-0 ${isVisible && 'animate-fadeInUp'}`}>
+                  <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Insights & Articles</h2>
+                  <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">Sharing my perspective on the intersection of AI, data, and the energy sector. A key part of my content marketing to boost search rankings.</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {insights.map((item, index) => <InsightCard key={index} insight={item} isVisible={isVisible} delay={`${index * 150}ms`} />)}
+              </div>
+          </Section>
+      );
+      
+      const Certifications = ({ isVisible }) => (
+          <Section 
+            id="certifications" 
+            className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
+          >
+              <div className={`text-center opacity-0 ${isVisible && 'animate-fadeInUp'}`}>
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Certifications & Credentials</h2>
                   <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle mb-12">A collection of my professional certifications and continued learning achievements.</p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {certifications.map((cert, index) => <CertificationCard key={index} cert={cert} />)}
+                  {certifications.slice(0, 9).map((cert, index) => <CertificationCard key={index} cert={cert} isVisible={isVisible} delay={`${index * 100}ms`} />)}
               </div>
           </Section>
       );
-      const CertificationCard = ({ cert }) => (
-          <div className="bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg border-l-4 border-secondary-light dark:border-secondary-dark transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl flex flex-col items-start">
+      const CertificationCard = ({ cert, isVisible, delay }) => (
+          <div className={`bg-light-bg dark:bg-dark-bg p-6 rounded-xl shadow-lg border-l-4 border-secondary-light dark:border-secondary-dark transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl flex flex-col items-start opacity-0 ${isVisible && 'animate-fadeInUp'}`} style={{ animationDelay: delay }}>
               <div className="w-12 h-12 mb-4 rounded-lg bg-secondary-light/10 dark:bg-secondary-dark/10 flex items-center justify-center">
                   <i className={`${cert.icon} text-2xl text-secondary-light dark:text-secondary-dark`}></i>
               </div>
               <h4 className="font-montserrat text-lg font-bold text-primary-light dark:text-primary-dark mb-1">{cert.title}</h4>
-              <p className="text-light-subtle dark:text-dark-subtle">{cert.issuer}</p>
+              <p className="text-light-subtle dark:text-dark-subtle text-sm">{cert.issuer}</p>
           </div>
       );
       
-      const Contact = () => (
+      const Contact = ({ isVisible }) => (
           <Section 
             id="contact" 
             className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
           >
-              <div className="text-center max-w-3xl mx-auto">
+              <div className={`text-center max-w-3xl mx-auto opacity-0 ${isVisible && 'animate-fadeInUp'}`}>
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Let's Talk</h2>
                   <p className="mb-12 text-light-subtle dark:text-dark-subtle">I am always open to discussing new opportunities, projects, and collaborations. Please get in touch using the form below or through my social channels.</p>
                   
-                  <div className="bg-light-bg dark:bg-dark-bg p-8 rounded-xl shadow-2xl ring-1 ring-slate-300 dark:ring-slate-600">
+                  <div className={`bg-light-bg dark:bg-dark-bg p-8 rounded-xl shadow-2xl ring-1 ring-slate-300 dark:ring-slate-600 opacity-0 ${isVisible && 'animate-scaleIn animation-delay-200'}`}>
                       <form action="https://formspree.io/f/myzjobjp" method="POST" className="text-left space-y-6">
                           <div>
                               <label htmlFor="name" className="block mb-2 font-medium text-light-text dark:text-dark-text">Your Name</label>
@@ -718,7 +797,7 @@
                       </form>
                   </div>
 
-                  <div className="mt-16">
+                  <div className={`mt-16 opacity-0 ${isVisible && 'animate-fadeInUp animation-delay-400'}`}>
                       <p className="font-medium mb-6 text-light-subtle dark:text-dark-subtle">Or reach out directly:</p>
                       <ul className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 text-md">
                           <li className="flex items-center gap-3 group">
@@ -785,10 +864,9 @@
                   }
                   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
               }
-              return 'dark'; // default
+              return 'dark';
           });
           
-          // ✅ NEW: State for the marketing modal
           const [isModalOpen, setIsModalOpen] = useState(false);
 
           useEffect(() => {
@@ -800,15 +878,14 @@
               localStorage.setItem('theme', theme);
           }, [theme]);
           
-          // ✅ NEW: Effect to show the modal once per session
           useEffect(() => {
               const hasSeenModal = sessionStorage.getItem('hasSeenConsultationModal');
               if (!hasSeenModal) {
                   const timer = setTimeout(() => {
                       setIsModalOpen(true);
                       sessionStorage.setItem('hasSeenConsultationModal', 'true');
-                  }, 2500); // Show modal after 2.5 seconds
-                  return () => clearTimeout(timer); // Cleanup timer
+                  }, 5000); // Show modal after 5 seconds
+                  return () => clearTimeout(timer);
               }
           }, []);
 
@@ -817,7 +894,6 @@
               setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
           };
           
-          // ✅ NEW: Handlers for modal actions
           const handleModalClose = () => setIsModalOpen(false);
           const handleModalCtaClick = () => {
               setIsModalOpen(false);
@@ -829,7 +905,6 @@
 
           return (
               <Fragment>
-                  {/* ✅ NEW: Render the Marketing Modal */}
                   <MarketingModal 
                     isOpen={isModalOpen}
                     onClose={handleModalClose}
@@ -844,6 +919,8 @@
                       <Projects />
                       <Expertise />
                       <Experience />
+                      {/* ✅ NEW: Insights section added to the main flow */}
+                      <Insights />
                       <Certifications />
                       <Contact />
                   </main>
