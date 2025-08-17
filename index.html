@@ -133,18 +133,47 @@
       const { useState, useEffect, useRef, useId, Fragment } = React;
 
       // --- DATA CONSTANTS ---
-      const featuredProject = {
-          title: "Upstream AI Analyzer Tool",
-          situation: "In the upstream oil & gas industry, decision-makers rely on timely insights from news sources. However, manually scanning, extracting, and analyzing key information is tedious, error-prone, and time-consuming, leading to missed updates and difficulties in building structured dashboards.",
-          task: "My objective was to design and build a tool that could automatically collect upstream news, extract specific entities (projects, operators, delays), summarize articles, and visually present the analysis in an interactive dashboard—all accessible to non-technical users.",
-          action: "I built the Upstream AI Analyzer, a full-featured Python desktop application. The tool's workflow involves a user selecting a date range, which triggers automated web scraping of news articles. Each article is then processed through a custom NLP extraction pipeline to pull over 14 categories of information, including field names, companies, contract types, and budget values. Finally, the structured results are rendered in a dynamic, graphical dashboard.",
-          techStack: ["PyQt5", "Selenium", "spaCy", "Regex", "Matplotlib", "Python"],
-          results: [
-              { metric: "90%", description: "Reduction in manual analysis time for upstream analysts." },
-              { metric: "100%", description: "Automation of intelligence gathering from unstructured news." },
-              { metric: "1-Click", description: "Deployment, launched from a single desktop icon for non-technical users." }
-          ]
-      };
+      const spotlightProjects = [
+          {
+              title: "Upstream AI Analyzer Tool",
+              situation: "In the upstream oil & gas industry, decision-makers rely on timely insights from news sources. However, manually scanning, extracting, and analyzing key information is tedious, error-prone, and time-consuming, leading to missed updates and difficulties in building structured dashboards.",
+              task: "My objective was to design and build a tool that could automatically collect upstream news, extract specific entities (projects, operators, delays), summarize articles, and visually present the analysis in an interactive dashboard—all accessible to non-technical users.",
+              action: "I built the Upstream AI Analyzer, a full-featured Python desktop application. The tool's workflow involves a user selecting a date range, which triggers automated web scraping of news articles. Each article is then processed through a custom NLP extraction pipeline to pull over 14 categories of information, including field names, companies, contract types, and budget values. Finally, the structured results are rendered in a dynamic, graphical dashboard.",
+              techStack: ["PyQt5", "Selenium", "spaCy", "Regex", "Matplotlib", "Python"],
+              image: "https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20tool%20analysis.jpg",
+              results: [
+                  { metric: "90%", description: "Reduction in manual analysis time for upstream analysts." },
+                  { metric: "100%", description: "Automation of intelligence gathering from unstructured news." },
+                  { metric: "1-Click", description: "Deployment, launched from a single desktop icon for non-technical users." }
+              ]
+          },
+          {
+              title: "Automated Research Synthesizer",
+              situation: "Strategic research teams were bogged down by manual data collection from diverse online sources. This time-consuming process led to project delays and made it difficult to synthesize information into a consistent, actionable format.",
+              task: "The goal was to create an intelligent tool that leverages Generative AI to automate the entire secondary research lifecycle—from targeted data gathering and summarization to the final synthesis of key insights, freeing up analysts for higher-value strategic thinking.",
+              action: "I engineered a Python-based application that integrates with the OpenAI API. An analyst provides a research query, and the tool autonomously scours predefined industry websites and news outlets. It uses BeautifulSoup for content extraction and LangChain to structure prompts for summarization, theme identification, and insight generation. The final, synthesized report is automatically compiled into a structured Word document.",
+              techStack: ["Python", "OpenAI API", "LangChain", "BeautifulSoup", "python-docx"],
+              image: "https://images.unsplash.com/photo-1677756119517-756a188d2d94?q=80&w=1200&h=800&fit=crop&auto=format",
+              results: [
+                  { metric: "75%", description: "Reduction in time spent on initial data gathering and synthesis." },
+                  { metric: "4x", description: "Increase in the volume of sources analyzed per research project." },
+                  { metric: "100%", description: "Standardization of research outputs for improved consistency." }
+              ]
+          },
+          {
+              title: "Project Command Center",
+              situation: "Managing complex projects with multiple team members often leads to fragmented data, unbalanced workloads, and a lack of real-time visibility. Traditional tools struggle to provide intelligent insights, forcing managers into manual tracking and reactive decision-making.",
+              task: "To design and develop an all-in-one desktop application that centralizes project management, provides granular sub-task tracking, and integrates AI-powered analytics to predict delays, summarize workloads, and intelligently optimize task allocation across the team.",
+              action: "I developed the 'Project Command Center,' a comprehensive solution featuring a dynamic task table with Excel integration. Its key innovations include an AI-powered observation module using NLP to summarize workloads, a machine learning model to predict task completion, and a linear programming engine to optimize resource allocation. The platform is rounded out with an interactive visualization panel, offering customizable charts and advanced filtering for deep-dive analysis.",
+              techStack: ["Python", "PyQt5", "Pandas", "Scikit-learn", "Matplotlib", "SciPy"],
+              image: "https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/Project%20tool.png",
+              results: [
+                  { metric: "AI-Driven", description: "Insights that predict delays & optimize team workload allocation." },
+                  { metric: "100%", description: "Centralized visibility into all tasks and sub-tasks in real-time." },
+                  { metric: "30%+", description: "Increase in team productivity via automation & balanced workloads." }
+              ]
+          }
+      ];
       const projects = [
           {
               title: 'AI-Powered News Intelligence Pipeline',
@@ -500,64 +529,130 @@
           );
       };
 
-      const ProjectShowcase = ({ project }) => {
+      const ProjectShowcase = ({ projects }) => {
+          const [currentIndex, setCurrentIndex] = useState(0);
+
+          const prevSlide = () => {
+              const isFirstSlide = currentIndex === 0;
+              const newIndex = isFirstSlide ? projects.length - 1 : currentIndex - 1;
+              setCurrentIndex(newIndex);
+          };
+
+          const nextSlide = () => {
+              const isLastSlide = currentIndex === projects.length - 1;
+              const newIndex = isLastSlide ? 0 : currentIndex + 1;
+              setCurrentIndex(newIndex);
+          };
+
+          const goToSlide = (slideIndex) => {
+              setCurrentIndex(slideIndex);
+          };
+
           return (
               <Section 
-                id="spotlight" 
-                className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
+                  id="spotlight" 
+                  className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
               >
                   <div className="text-center mb-16">
                       <p className="font-montserrat font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-widest mb-2">Project Spotlight</p>
-                      <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark">{project.title}</h2>
+                      <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark">Featured AI Implementations</h2>
                   </div>
-                  <div className="grid md:grid-cols-2 gap-12 items-start">
-                      <div className="space-y-8">
-                          <div>
-                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">⭐ Situation</h4>
-                              <p className="text-light-subtle dark:text-dark-subtle">{project.situation}</p>
-                          </div>
-                          <div>
-                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">🎯 Task</h4>
-                              <p className="text-light-subtle dark:text-dark-subtle">{project.task}</p>
-                          </div>
-                          <div>
-                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">🔧 Action</h4>
-                              <p className="text-light-subtle dark:text-dark-subtle">{project.action}</p>
-                          </div>
-                          <div>
-                              <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">Technology Stack</h4>
-                               <div className="flex flex-wrap justify-start gap-3">
-                                  {project.techStack.map((tech, index) => (
-                                      <span key={index} className="bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-300 py-1 px-3 rounded-full text-sm font-medium ring-1 ring-cyan-200 dark:ring-cyan-800">{tech}</span>
-                                  ))}
-                              </div>
-                          </div>
-                      </div>
-                      <div className="space-y-8">
-                          <img 
-                            src="https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20tool%20analysis.jpg" 
-                            alt="Screenshot of the Upstream AI Analyzer Tool dashboard"
-                            className="rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 w-full h-auto"
-                          />
-                          <div>
-                              <h4 className="font-montserrat text-xl font-bold mb-4 text-light-text dark:text-dark-text">✅ Key Outcomes</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-                                  {project.results.map((res, index) => (
-                                      <div key={index} className="bg-light-card dark:bg-dark-card p-4 rounded-lg shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                                          <p className="text-3xl font-bold font-montserrat text-secondary-light dark:text-secondary-dark">{res.metric}</p>
-                                          <p className="text-sm text-light-subtle dark:text-dark-subtle">{res.description}</p>
+
+                  {/* --- Slider Starts Here --- */}
+                  <div className="relative max-w-6xl mx-auto">
+                      <div className="overflow-hidden relative rounded-xl">
+                          <div 
+                              className="flex transition-transform ease-in-out duration-700"
+                              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                          >
+                              {projects.map((project, index) => (
+                                  <div key={index} className="w-full flex-shrink-0 p-2">
+                                      <div className="grid md:grid-cols-2 gap-12 items-start bg-light-card dark:bg-dark-card p-8 rounded-xl shadow-lg ring-1 ring-slate-200 dark:ring-slate-700">
+                                          {/* Left Column: Project Details */}
+                                          <div className="space-y-8">
+                                              <h3 className="font-montserrat text-2xl font-bold text-primary-light dark:text-primary-dark -mt-2">{project.title}</h3>
+                                              <div>
+                                                  <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">⭐ Situation</h4>
+                                                  <p className="text-light-subtle dark:text-dark-subtle">{project.situation}</p>
+                                              </div>
+                                              <div>
+                                                  <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">🎯 Task</h4>
+                                                  <p className="text-light-subtle dark:text-dark-subtle">{project.task}</p>
+                                              </div>
+                                              <div>
+                                                  <h4 className="font-montserrat text-xl font-bold mb-2 text-light-text dark:text-dark-text">🔧 Action</h4>
+                                                  <p className="text-light-subtle dark:text-dark-subtle">{project.action}</p>
+                                              </div>
+                                          </div>
+                                          
+                                          {/* Right Column: Image, Tech Stack, Outcomes */}
+                                          <div className="space-y-8">
+                                              <img 
+                                                src={project.image}
+                                                alt={`Screenshot of the ${project.title}`}
+                                                className="rounded-xl shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 w-full h-auto aspect-[16/10] object-cover"
+                                              />
+                                              <div>
+                                                  <h4 className="font-montserrat text-xl font-bold mb-3 text-light-text dark:text-dark-text">Technology Stack</h4>
+                                                  <div className="flex flex-wrap justify-start gap-3">
+                                                      {project.techStack.map((tech, i) => (
+                                                          <span key={i} className="bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-300 py-1 px-3 rounded-full text-sm font-medium ring-1 ring-cyan-200 dark:ring-cyan-800">{tech}</span>
+                                                      ))}
+                                                  </div>
+                                              </div>
+                                              <div>
+                                                  <h4 className="font-montserrat text-xl font-bold mb-4 text-light-text dark:text-dark-text">✅ Key Outcomes</h4>
+                                                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                                                      {project.results.map((res, i) => (
+                                                          <div key={i} className="bg-light-bg dark:bg-dark-bg p-4 rounded-lg shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                                                              <p className="text-3xl font-bold font-montserrat text-secondary-light dark:text-secondary-dark">{res.metric}</p>
+                                                              <p className="text-sm text-light-subtle dark:text-dark-subtle">{res.description}</p>
+                                                          </div>
+                                                      ))}
+                                                  </div>
+                                              </div>
+                                          </div>
                                       </div>
-                                  ))}
-                              </div>
+                                  </div>
+                              ))}
                           </div>
                       </div>
+
+                      {/* --- Navigation Buttons (MODIFIED) --- */}
+                      <button 
+                          onClick={prevSlide}
+                          className="absolute top-1/2 -translate-y-1/2 left-[-2rem] md:left-[-4rem] z-10 w-12 h-12 bg-white/50 dark:bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-light-text dark:text-dark-text hover:bg-white/80 dark:hover:bg-black/80 transition-all shadow-lg"
+                          aria-label="Previous project"
+                      >
+                          <i className="fa-solid fa-chevron-left"></i>
+                      </button>
+                      <button 
+                          onClick={nextSlide}
+                          className="absolute top-1/2 -translate-y-1/2 right-[-2rem] md:right-[-4rem] z-10 w-12 h-12 bg-white/50 dark:bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-light-text dark:text-dark-text hover:bg-white/80 dark:hover:bg-black/80 transition-all shadow-lg"
+                          aria-label="Next project"
+                      >
+                          <i className="fa-solid fa-chevron-right"></i>
+                      </button>
+
+                      {/* --- Indicator Dots --- */}
+                      <div className="flex justify-center mt-8 space-x-3">
+                          {projects.map((_, slideIndex) => (
+                              <button
+                                  key={slideIndex}
+                                  onClick={() => goToSlide(slideIndex)}
+                                  className={`w-3 h-3 rounded-full transition-all duration-300 ${currentIndex === slideIndex ? 'bg-primary-light dark:bg-primary-dark scale-125' : 'bg-slate-300 dark:bg-slate-600'}`}
+                                  aria-label={`Go to project ${slideIndex + 1}`}
+                              ></button>
+                          ))}
+                      </div>
                   </div>
-                  {/* ✅ This link guides users to the next section */}
+                  {/* --- Slider Ends Here --- */}
+
                   <NextSectionLink href="#projects" text="Explore more case studies" />
               </Section>
           );
       };
-      
+
       const ProjectCard = ({ project }) => {
           return (
               <div className="bg-light-card dark:bg-dark-card p-8 rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700">
@@ -958,7 +1053,7 @@
                   <main>
                       <Hero />
                       <About />
-                      <ProjectShowcase project={featuredProject} />
+                      <ProjectShowcase projects={spotlightProjects} />
                       <Projects />
                       <Expertise />
                       <Experience />
