@@ -133,85 +133,62 @@
       const { useState, useEffect, useRef, useId, Fragment } = React;
 
       // --- DATA CONSTANTS ---
-      const spotlightProjects = [
-          {
-              title: "Upstream AI Analyzer Tool",
-              situation: "In the upstream oil & gas industry, decision-makers rely on timely insights from news sources. However, manually scanning, extracting, and analyzing key information is tedious, error-prone, and time-consuming, leading to missed updates and difficulties in building structured dashboards.",
-              task: "My objective was to design and build a tool that could automatically collect upstream news, extract specific entities (projects, operators, delays), summarize articles, and visually present the analysis in an interactive dashboard—all accessible to non-technical users.",
-              action: "I built the Upstream AI Analyzer, a full-featured Python desktop application. The tool's workflow involves a user selecting a date range, which triggers automated web scraping of news articles. Each article is then processed through a custom NLP extraction pipeline to pull over 14 categories of information, including field names, companies, contract types, and budget values. Finally, the structured results are rendered in a dynamic, graphical dashboard.",
-              techStack: ["PyQt5", "Selenium", "spaCy", "Regex", "Matplotlib", "Python"],
-              image: "https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20tool%20analysis.jpg",
-              results: [
-                  { metric: "90%", description: "Reduction in manual analysis time for upstream analysts." },
-                  { metric: "100%", description: "Automation of intelligence gathering from unstructured news." },
-                  { metric: "1-Click", description: "Deployment, launched from a single desktop icon for non-technical users." }
-              ]
-          },
-          
-        {
-    title: "Upstream AI Data Matcher Tool",
-    situation: "In the upstream oil & gas industry, reconciling data from multiple sources is critical for accurate decision-making, but manual matching is slow, error-prone, and leads to inconsistencies across datasets.",
-    task: "The goal was to design an automated data matching tool that utilizes AI to enhance accuracy, streamlines the reconciliation process, and provides a user-friendly, interactive dashboard for non-technical users.",
-    action: "I built the Upstream Data Matcher, a Python desktop application that combines multiple data matching algorithms (fuzzy, semantic, cosine similarity, etc.) with AI-powered features. The tool uses Natural Language Processing (NLP) and machine learning to intelligently analyze and compare datasets. It automatically identifies matches, improves accuracy with user feedback, and even allows users to train a Random Forest model to enhance future predictions. Results are presented in a dynamic dashboard with real-time updates and asynchronous processing, ensuring a smooth user experience.",
-    techStack: ["tkinter", "pandas", "fuzzywuzzy", "spaCy", "sklearn", "threading", "random forest classifier"],
-    image: "https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20matching%20tool.png",
-    results: [
-      [
-  { "metric": "95%", "description": "Improvement in data matching accuracy with AI-powered algorithms." },
-  { "metric": "80%", "description": "Reduction in manual data reconciliation time for upstream teams." },
-  { "metric": "1-Click", "description": "Seamless deployment and user access via a simple desktop interface." },
-  { "metric": "Continuous Learning", "description": "Real-time model training and refinement through user feedback." }
-]
+     const spotlightProjects = [
+    {
+        title: "Upstream AI Analyzer Tool",
+        situation: "In the upstream oil & gas industry, decision-makers rely on timely insights from news sources. However, manually scanning, extracting, and analyzing key information is tedious, error-prone, and time-consuming, leading to missed updates and difficulties in building structured dashboards.",
+        task: "My objective was to design and build a tool that could automatically collect upstream news, extract specific entities (projects, operators, delays), summarize articles, and visually present the analysis in an interactive dashboard—all accessible to non-technical users.",
+        action: "I built the Upstream AI Analyzer, a full-featured Python desktop application. The tool's workflow involves a user selecting a date range, which triggers automated web scraping of news articles. Each article is then processed through a custom NLP extraction pipeline to pull over 14 categories of information, including field names, companies, contract types, and budget values. Finally, the structured results are rendered in a dynamic, graphical dashboard.",
+        techStack: ["PyQt5", "Selenium", "spaCy", "Regex", "Matplotlib", "Python"],
+        image: "https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20tool%20analysis.jpg",
+        results: [
+            { metric: "90%", description: "Reduction in manual analysis time for upstream analysts." },
+            { metric: "100%", description: "Automation of intelligence gathering from unstructured news." },
+            { metric: "1-Click", description: "Deployment, launched from a single desktop icon for non-technical users." }
+        ]
+    },
 
-    ]
-},
-          {
-              title: "Automated Research Synthesizer",
-              situation: "Strategic research teams were bogged down by manual data collection from diverse online sources. This time-consuming process led to project delays and made it difficult to synthesize information into a consistent, actionable format.",
-              task: "The goal was to create an intelligent tool that leverages Generative AI to automate the entire secondary research lifecycle—from targeted data gathering and summarization to the final synthesis of key insights, freeing up analysts for higher-value strategic thinking.",
-              action: "I engineered a Python-based application that integrates with the OpenAI API. An analyst provides a research query, and the tool autonomously scours predefined industry websites and news outlets. It uses BeautifulSoup for content extraction and LangChain to structure prompts for summarization, theme identification, and insight generation. The final, synthesized report is automatically compiled into a structured Word document.",
-              techStack: ["Python", "OpenAI API", "LangChain", "BeautifulSoup", "python-docx"],
-              image: "https://images.unsplash.com/photo-1677756119517-756a188d2d94?q=80&w=1200&h=800&fit=crop&auto=format",
-              results: [
-                  { metric: "75%", description: "Reduction in time spent on initial data gathering and synthesis." },
-                  { metric: "4x", description: "Increase in the volume of sources analyzed per research project." },
-                  { metric: "100%", description: "Standardization of research outputs for improved consistency." }
-              ]
-          },
-          {
-              title: "Project Command Center",
-              situation: "Managing complex projects with multiple team members often leads to fragmented data, unbalanced workloads, and a lack of real-time visibility. Traditional tools struggle to provide intelligent insights, forcing managers into manual tracking and reactive decision-making.",
-              task: "To design and develop an all-in-one desktop application that centralizes project management, provides granular sub-task tracking, and integrates AI-powered analytics to predict delays, summarize workloads, and intelligently optimize task allocation across the team.",
-              action: "I developed the 'Project Command Center,' a comprehensive solution featuring a dynamic task table with Excel integration. Its key innovations include an AI-powered observation module using NLP to summarize workloads, a machine learning model to predict task completion, and a linear programming engine to optimize resource allocation. The platform is rounded out with an interactive visualization panel, offering customizable charts and advanced filtering for deep-dive analysis.",
-              techStack: ["Python", "PyQt5", "Pandas", "Scikit-learn", "Matplotlib", "SciPy"],
-              image: "https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/Project%20tool.png",
-              results: [
-                  { metric: "AI-Driven", description: "Insights that predict delays & optimize team workload allocation." },
-                  { metric: "100%", description: "Centralized visibility into all tasks and sub-tasks in real-time." },
-                  { metric: "30%+", description: "Increase in team productivity via automation & balanced workloads." }
-              ]
-          }
-      ];
-      const projects = [
-          {
-              title: 'AI-Powered News Intelligence Pipeline',
-              challenge: 'The upstream analysis team spent 12 hours weekly on manual news gathering, causing delays and inconsistent outputs.',
-              action: 'I architected a fully automated Python pipeline using <strong>Selenium</strong> and <strong>BeautifulSoup</strong> for web scraping, and an AI summarization engine with <strong>Newspaper3k</strong> and <strong>spaCy</strong> to generate concise briefs. The process was integrated with <strong>Microsoft Copilot</strong> for seamless delivery.',
-              result: {
-                  text: 'in processing time, <strong>100% data coverage</strong> with consistent formatting, and delivery of <strong>near-real-time intelligence</strong> that accelerated strategic decision-making.',
-                  highlight: '90% reduction'
-              }
-          },
-          {
-              title: 'Generative AI for Accelerated Secondary Research',
-              challenge: "KPMG's ENR team was hampered by time-consuming and inefficient manual data gathering for research projects.",
-              action: 'I developed a custom solution by integrating a <strong>Generative AI tool</strong> directly into the team\'s workflow. I created a powerful <strong>Excel VBA macro</strong> that acted as a bridge, allowing analysts to automate a significant portion of their data gathering and synthesis tasks.',
-              result: {
-                  text: 'The macro was a game-changer, delivering a <strong>marked reduction in research time</strong>, significantly <strong>enhancing data accuracy</strong>, and creating a more efficient and scalable research process.',
-                  highlight: ''
-              }
-          }
-      ];
+    {
+        title: "Upstream AI Data Matcher Tool",
+        situation: "In the upstream oil & gas industry, reconciling data from multiple sources is critical for accurate decision-making, but manual matching is slow, error-prone, and leads to inconsistencies across datasets.",
+        task: "The goal was to design an automated data matching tool that utilizes AI to enhance accuracy, streamlines the reconciliation process, and provides a user-friendly, interactive dashboard for non-technical users.",
+        action: "I built the Upstream Data Matcher, a Python desktop application that combines multiple data matching algorithms (fuzzy, semantic, cosine similarity, etc.) with AI-powered features. The tool uses Natural Language Processing (NLP) and machine learning to intelligently analyze and compare datasets. It automatically identifies matches, improves accuracy with user feedback, and even allows users to train a Random Forest model to enhance future predictions. Results are presented in a dynamic dashboard with real-time updates and asynchronous processing, ensuring a smooth user experience.",
+        techStack: ["tkinter", "pandas", "fuzzywuzzy", "spaCy", "sklearn", "threading", "random forest classifier"],
+        image: "https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20matching%20tool.png",
+        results: [
+            { "metric": "95%", "description": "Improvement in data matching accuracy with AI-powered algorithms." },
+            { "metric": "80%", "description": "Reduction in manual data reconciliation time for upstream teams." },
+            { "metric": "1-Click", "description": "Seamless deployment and user access via a simple desktop interface." },
+            { "metric": "Continuous Learning", "description": "Real-time model training and refinement through user feedback." }
+        ]
+    },
+    {
+        title: "Automated Research Synthesizer",
+        situation: "Strategic research teams were bogged down by manual data collection from diverse online sources. This time-consuming process led to project delays and made it difficult to synthesize information into a consistent, actionable format.",
+        task: "The goal was to create an intelligent tool that leverages Generative AI to automate the entire secondary research lifecycle—from targeted data gathering and summarization to the final synthesis of key insights, freeing up analysts for higher-value strategic thinking.",
+        action: "I engineered a Python-based application that integrates with the OpenAI API. An analyst provides a research query, and the tool autonomously scours predefined industry websites and news outlets. It uses BeautifulSoup for content extraction and LangChain to structure prompts for summarization, theme identification, and insight generation. The final, synthesized report is automatically compiled into a structured Word document.",
+        techStack: ["Python", "OpenAI API", "LangChain", "BeautifulSoup", "python-docx"],
+        image: "https://images.unsplash.com/photo-1677756119517-756a188d2d94?q=80&w=1200&h=800&fit=crop&auto=format",
+        results: [
+            { metric: "75%", description: "Reduction in time spent on initial data gathering and synthesis." },
+            { metric: "4x", description: "Increase in the volume of sources analyzed per research project." },
+            { metric: "100%", description: "Standardization of research outputs for improved consistency." }
+        ]
+    },
+    {
+        title: "Project Command Center",
+        situation: "Managing complex projects with multiple team members often leads to fragmented data, unbalanced workloads, and a lack of real-time visibility. Traditional tools struggle to provide intelligent insights, forcing managers into manual tracking and reactive decision-making.",
+        task: "To design and develop an all-in-one desktop application that centralizes project management, provides granular sub-task tracking, and integrates AI-powered analytics to predict delays, summarize workloads, and intelligently optimize task allocation across the team.",
+        action: "I developed the 'Project Command Center,' a comprehensive solution featuring a dynamic task table with Excel integration. Its key innovations include an AI-powered observation module using NLP to summarize workloads, a machine learning model to predict task completion, and a linear programming engine to optimize resource allocation. The platform is rounded out with an interactive visualization panel, offering customizable charts and advanced filtering for deep-dive analysis.",
+        techStack: ["Python", "PyQt5", "Pandas", "Scikit-learn", "Matplotlib", "SciPy"],
+        image: "https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/Project%20tool.png",
+        results: [
+            { metric: "AI-Driven", description: "Insights that predict delays & optimize team workload allocation." },
+            { metric: "100%", description: "Centralized visibility into all tasks and sub-tasks in real-time." },
+            { metric: "30%+", description: "Increase in team productivity via automation & balanced workloads." }
+        ]
+    }
+];
       const competencies = [
           { icon: 'fa-solid fa-magnifying-glass-chart', title: 'Upstream Market Analysis', description: 'Supply/demand forecasting, contract analysis, and competitor performance tracking.' },
           { icon: 'fa-solid fa-robot', title: 'Data Automation', description: 'Building intelligent systems with Python & VBA to eliminate manual work and drive efficiency.' },
