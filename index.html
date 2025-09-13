@@ -926,7 +926,7 @@
         return (
           <>
             {/* Only a subtle overlay behind the HUD, not over the whole page */}
-            <div className="fixed bottom-8 right-8 z-[200] pointer-events-auto">
+            <div className="fixed bottom-8 left-8 z-[200] pointer-events-auto">
               <div className="relative w-[370px] h-[320px]">
                 {/* HUD Card */}
                 <div className="absolute inset-0 bg-gradient-to-br from-slate-900/95 to-blue-950/90 border-2 border-cyan-400/40 rounded-2xl shadow-2xl shadow-cyan-400/20 backdrop-blur-md flex flex-col items-center justify-center text-center">
@@ -1043,6 +1043,354 @@
         );
       };
 
+      // --- AI Chatbot Modal Component ---
+const AIChatbotModal = ({ isOpen, onClose }) => {
+  // Only render if open
+  if (!isOpen) return null;
+
+  // The chatbot HTML and JS are injected into a React portal/modal
+  // We'll use a ref for the input field and manage messages in React state
+  const [messages, setMessages] = React.useState([
+    {
+      sender: 'bot',
+      content: `Hello! I'm Ayush Kulshrestha's AI assistant.
+
+I'm an Energy Consultant & Data Scientist specializing in AI-driven analytics that deliver 90%+ efficiency gains. My flagship achievements include:
+🔥 Upstream AI Analyzer: 90% time reduction + 100% automation
+🔥 Data Matcher Tool: 95% accuracy improvement
+🔥 Research Synthesizer: 75% faster data gathering
+
+I bridge engineering, business, and data science to transform complex energy challenges into competitive advantages.
+
+Ready to explore how I can revolutionize your energy data workflows?`,
+      time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+    }
+  ]);
+  const [input, setInput] = React.useState('');
+  const [isTyping, setIsTyping] = React.useState(false);
+
+  // Knowledge base (same as in chatbot.html)
+  const knowledgeBase = {
+    education: {
+      mba: 'MBA in Marketing & International Business from Galgotias College of Engineering & Technology (2018-2020)',
+      btech: 'B.Tech in Mechanical Engineering from Maharshi Dayanand University (2013-2017)',
+      certs: 'Lean Six Sigma (KPMG), Google Digital Marketing, IBM AI & Generative AI, Python Essential Training (LinkedIn), Business Analysis (IIBA), ADBI certifications in Digital Economy and Urban Growth',
+      details: 'This unique combination of engineering technical depth and business strategic thinking enables bridging complex technical challenges with commercial solutions in the energy sector.'
+    },
+    experience: {
+      current: 'Wood Mackenzie, Gurugram (2024-Present) - Upstream Production Analyst: Spearheading advanced upstream intelligence, integrating geospatial analytics (ArcGIS) and AI-driven automation to streamline subsea contract forecasting.',
+      kpmg: 'KPMG Global Services, Gurugram (2022-2024) - Business Associate (Energy & Natural Resources): Created Power BI dashboards, conducted benchmarking studies, developed VBA/Python solutions, pioneered generative AI integration.',
+      acs: 'ACS Global Tech Solutions, Noida (2020-2022) - Market Research Associate: Specialized in IT applications in industrial manufacturing, conducted competitive analysis, created thought leadership content.',
+      continental: 'Continental Automotive Components, Gurugram (2019) - Trainee: Gained practical insights into manufacturing operations and quality control procedures.'
+    },
+    upstream_expertise: {
+      technical: 'Reservoir management, rig performance analysis, subsea development, drilling operations, production optimization, well completion techniques, field development planning',
+      subsea: 'SURF (Subsea, Umbilicals, Risers, Flowlines), subsea production systems, subsea processing, tie-back developments, subsea field architecture, contract analysis',
+      market: 'Supply/demand forecasting, market dynamics analysis, pricing mechanisms, contractor performance evaluation, global upstream activities, investment flows',
+      operations: 'Drilling programs, completion strategies, production forecasting, enhanced oil recovery, unconventional resource development, field optimization',
+      contracts: 'Drilling contracts, service agreements, joint venture structures, farm-in/farm-out deals, equipment procurement contracts'
+    },
+    projects: {
+      analyzer: 'Upstream AI Analyzer Tool: 90% reduction in manual analysis time, 100% automation of intelligence gathering, 1-click deployment with PyQt5, Selenium, spaCy',
+      matcher: 'AI Data Matcher Tool: 95% improvement in matching accuracy, 80% reduction in reconciliation time, Random Forest ML integration',
+      synthesizer: 'Automated Research Synthesizer: 75% reduction in data gathering, 4x increase in sources analyzed, OpenAI API + LangChain integration',
+      command: 'Project Command Center: AI-powered analytics, ML delay prediction, 30%+ productivity increase with linear programming optimization',
+      pipeline: 'AI News Intelligence Pipeline: 90% processing time reduction, Microsoft Copilot integration, real-time intelligence delivery'
+    },
+    technical_skills: {
+      programming: 'Python (PyQt5, Selenium, spaCy, scikit-learn, pandas), VBA (expert level), JavaScript, HTML5, CSS3',
+      ai_ml: 'Random Forest classifiers, NLP processing, OpenAI API, LangChain, generative AI tools, continuous learning algorithms',
+      databases: 'Refinitiv, FactSet, Bloomberg, GlobalData, Zoominfo, database optimization, spatial data analysis',
+      visualization: 'Power BI (advanced dashboards), ArcGIS (geospatial analytics), matplotlib, custom visualizations'
+    },
+    contact: {
+      email: 'ayushkul404@yahoo.com',
+      phone: '+91 8851222155',
+      website: 'www.akenergyconsultant.org',
+      location: 'Gurugram, India (serving clients globally)'
+    }
+  };
+
+  function containsAny(text, keywords) {
+    return keywords.some(keyword => text.includes(keyword));
+  }
+
+  function getResponse(userMessage) {
+    const message = userMessage.toLowerCase();
+
+    if (containsAny(message, ['education', 'qualification', 'degree', 'study', 'university', 'his education', 'your education', 'know his education'])) {
+      return `🎓 Ayush's Educational Background:
+
+${knowledgeBase.education.mba}
+Strategic business perspective, international market understanding, and commercial acumen for energy consulting.
+
+${knowledgeBase.education.btech}
+Technical foundation in mechanical systems, thermodynamics, fluid mechanics - crucial for upstream oil & gas operations.
+
+Professional Certifications:
+${knowledgeBase.education.certs}
+
+${knowledgeBase.education.details}`;
+    }
+
+    if (containsAny(message, ['experience', 'work history', 'career', 'background', 'his experience', 'your experience'])) {
+      return `💼 Ayush's Professional Experience:
+
+Current Role (2024-Present):
+${knowledgeBase.experience.current}
+
+KPMG (2022-2024):
+${knowledgeBase.experience.kpmg}
+
+ACS Global Tech (2020-2022):
+${knowledgeBase.experience.acs}
+
+Continental Automotive (2019):
+${knowledgeBase.experience.continental}
+
+Career progression from manufacturing to market research to specialized upstream analysis, developing comprehensive expertise across the energy value chain.`;
+    }
+
+    if (containsAny(message, ['upstream', 'oil', 'gas', 'expertise', 'knowledge', 'subsea', 'reservoir'])) {
+      return `🛢️ Comprehensive Upstream Expertise:
+
+Technical Operations: ${knowledgeBase.upstream_expertise.technical}
+
+Subsea Systems: ${knowledgeBase.upstream_expertise.subsea}
+
+Market Intelligence: ${knowledgeBase.upstream_expertise.market}
+
+Operations Analysis: ${knowledgeBase.upstream_expertise.operations}
+
+Contract Expertise: ${knowledgeBase.upstream_expertise.contracts}
+
+At Wood Mackenzie, I apply this expertise daily, analyzing global upstream projects worth billions of dollars, providing strategic intelligence that influences major investment decisions.`;
+    }
+
+    if (containsAny(message, ['technical', 'skills', 'programming', 'python', 'ai', 'his skills', 'your skills'])) {
+      return `💻 Technical Skills & Expertise:
+
+Programming: ${knowledgeBase.technical_skills.programming}
+
+AI & Machine Learning: ${knowledgeBase.technical_skills.ai_ml}
+
+Databases: ${knowledgeBase.technical_skills.databases}
+
+Visualization: ${knowledgeBase.technical_skills.visualization}
+
+Real Applications:
+• 90% time savings in news processing
+• 95% accuracy in data matching
+• Fully automated intelligence pipelines serving global energy clients
+• 30%+ productivity improvements through AI-powered solutions`;
+    }
+
+    if (containsAny(message, ['projects', 'portfolio', 'tools', 'applications', 'case studies'])) {
+      return `🔥 Flagship AI-Powered Projects:
+
+${knowledgeBase.projects.analyzer}
+
+${knowledgeBase.projects.matcher}
+
+${knowledgeBase.projects.synthesizer}
+
+${knowledgeBase.projects.command}
+
+${knowledgeBase.projects.pipeline}
+
+All projects feature advanced ML integration, intuitive interfaces, and measurable business impact. Which project interests you most?`;
+    }
+
+    if (containsAny(message, ['contact', 'email', 'phone', 'reach', 'connect'])) {
+      return `📞 Contact Information:
+
+Email: ${knowledgeBase.contact.email}
+Phone: ${knowledgeBase.contact.phone}
+Website: ${knowledgeBase.contact.website}
+Location: ${knowledgeBase.contact.location}
+
+Response Time: Within 24 hours
+Free Consultation: Available to discuss your automation and analytics needs
+
+Ready to transform your energy data challenges into competitive advantages? Let's connect!`;
+    }
+
+    if (containsAny(message, ['price', 'cost', 'rate', 'fee', 'investment'])) {
+      return `💰 Consulting Investment Structure:
+
+🔥 AI Automation Projects: Custom development of desktop applications - project-based pricing with ROI guarantees
+
+📊 Dashboard & Analytics: Power BI dashboard creation and ArcGIS integration - fixed packages
+
+📈 Strategic Consulting: Upstream market analysis and competitive positioning - hourly or monthly retainer
+
+🎯 Training & Implementation: Team training on AI tools and methodologies
+
+Typical ROI: 75-90% time savings, 95%+ accuracy improvements
+
+Let's discuss your specific challenge for a detailed proposal with guaranteed measurable results.`;
+    }
+
+    if (containsAny(message, ['hello', 'hi', 'hey', 'greetings'])) {
+      return `Hello! Great to connect with you! 🚀
+
+I'm Ayush Kulshrestha - an Energy Consultant & Data Scientist who transforms complex energy challenges into AI-powered competitive advantages.
+
+What makes me unique?
+• 90%+ efficiency gains through intelligent automation
+• Real-world AI applications with measurable ROI
+• Bridge between engineering, business & data science
+
+Ready to explore:
+• Upstream market intelligence & automation
+• AI-powered desktop applications  
+• Strategic consulting & competitive positioning
+• Power BI dashboards & geospatial analytics
+
+What specific challenge can I help you solve?`;
+    }
+
+    return `That's a great question! I'm Ayush Kulshrestha - specializing in AI-driven energy analytics that deliver measurable competitive advantages.
+
+🔥 Core Expertise:
+• Upstream market intelligence with 90%+ efficiency gains
+• AI-powered desktop applications with ML integration
+• Strategic consulting bridging engineering, business & data science
+• Power BI dashboards with ArcGIS geospatial analytics
+
+Feel free to ask about:
+• My educational background (MBA + B.Tech)
+• Work experience (Wood Mackenzie, KPMG)
+• Upstream oil & gas expertise
+• Technical skills and AI projects
+• How I can optimize your energy data workflows
+
+I transform complex data challenges into streamlined, intelligent solutions!`;
+  }
+
+  function handleSend() {
+    if (!input.trim() || isTyping) return;
+    const userMsg = {
+      sender: 'user',
+      content: input.trim(),
+      time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+    };
+    setMessages(msgs => [...msgs, userMsg]);
+    setInput('');
+    setIsTyping(true);
+
+    setTimeout(() => {
+      const botMsg = {
+        sender: 'bot',
+        content: getResponse(userMsg.content),
+        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+      };
+      setMessages(msgs => [...msgs, botMsg]);
+      setIsTyping(false);
+    }, 1500);
+  }
+
+  function handleQuick(question) {
+    setInput(question);
+    setTimeout(handleSend, 100);
+  }
+
+  function handleKeyPress(e) {
+    if (e.key === 'Enter') handleSend();
+  }
+
+  // Modal style
+  return (
+    <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/30 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl flex flex-col overflow-hidden" style={{maxHeight: '90vh'}}>
+        {/* Header */}
+        <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white px-6 py-4 flex justify-between items-center">
+          <div>
+            <span className="font-bold text-lg"><i className="fas fa-robot mr-2"></i>AK Energy Consultant</span>
+            <div className="text-xs opacity-80">Upstream Oil & Gas Analysis • Python Automation • Market Intelligence</div>
+          </div>
+          <button className="text-white text-xl hover:text-red-400 transition" onClick={onClose} aria-label="Close chatbot">
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        {/* Quick Questions */}
+        <div className="flex flex-wrap gap-2 px-4 py-2 bg-blue-50 border-b border-blue-100">
+          <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('Tell me about his education')}>📚 Education</button>
+          <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('What is his upstream expertise?')}>🛢️ Upstream Expertise</button>
+          <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('Show me his experience')}>💼 Experience</button>
+          <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('What are his technical skills?')}>💻 Technical Skills</button>
+          <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('Tell me about his projects')}>🔥 Projects</button>
+          <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('How can I contact him?')}>📞 Contact</button>
+        </div>
+        {/* Chat Messages */}
+        <div className="flex-1 overflow-y-auto px-4 py-3" style={{background:'#f8f9fa'}}>
+          {messages.map((msg, idx) => (
+            <div key={idx} className={`flex mb-4 ${msg.sender==='user'?'flex-row-reverse':''}`}>
+              <div className={`message-avatar ${msg.sender==='bot'?'bg-blue-600':'bg-green-600'} text-white flex items-center justify-center rounded-full w-9 h-9`}>
+                <i className={`fa-solid ${msg.sender==='bot'?'fa-robot':'fa-user'}`}></i>
+              </div>
+              <div className="ml-2 mr-2">
+                <div className={`message-content preformatted`} style={{
+                  background: msg.sender==='bot'?'#f1f3f5':'#667eea',
+                  color: msg.sender==='bot'?'#333':'#fff',
+                  borderRadius: '18px',
+                  borderBottomLeftRadius: msg.sender==='bot'?'4px':'18px',
+                  borderBottomRightRadius: msg.sender==='user'?'4px':'18px',
+                  padding: '12px 16px',
+                  maxWidth: '80vw',
+                  fontSize: '14px',
+                  whiteSpace: 'pre-wrap'
+                }}>{msg.content}</div>
+                <div className="message-time text-xs opacity-60 mt-1">{msg.time}</div>
+              </div>
+            </div>
+          ))}
+          {isTyping && (
+            <div className="flex mb-4">
+              <div className="message-avatar bg-blue-600 text-white flex items-center justify-center rounded-full w-9 h-9">
+                <i className="fa-solid fa-robot"></i>
+              </div>
+              <div className="ml-2">
+                <div className="typing-indicator flex items-center gap-2 bg-[#f1f3f5] rounded-[18px] border-b-[4px] border-blue-200 px-4 py-2" style={{maxWidth:'80px'}}>
+                  <div className="typing-dots flex gap-1">
+                    <div className="typing-dot" style={{width:'8px',height:'8px',background:'#666',borderRadius:'50%',animation:'typing 1.4s infinite ease-in-out'}}></div>
+                    <div className="typing-dot" style={{width:'8px',height:'8px',background:'#666',borderRadius:'50%',animation:'typing 1.4s infinite ease-in-out',animationDelay:'0.2s'}}></div>
+                    <div className="typing-dot" style={{width:'8px',height:'8px',background:'#666',borderRadius:'50%',animation:'typing 1.4s infinite ease-in-out',animationDelay:'0.4s'}}></div>
+                  </div>
+                  <span style={{fontSize:'11px',marginLeft:'8px'}}>AK is typing...</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        {/* Input */}
+        <div className="input-container flex items-center gap-2 px-4 py-3 bg-white border-t border-blue-100">
+          <input
+            type="text"
+            className="input-field flex-1 px-4 py-2 rounded-full border border-blue-200"
+            placeholder="Ask about Ayush's expertise..."
+            value={input}
+            onChange={e=>setInput(e.target.value)}
+            onKeyPress={handleKeyPress}
+            autoFocus
+          />
+          <button className={`send-btn w-11 h-11 rounded-full flex items-center justify-center text-white text-lg ${isTyping?'bg-green-600':'bg-blue-600'}`} onClick={handleSend} disabled={isTyping}>
+            {isTyping ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-paper-plane"></i>}
+          </button>
+        </div>
+      </div>
+      {/* Modal backdrop click closes modal */}
+      <style>{`
+        @keyframes typing {
+          0%, 60%, 100% { transform: translateY(0); }
+          30% { transform: translateY(-10px); }
+        }
+      `}</style>
+      <div className="fixed inset-0 z-[299]" style={{background:'transparent'}} onClick={onClose} />
+    </div>
+  );
+};
+
       // --- MAIN APP COMPONENT ---
       const App = () => {
         const [theme, setTheme] = useState(() => {
@@ -1058,6 +1406,7 @@
         const [isModalOpen, setIsModalOpen] = useState(false);
         const [activeSection, setActiveSection] = useState('home');
         const [showGuide, setShowGuide] = useState(false);
+        const [showChatbot, setShowChatbot] = useState(false);
 
         useEffect(() => {
           if (theme === 'dark') {
@@ -1143,7 +1492,6 @@
             </main>
             <Footer />
             <ScrollToTopButton />
-            {/* Use IronManNavigator instead of NavigationGuide */}
             <IronManNavigator visible={showGuide} onClose={() => setShowGuide(false)} />
             {/* JARVIS Launch Button */}
             <button
@@ -1156,6 +1504,17 @@
               <span className="text-sm">JARVIS</span>
               <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse opacity-70"></div>
             </button>
+            {/* --- AI Chatbot Floating Button --- */}
+            <button
+              className="fixed right-4 bottom-8 z-50 bg-gradient-to-r from-blue-600 to-blue-400 text-white px-5 py-3 rounded-full shadow-2xl shadow-blue-400/30 flex items-center gap-2 font-mono font-bold hover:scale-110 hover:shadow-blue-400/50 transition-all duration-300 border border-blue-400/30 group"
+              style={{ pointerEvents: 'auto' }}
+              onClick={() => setShowChatbot(true)}
+              aria-label="Open AI Assistant Chatbot"
+            >
+              <i className="fa-solid fa-robot text-lg"></i>
+              <span className="text-sm">AI Assistant</span>
+            </button>
+            <AIChatbotModal isOpen={showChatbot} onClose={()=>setShowChatbot(false)} />
           </Fragment>
         );
       };
