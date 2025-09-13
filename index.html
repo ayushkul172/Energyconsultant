@@ -1301,8 +1301,10 @@ I transform complex data challenges into streamlined, intelligent solutions!`;
 
   // Modal style
   return (
-    <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/30 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl flex flex-col overflow-hidden" style={{maxHeight: '90vh'}}>
+// Modal style
+return (
+  <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/30 backdrop-blur-sm" onClick={onClose}>
+    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl flex flex-col overflow-hidden" style={{maxHeight: '90vh'}} onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white px-6 py-4 flex justify-between items-center">
           <div>
@@ -1385,11 +1387,13 @@ I transform complex data challenges into streamlined, intelligent solutions!`;
           0%, 60%, 100% { transform: translateY(0); }
           30% { transform: translateY(-10px); }
         }
+   <style>{`
+        @keyframes typing {
+          0%, 60%, 100% { transform: translateY(0); }
+          30% { transform: translateY(-10px); }
+        }
       `}</style>
-      <div className="fixed inset-0 z-[299]" style={{background:'transparent'}} onClick={onClose} />
     </div>
-  );
-};
 
       // --- MAIN APP COMPONENT ---
       const App = () => {
