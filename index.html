@@ -38,23 +38,23 @@
           extend: {
             colors: {
               primary: {
-                light: '#0891b2', // cyan-600
+                light: '#0891b2',
                 DEFAULT: '#0a4d68',
-                dark: '#06b6d4', // cyan-500
+                dark: '#06b6d4',
               },
               secondary: {
-                light: '#0e7490', // cyan-700
+                light: '#0e7490',
                 DEFAULT: '#088395',
-                dark: '#22d3ee', // cyan-400
+                dark: '#22d3ee',
               },
-              'dark-bg': '#0f172a', // slate-900
-              'light-bg': '#f1f5f9', // slate-100
-              'dark-card': '#1e293b', // slate-800
+              'dark-bg': '#0f172a',
+              'light-bg': '#f1f5f9',
+              'dark-card': '#1e293b',
               'light-card': '#ffffff',
-              'dark-text': '#e2e8f0', // slate-200
-              'light-text': '#1e293b', // slate-800
-              'dark-subtle': '#94a3b8', // slate-400
-              'light-subtle': '#475569', // slate-600
+              'dark-text': '#e2e8f0',
+              'light-text': '#1e293b',
+              'dark-subtle': '#94a3b8',
+              'light-subtle': '#475569',
             },
             fontFamily: {
               sans: ['Roboto', 'sans-serif'],
@@ -65,7 +65,6 @@
                 'from': { opacity: 0, transform: 'translateY(20px)' },
                 'to': { opacity: 1, transform: 'translateY(0)' },
               },
-              // ✅ ADDED: A standard fadeIn animation for the scroll prompt
               fadeIn: {
                 'from': { opacity: 0 },
                 'to': { opacity: 1 },
@@ -77,20 +76,24 @@
               bounceSlow: {
                 '0%, 100%': { transform: 'translateY(-25%)', animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)' },
                 '50%': { transform: 'translateY(0)', animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)' },
+              },
+              typing: {
+                '0%, 60%, 100%': { transform: 'translateY(0)' },
+                '30%': { transform: 'translateY(-10px)' },
               }
             },
             animation: {
               fadeInUp: 'fadeInUp 0.8s ease-out forwards',
-              fadeIn: 'fadeIn 1s ease-in forwards', // ✅ ADDED
+              fadeIn: 'fadeIn 1s ease-in forwards',
               reveal: 'reveal 1s ease-in-out forwards',
               bounceSlow: 'bounceSlow 2s infinite',
+              typing: 'typing 1.4s infinite ease-in-out',
             }
           }
         }
       }
     </script>
     
-    <!-- React, ReactDOM, and Babel for in-browser JSX transpilation -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -110,10 +113,10 @@
       }
 
       body {
-        background-color: #0f172a; /* Fallback for dark mode */
+        background-color: #0f172a;
       }
       html.light body {
-        background-color: #f1f5f9; /* Fallback for light mode */
+        background-color: #f1f5f9;
       }
       body {
         background-color: transparent !important;
@@ -148,19 +151,17 @@
               ]
           },
           {
-                 
-        title: "Upstream AI Data Matcher Tool",
-        situation: "In the upstream oil & gas industry, reconciling data from multiple sources is critical for accurate decision-making, but manual matching is slow, error-prone, and leads to inconsistencies across datasets.",
-        task: "The goal was to design an automated data matching tool that utilizes AI to enhance accuracy, streamlines the reconciliation process, and provides a user-friendly, interactive dashboard for non-technical users.",
-        action: "I built the Upstream Data Matcher, a Python desktop application that combines multiple data matching algorithms (fuzzy, semantic, cosine similarity, etc.) with AI-powered features. The tool uses Natural Language Processing (NLP) and machine learning to intelligently analyze and compare datasets. It automatically identifies matches, improves accuracy with user feedback, and even allows users to train a Random Forest model to enhance future predictions. Results are presented in a dynamic dashboard with real-time updates and asynchronous processing, ensuring a smooth user experience.",
-        techStack: ["tkinter", "pandas", "fuzzywuzzy", "spaCy", "sklearn", "threading", "random forest classifier"],
-        image: "https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20matching%20tool.png",
-        results: [
-            { "metric": "95%", "description": "Improvement in data matching accuracy with AI-powered algorithms." },
-            { "metric": "80%", "description": "Reduction in manual data reconciliation time for upstream teams." },
-            { "metric": "1-Click", "description": "Seamless deployment and user access via a simple desktop interface." },
-            { "metric": "Continuous Learning", "description": "Real-time model training and refinement through user feedback." }
-        
+              title: "Upstream AI Data Matcher Tool",
+              situation: "In the upstream oil & gas industry, reconciling data from multiple sources is critical for accurate decision-making, but manual matching is slow, error-prone, and leads to inconsistencies across datasets.",
+              task: "The goal was to design an automated data matching tool that utilizes AI to enhance accuracy, streamlines the reconciliation process, and provides a user-friendly, interactive dashboard for non-technical users.",
+              action: "I built the Upstream Data Matcher, a Python desktop application that combines multiple data matching algorithms (fuzzy, semantic, cosine similarity, etc.) with AI-powered features. The tool uses Natural Language Processing (NLP) and machine learning to intelligently analyze and compare datasets. It automatically identifies matches, improves accuracy with user feedback, and even allows users to train a Random Forest model to enhance future predictions. Results are presented in a dynamic dashboard with real-time updates and asynchronous processing, ensuring a smooth user experience.",
+              techStack: ["tkinter", "pandas", "fuzzywuzzy", "spaCy", "sklearn", "threading", "random forest classifier"],
+              image: "https://raw.githubusercontent.com/ayushkul172/Energyconsultant/main/AI%20matching%20tool.png",
+              results: [
+                  { metric: "95%", description: "Improvement in data matching accuracy with AI-powered algorithms." },
+                  { metric: "80%", description: "Reduction in manual data reconciliation time for upstream teams." },
+                  { metric: "1-Click", description: "Seamless deployment and user access via a simple desktop interface." },
+                  { metric: "Continuous Learning", description: "Real-time model training and refinement through user feedback." }
               ]
           },
           {
@@ -190,6 +191,7 @@
               ]
           }
       ];
+      
       const projects = [
           {
               title: 'AI-Powered News Intelligence Pipeline',
@@ -210,15 +212,18 @@
               }
           }
       ];
+      
       const competencies = [
           { icon: 'fa-solid fa-magnifying-glass-chart', title: 'Upstream Market Analysis', description: 'Supply/demand forecasting, contract analysis, and competitor performance tracking.' },
           { icon: 'fa-solid fa-robot', title: 'Data Automation', description: 'Building intelligent systems with Python & VBA to eliminate manual work and drive efficiency.' },
           { icon: 'fa-solid fa-chart-pie', title: 'Business Intelligence', description: 'Transforming complex data into clear, actionable dashboards with Power BI and ArcGIS.' },
           { icon: 'fa-solid fa-bullseye', title: 'Commercial Strategy', description: 'Data-backed insights for pricing, market share analysis, and industry benchmarking.' }
       ];
+      
       const skills = [
           'Microsoft Office (Excel, PowerPoint, Word)', 'Excel Dashboards', 'Google Analytics', 'Python', 'VBA', 'PyQt5', 'Selenium', 'spaCy', 'Gen AI Tools (ChatGPT, Bing AI, Bard)'
       ];
+      
       const experiences = [
           {
               company: 'Wood Mackenzie',
@@ -239,27 +244,25 @@
               description: 'Analyzed market dynamics and competitor landscapes in the industrial manufacturing sector, focusing on digital technologies and product mapping.'
           }
       ];
+      
       const certifications = [
           { icon: 'fa-solid fa-award', title: 'Lean Six Sigma', issuer: 'Issued by KPMG' },
           { icon: 'fa-solid fa-award', title: 'Fundamentals of Digital Marketing', issuer: 'Issued by Google' },
           { icon: 'fa-solid fa-award', title: 'AI for Everyone: Master the Basics', issuer: 'Issued by IBM' },
           { icon: 'fa-solid fa-award', title: 'Introduction to Generative AI', issuer: 'Issued by IBM' },
           { icon: 'fa-solid fa-award', title: 'Introduction to Prompt Engineering', issuer: 'Issued by IBM' },
-          { icon: 'fa-solid fa-award', 'title': 'Advancing the Digital Economy for Sustainable Growth in Asia', issuer: 'Issued by ADBI' },
-          { icon: 'fa-solid fa-award', 'title': 'Fostering Growth and Inclusion in Asia’s Cities', issuer: 'Issued by ADBI' },
-          { icon: 'fa-solid fa-award', 'title': 'Business Analysis: Essential Tools and Techniques', issuer: 'Issued by IIBA Egypt Chapter' },
-          { icon: 'fa-solid fa-award', 'title': 'Python Essential Training', issuer: 'Issued by LinkedIn Learning' },
-          { icon: 'fa-solid fa-award', 'title': 'Introduction to Web Development with HTML5, CSS3, and JavaScript', issuer: 'Issued by IBM' }
+          { icon: 'fa-solid fa-award', title: 'Advancing the Digital Economy for Sustainable Growth in Asia', issuer: 'Issued by ADBI' },
+          { icon: 'fa-solid fa-award', title: 'Fostering Growth and Inclusion in Asia\'s Cities', issuer: 'Issued by ADBI' },
+          { icon: 'fa-solid fa-award', title: 'Business Analysis: Essential Tools and Techniques', issuer: 'Issued by IIBA Egypt Chapter' },
+          { icon: 'fa-solid fa-award', title: 'Python Essential Training', issuer: 'Issued by LinkedIn Learning' },
+          { icon: 'fa-solid fa-award', title: 'Introduction to Web Development with HTML5, CSS3, and JavaScript', issuer: 'Issued by IBM' }
       ];
 
-
       // --- REUSABLE COMPONENTS ---
-
-      // Helper function for smooth scrolling
       const smoothScrollTo = (selector) => {
         const element = document.querySelector(selector);
         if (element) {
-            const offset = 80; // Navbar height
+            const offset = 80;
             const bodyRect = document.body.getBoundingClientRect().top;
             const elementRect = element.getBoundingClientRect().top;
             const elementPosition = elementRect - bodyRect;
@@ -342,7 +345,6 @@
           );
       };
 
-      // ✅ ENHANCED: Component for guiding users to the next section
       const NextSectionLink = ({ href, text }) => {
           const handleScroll = (e) => {
               e.preventDefault();
@@ -486,7 +488,6 @@
                           View Featured Project <i className="fa-solid fa-arrow-right-long ml-2"></i>
                       </a>
                   </div>
-                  {/* ✅ FIXED: Scroll down prompt is now visible */}
                   <a
                       href="#about"
                       onClick={handleScrollClick}
@@ -539,7 +540,6 @@
                       </div>
                   </div>
                 </div>
-                {/* ✅ This link guides users to the next section */}
                 <NextSectionLink href="#spotlight" text="View my featured work" />
             </Section>
           );
@@ -574,8 +574,7 @@
                       <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark">Featured AI Implementations</h2>
                   </div>
 
-                  {/* --- Slider Starts Here --- */}
-                <div className="relative max-w-full mx-auto">
+                  <div className="relative max-w-full mx-auto">
                       <div className="overflow-hidden relative rounded-xl">
                           <div 
                               className="flex transition-transform ease-in-out duration-700"
@@ -584,7 +583,6 @@
                               {projects.map((project, index) => (
                                   <div key={index} className="w-full flex-shrink-0 p-2">
                                       <div className="grid md:grid-cols-2 gap-12 items-start bg-light-card dark:bg-dark-card p-8 rounded-xl shadow-lg ring-1 ring-slate-200 dark:ring-slate-700">
-                                          {/* Left Column: Project Details */}
                                           <div className="space-y-8">
                                               <h3 className="font-montserrat text-2xl font-bold text-primary-light dark:text-primary-dark -mt-2">{project.title}</h3>
                                               <div>
@@ -601,7 +599,6 @@
                                               </div>
                                           </div>
                                           
-                                          {/* Right Column: Image, Tech Stack, Outcomes */}
                                           <div className="space-y-8">
                                               <img 
                                                 src={project.image}
@@ -634,7 +631,6 @@
                           </div>
                       </div>
 
-                      {/* --- Navigation Buttons (MODIFIED) --- */}
                       <button 
                           onClick={prevSlide}
                           className="absolute top-1/2 -translate-y-1/2 left-[-2rem] md:left-[-4rem] z-10 w-12 h-12 bg-white/50 dark:bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-light-text dark:text-dark-text hover:bg-white/80 dark:hover:bg-black/80 transition-all shadow-lg"
@@ -650,7 +646,6 @@
                           <i className="fa-solid fa-chevron-right"></i>
                       </button>
 
-                      {/* --- Indicator Dots --- */}
                       <div className="flex justify-center mt-8 space-x-3">
                           {projects.map((_, slideIndex) => (
                               <button
@@ -662,7 +657,6 @@
                           ))}
                       </div>
                   </div>
-                  {/* --- Slider Ends Here --- */}
 
                   <NextSectionLink href="#projects" text="Explore more case studies" />
               </Section>
@@ -686,6 +680,7 @@
               </div>
           );
       };
+      
       const Projects = () => (
           <Section 
             id="projects" 
@@ -698,9 +693,16 @@
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {projects.map((project, index) => <ProjectCard key={index} project={project} />)}
               </div>
-              {/* ✅ This link guides users to the next section */}
               <NextSectionLink href="#expertise" text="See my technical skills" />
           </Section>
+      );
+
+      const CompetencyCard = ({ competency }) => (
+          <div className="bg-light-card dark:bg-dark-card p-6 text-center rounded-xl shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ring-1 ring-slate-200 dark:ring-slate-700">
+              <i className={`${competency.icon} text-4xl text-secondary-dark mb-4`}></i>
+              <h4 className="font-montserrat text-lg font-bold text-primary-light dark:text-primary-dark mb-2">{competency.title}</h4>
+              <p className="text-sm text-light-subtle dark:text-dark-subtle">{competency.description}</p>
+          </div>
       );
 
       const Expertise = () => (
@@ -723,17 +725,8 @@
                       ))}
                   </div>
               </div>
-              {/* ✅ This link guides users to the next section */}
               <NextSectionLink href="#experience" text="Review my career journey" />
           </Section>
-      );
-      
-      const CompetencyCard = ({ competency }) => (
-          <div className="bg-light-card dark:bg-dark-card p-6 text-center rounded-xl shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ring-1 ring-slate-200 dark:ring-slate-700">
-              <i className={`${competency.icon} text-4xl text-secondary-dark mb-4`}></i>
-              <h4 className="font-montserrat text-lg font-bold text-primary-light dark:text-primary-dark mb-2">{competency.title}</h4>
-              <p className="text-sm text-light-subtle dark:text-dark-subtle">{competency.description}</p>
-          </div>
       );
 
       const TimelineItem = ({ item, isActive, onClick }) => {
@@ -764,6 +757,7 @@
               </div>
           );
       };
+      
       const Experience = () => {
           const [activeIndex, setActiveIndex] = useState(0);
           const handleItemClick = (index) => {
@@ -784,11 +778,20 @@
                           <TimelineItem key={index} item={item} isActive={activeIndex === index} onClick={() => handleItemClick(index)} />
                       ))}
                   </div>
-                  {/* ✅ This link guides users to the next section */}
                   <NextSectionLink href="#certifications" text="View my credentials" />
               </Section>
           );
       };
+
+      const CertificationCard = ({ cert }) => (
+          <div className="bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg border-l-4 border-secondary-light dark:border-secondary-dark transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl flex flex-col items-start">
+              <div className="w-12 h-12 mb-4 rounded-lg bg-secondary-light/10 dark:bg-secondary-dark/10 flex items-center justify-center">
+                  <i className={`${cert.icon} text-2xl text-secondary-light dark:text-secondary-dark`}></i>
+              </div>
+              <h4 className="font-montserrat text-lg font-bold text-primary-light dark:text-primary-dark mb-1">{cert.title}</h4>
+              <p className="text-light-subtle dark:text-dark-subtle">{cert.issuer}</p>
+          </div>
+      );
 
       const Certifications = () => (
           <Section 
@@ -802,18 +805,8 @@
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                   {certifications.map((cert, index) => <CertificationCard key={index} cert={cert} />)}
               </div>
-              {/* ✅ This link guides users to the final section */}
               <NextSectionLink href="#contact" text="Ready to connect?" />
           </Section>
-      );
-      const CertificationCard = ({ cert }) => (
-          <div className="bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg border-l-4 border-secondary-light dark:border-secondary-dark transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl flex flex-col items-start">
-              <div className="w-12 h-12 mb-4 rounded-lg bg-secondary-light/10 dark:bg-secondary-dark/10 flex items-center justify-center">
-                  <i className={`${cert.icon} text-2xl text-secondary-light dark:text-secondary-dark`}></i>
-              </div>
-              <h4 className="font-montserrat text-lg font-bold text-primary-light dark:text-primary-dark mb-1">{cert.title}</h4>
-              <p className="text-light-subtle dark:text-dark-subtle">{cert.issuer}</p>
-          </div>
       );
       
       const Contact = () => (
@@ -895,7 +888,6 @@
           );
       };
 
-      // --- IronManNavigator Component ---
       const IronManNavigator = ({ visible, onClose }) => {
         const navSteps = [
           { selector: '#home', label: 'JARVIS: Welcome, Sir. Initializing portfolio systems.' },
@@ -925,10 +917,8 @@
 
         return (
           <>
-            {/* Only a subtle overlay behind the HUD, not over the whole page */}
             <div className="fixed bottom-8 left-8 z-[200] pointer-events-auto">
               <div className="relative w-[370px] h-[320px]">
-                {/* HUD Card */}
                 <div className="absolute inset-0 bg-gradient-to-br from-slate-900/95 to-blue-950/90 border-2 border-cyan-400/40 rounded-2xl shadow-2xl shadow-cyan-400/20 backdrop-blur-md flex flex-col items-center justify-center text-center">
                   {isInitializing ? (
                     <div className="space-y-4 pt-10">
@@ -946,12 +936,10 @@
                     </div>
                   ) : (
                     <>
-                      {/* Status Indicator */}
                       <div className="absolute top-4 right-4 flex items-center gap-2">
                         <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
                         <span className="text-green-400 font-mono text-xs">ONLINE</span>
                       </div>
-                      {/* Close Button */}
                       <button
                         className="absolute top-4 left-4 w-8 h-8 flex items-center justify-center text-cyan-400 hover:text-red-400 transition-colors border border-cyan-400/30 rounded-full hover:border-red-400/50 group"
                         onClick={onClose}
@@ -960,7 +948,6 @@
                       >
                         <i className="fa-solid fa-power-off text-sm group-hover:animate-pulse"></i>
                       </button>
-                      {/* Main Content */}
                       <div className="space-y-4 px-6 pt-10">
                         <div className="text-cyan-400 font-mono text-base font-bold">
                           JARVIS v3.0 - Navigation Protocol
@@ -1022,17 +1009,17 @@
                 </div>
               </div>
             </div>
-            <div className="absolute top-8 left-8 space-y-2 pointer-events-none">
+            <div className="fixed top-8 left-8 space-y-2 pointer-events-none">
               <div className="text-cyan-400 font-mono text-xs opacity-70">STARK INDUSTRIES</div>
               <div className="text-green-400 font-mono text-xs">SECURITY: AUTHORIZED</div>
               <div className="text-blue-400 font-mono text-xs">MODE: NAVIGATION</div>
             </div>
-            <div className="absolute top-8 right-8 space-y-2 pointer-events-none text-right">
+            <div className="fixed top-8 right-8 space-y-2 pointer-events-none text-right">
               <div className="text-cyan-400 font-mono text-xs opacity-70">PORTFOLIO v2.1</div>
               <div className="text-yellow-400 font-mono text-xs">POWER: 100%</div>
               <div className="text-green-400 font-mono text-xs">STATUS: ACTIVE</div>
             </div>
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 pointer-events-none">
+            <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 pointer-events-none">
               <div className="flex items-center gap-4 text-cyan-400 font-mono text-xs">
                 <span className="opacity-70">SYSTEM: OPERATIONAL</span>
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
@@ -1043,17 +1030,13 @@
         );
       };
 
-      // --- AI Chatbot Modal Component ---
-const AIChatbotModal = ({ isOpen, onClose }) => {
-  // Only render if open
-  if (!isOpen) return null;
+      const AIChatbotModal = ({ isOpen, onClose }) => {
+        if (!isOpen) return null;
 
-  // The chatbot HTML and JS are injected into a React portal/modal
-  // We'll use a ref for the input field and manage messages in React state
-  const [messages, setMessages] = React.useState([
-    {
-      sender: 'bot',
-      content: `Hello! I'm Ayush Kulshrestha's AI assistant.
+        const [messages, setMessages] = useState([
+          {
+            sender: 'bot',
+            content: `Hello! I'm Ayush Kulshrestha's AI assistant.
 
 I'm an Energy Consultant & Data Scientist specializing in AI-driven analytics that deliver 90%+ efficiency gains. My flagship achievements include:
 🔥 Upstream AI Analyzer: 90% time reduction + 100% automation
@@ -1063,63 +1046,62 @@ I'm an Energy Consultant & Data Scientist specializing in AI-driven analytics th
 I bridge engineering, business, and data science to transform complex energy challenges into competitive advantages.
 
 Ready to explore how I can revolutionize your energy data workflows?`,
-      time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-    }
-  ]);
-  const [input, setInput] = React.useState('');
-  const [isTyping, setIsTyping] = React.useState(false);
+            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+          }
+        ]);
+        const [input, setInput] = useState('');
+        const [isTyping, setIsTyping] = useState(false);
 
-  // Knowledge base (same as in chatbot.html)
-  const knowledgeBase = {
-    education: {
-      mba: 'MBA in Marketing & International Business from Galgotias College of Engineering & Technology (2018-2020)',
-      btech: 'B.Tech in Mechanical Engineering from Maharshi Dayanand University (2013-2017)',
-      certs: 'Lean Six Sigma (KPMG), Google Digital Marketing, IBM AI & Generative AI, Python Essential Training (LinkedIn), Business Analysis (IIBA), ADBI certifications in Digital Economy and Urban Growth',
-      details: 'This unique combination of engineering technical depth and business strategic thinking enables bridging complex technical challenges with commercial solutions in the energy sector.'
-    },
-    experience: {
-      current: 'Wood Mackenzie, Gurugram (2024-Present) - Upstream Production Analyst: Spearheading advanced upstream intelligence, integrating geospatial analytics (ArcGIS) and AI-driven automation to streamline subsea contract forecasting.',
-      kpmg: 'KPMG Global Services, Gurugram (2022-2024) - Business Associate (Energy & Natural Resources): Created Power BI dashboards, conducted benchmarking studies, developed VBA/Python solutions, pioneered generative AI integration.',
-      acs: 'ACS Global Tech Solutions, Noida (2020-2022) - Market Research Associate: Specialized in IT applications in industrial manufacturing, conducted competitive analysis, created thought leadership content.',
-      continental: 'Continental Automotive Components, Gurugram (2019) - Trainee: Gained practical insights into manufacturing operations and quality control procedures.'
-    },
-    upstream_expertise: {
-      technical: 'Reservoir management, rig performance analysis, subsea development, drilling operations, production optimization, well completion techniques, field development planning',
-      subsea: 'SURF (Subsea, Umbilicals, Risers, Flowlines), subsea production systems, subsea processing, tie-back developments, subsea field architecture, contract analysis',
-      market: 'Supply/demand forecasting, market dynamics analysis, pricing mechanisms, contractor performance evaluation, global upstream activities, investment flows',
-      operations: 'Drilling programs, completion strategies, production forecasting, enhanced oil recovery, unconventional resource development, field optimization',
-      contracts: 'Drilling contracts, service agreements, joint venture structures, farm-in/farm-out deals, equipment procurement contracts'
-    },
-    projects: {
-      analyzer: 'Upstream AI Analyzer Tool: 90% reduction in manual analysis time, 100% automation of intelligence gathering, 1-click deployment with PyQt5, Selenium, spaCy',
-      matcher: 'AI Data Matcher Tool: 95% improvement in matching accuracy, 80% reduction in reconciliation time, Random Forest ML integration',
-      synthesizer: 'Automated Research Synthesizer: 75% reduction in data gathering, 4x increase in sources analyzed, OpenAI API + LangChain integration',
-      command: 'Project Command Center: AI-powered analytics, ML delay prediction, 30%+ productivity increase with linear programming optimization',
-      pipeline: 'AI News Intelligence Pipeline: 90% processing time reduction, Microsoft Copilot integration, real-time intelligence delivery'
-    },
-    technical_skills: {
-      programming: 'Python (PyQt5, Selenium, spaCy, scikit-learn, pandas), VBA (expert level), JavaScript, HTML5, CSS3',
-      ai_ml: 'Random Forest classifiers, NLP processing, OpenAI API, LangChain, generative AI tools, continuous learning algorithms',
-      databases: 'Refinitiv, FactSet, Bloomberg, GlobalData, Zoominfo, database optimization, spatial data analysis',
-      visualization: 'Power BI (advanced dashboards), ArcGIS (geospatial analytics), matplotlib, custom visualizations'
-    },
-    contact: {
-      email: 'ayushkul404@yahoo.com',
-      phone: '+91 8851222155',
-      website: 'www.akenergyconsultant.org',
-      location: 'Gurugram, India (serving clients globally)'
-    }
-  };
+        const knowledgeBase = {
+          education: {
+            mba: 'MBA in Marketing & International Business from Galgotias College of Engineering & Technology (2018-2020)',
+            btech: 'B.Tech in Mechanical Engineering from Maharshi Dayanand University (2013-2017)',
+            certs: 'Lean Six Sigma (KPMG), Google Digital Marketing, IBM AI & Generative AI, Python Essential Training (LinkedIn), Business Analysis (IIBA), ADBI certifications in Digital Economy and Urban Growth',
+            details: 'This unique combination of engineering technical depth and business strategic thinking enables bridging complex technical challenges with commercial solutions in the energy sector.'
+          },
+          experience: {
+            current: 'Wood Mackenzie, Gurugram (2024-Present) - Upstream Production Analyst: Spearheading advanced upstream intelligence, integrating geospatial analytics (ArcGIS) and AI-driven automation to streamline subsea contract forecasting.',
+            kpmg: 'KPMG Global Services, Gurugram (2022-2024) - Business Associate (Energy & Natural Resources): Created Power BI dashboards, conducted benchmarking studies, developed VBA/Python solutions, pioneered generative AI integration.',
+            acs: 'ACS Global Tech Solutions, Noida (2020-2022) - Market Research Associate: Specialized in IT applications in industrial manufacturing, conducted competitive analysis, created thought leadership content.',
+            continental: 'Continental Automotive Components, Gurugram (2019) - Trainee: Gained practical insights into manufacturing operations and quality control procedures.'
+          },
+          upstream_expertise: {
+            technical: 'Reservoir management, rig performance analysis, subsea development, drilling operations, production optimization, well completion techniques, field development planning',
+            subsea: 'SURF (Subsea, Umbilicals, Risers, Flowlines), subsea production systems, subsea processing, tie-back developments, subsea field architecture, contract analysis',
+            market: 'Supply/demand forecasting, market dynamics analysis, pricing mechanisms, contractor performance evaluation, global upstream activities, investment flows',
+            operations: 'Drilling programs, completion strategies, production forecasting, enhanced oil recovery, unconventional resource development, field optimization',
+            contracts: 'Drilling contracts, service agreements, joint venture structures, farm-in/farm-out deals, equipment procurement contracts'
+          },
+          projects: {
+            analyzer: 'Upstream AI Analyzer Tool: 90% reduction in manual analysis time, 100% automation of intelligence gathering, 1-click deployment with PyQt5, Selenium, spaCy',
+            matcher: 'AI Data Matcher Tool: 95% improvement in matching accuracy, 80% reduction in reconciliation time, Random Forest ML integration',
+            synthesizer: 'Automated Research Synthesizer: 75% reduction in data gathering, 4x increase in sources analyzed, OpenAI API + LangChain integration',
+            command: 'Project Command Center: AI-powered analytics, ML delay prediction, 30%+ productivity increase with linear programming optimization',
+            pipeline: 'AI News Intelligence Pipeline: 90% processing time reduction, Microsoft Copilot integration, real-time intelligence delivery'
+          },
+          technical_skills: {
+            programming: 'Python (PyQt5, Selenium, spaCy, scikit-learn, pandas), VBA (expert level), JavaScript, HTML5, CSS3',
+            ai_ml: 'Random Forest classifiers, NLP processing, OpenAI API, LangChain, generative AI tools, continuous learning algorithms',
+            databases: 'Refinitiv, FactSet, Bloomberg, GlobalData, Zoominfo, database optimization, spatial data analysis',
+            visualization: 'Power BI (advanced dashboards), ArcGIS (geospatial analytics), matplotlib, custom visualizations'
+          },
+          contact: {
+            email: 'ayushkul404@yahoo.com',
+            phone: '+91 8851222155',
+            website: 'www.akenergyconsultant.org',
+            location: 'Gurugram, India (serving clients globally)'
+          }
+        };
 
-  function containsAny(text, keywords) {
-    return keywords.some(keyword => text.includes(keyword));
-  }
+        function containsAny(text, keywords) {
+          return keywords.some(keyword => text.includes(keyword));
+        }
 
-  function getResponse(userMessage) {
-    const message = userMessage.toLowerCase();
+        function getResponse(userMessage) {
+          const message = userMessage.toLowerCase();
 
-    if (containsAny(message, ['education', 'qualification', 'degree', 'study', 'university', 'his education', 'your education', 'know his education'])) {
-      return `🎓 Ayush's Educational Background:
+          if (containsAny(message, ['education', 'qualification', 'degree', 'study', 'university', 'his education', 'your education', 'know his education'])) {
+            return `🎓 Ayush's Educational Background:
 
 ${knowledgeBase.education.mba}
 Strategic business perspective, international market understanding, and commercial acumen for energy consulting.
@@ -1131,10 +1113,10 @@ Professional Certifications:
 ${knowledgeBase.education.certs}
 
 ${knowledgeBase.education.details}`;
-    }
+          }
 
-    if (containsAny(message, ['experience', 'work history', 'career', 'background', 'his experience', 'your experience'])) {
-      return `💼 Ayush's Professional Experience:
+          if (containsAny(message, ['experience', 'work history', 'career', 'background', 'his experience', 'your experience'])) {
+            return `💼 Ayush's Professional Experience:
 
 Current Role (2024-Present):
 ${knowledgeBase.experience.current}
@@ -1149,10 +1131,10 @@ Continental Automotive (2019):
 ${knowledgeBase.experience.continental}
 
 Career progression from manufacturing to market research to specialized upstream analysis, developing comprehensive expertise across the energy value chain.`;
-    }
+          }
 
-    if (containsAny(message, ['upstream', 'oil', 'gas', 'expertise', 'knowledge', 'subsea', 'reservoir'])) {
-      return `🛢️ Comprehensive Upstream Expertise:
+          if (containsAny(message, ['upstream', 'oil', 'gas', 'expertise', 'knowledge', 'subsea', 'reservoir'])) {
+            return `🛢️ Comprehensive Upstream Expertise:
 
 Technical Operations: ${knowledgeBase.upstream_expertise.technical}
 
@@ -1165,10 +1147,10 @@ Operations Analysis: ${knowledgeBase.upstream_expertise.operations}
 Contract Expertise: ${knowledgeBase.upstream_expertise.contracts}
 
 At Wood Mackenzie, I apply this expertise daily, analyzing global upstream projects worth billions of dollars, providing strategic intelligence that influences major investment decisions.`;
-    }
+          }
 
-    if (containsAny(message, ['technical', 'skills', 'programming', 'python', 'ai', 'his skills', 'your skills'])) {
-      return `💻 Technical Skills & Expertise:
+          if (containsAny(message, ['technical', 'skills', 'programming', 'python', 'ai', 'his skills', 'your skills'])) {
+            return `💻 Technical Skills & Expertise:
 
 Programming: ${knowledgeBase.technical_skills.programming}
 
@@ -1183,10 +1165,10 @@ Real Applications:
 • 95% accuracy in data matching
 • Fully automated intelligence pipelines serving global energy clients
 • 30%+ productivity improvements through AI-powered solutions`;
-    }
+          }
 
-    if (containsAny(message, ['projects', 'portfolio', 'tools', 'applications', 'case studies'])) {
-      return `🔥 Flagship AI-Powered Projects:
+          if (containsAny(message, ['projects', 'portfolio', 'tools', 'applications', 'case studies'])) {
+            return `🔥 Flagship AI-Powered Projects:
 
 ${knowledgeBase.projects.analyzer}
 
@@ -1199,10 +1181,10 @@ ${knowledgeBase.projects.command}
 ${knowledgeBase.projects.pipeline}
 
 All projects feature advanced ML integration, intuitive interfaces, and measurable business impact. Which project interests you most?`;
-    }
+          }
 
-    if (containsAny(message, ['contact', 'email', 'phone', 'reach', 'connect'])) {
-      return `📞 Contact Information:
+          if (containsAny(message, ['contact', 'email', 'phone', 'reach', 'connect'])) {
+            return `📞 Contact Information:
 
 Email: ${knowledgeBase.contact.email}
 Phone: ${knowledgeBase.contact.phone}
@@ -1213,10 +1195,10 @@ Response Time: Within 24 hours
 Free Consultation: Available to discuss your automation and analytics needs
 
 Ready to transform your energy data challenges into competitive advantages? Let's connect!`;
-    }
+          }
 
-    if (containsAny(message, ['price', 'cost', 'rate', 'fee', 'investment'])) {
-      return `💰 Consulting Investment Structure:
+          if (containsAny(message, ['price', 'cost', 'rate', 'fee', 'investment'])) {
+            return `💰 Consulting Investment Structure:
 
 🔥 AI Automation Projects: Custom development of desktop applications - project-based pricing with ROI guarantees
 
@@ -1229,10 +1211,10 @@ Ready to transform your energy data challenges into competitive advantages? Let'
 Typical ROI: 75-90% time savings, 95%+ accuracy improvements
 
 Let's discuss your specific challenge for a detailed proposal with guaranteed measurable results.`;
-    }
+          }
 
-    if (containsAny(message, ['hello', 'hi', 'hey', 'greetings'])) {
-      return `Hello! Great to connect with you! 🚀
+          if (containsAny(message, ['hello', 'hi', 'hey', 'greetings'])) {
+            return `Hello! Great to connect with you! 🚀
 
 I'm Ayush Kulshrestha - an Energy Consultant & Data Scientist who transforms complex energy challenges into AI-powered competitive advantages.
 
@@ -1248,9 +1230,9 @@ Ready to explore:
 • Power BI dashboards & geospatial analytics
 
 What specific challenge can I help you solve?`;
-    }
+          }
 
-    return `That's a great question! I'm Ayush Kulshrestha - specializing in AI-driven energy analytics that deliver measurable competitive advantages.
+          return `That's a great question! I'm Ayush Kulshrestha - specializing in AI-driven energy analytics that deliver measurable competitive advantages.
 
 🔥 Core Expertise:
 • Upstream market intelligence with 90%+ efficiency gains
@@ -1266,136 +1248,118 @@ Feel free to ask about:
 • How I can optimize your energy data workflows
 
 I transform complex data challenges into streamlined, intelligent solutions!`;
-  }
+        }
 
-  function handleSend() {
-    if (!input.trim() || isTyping) return;
-    const userMsg = {
-      sender: 'user',
-      content: input.trim(),
-      time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-    };
-    setMessages(msgs => [...msgs, userMsg]);
-    setInput('');
-    setIsTyping(true);
+        function handleSend() {
+          if (!input.trim() || isTyping) return;
+          const userMsg = {
+            sender: 'user',
+            content: input.trim(),
+            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+          };
+          setMessages(msgs => [...msgs, userMsg]);
+          setInput('');
+          setIsTyping(true);
 
-    setTimeout(() => {
-      const botMsg = {
-        sender: 'bot',
-        content: getResponse(userMsg.content),
-        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-      };
-      setMessages(msgs => [...msgs, botMsg]);
-      setIsTyping(false);
-    }, 1500);
-  }
+          setTimeout(() => {
+            const botMsg = {
+              sender: 'bot',
+              content: getResponse(userMsg.content),
+              time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+            setMessages(msgs => [...msgs, botMsg]);
+            setIsTyping(false);
+          }, 1500);
+        }
 
-  function handleQuick(question) {
-    setInput(question);
-    setTimeout(handleSend, 100);
-  }
+        function handleQuick(question) {
+          setInput(question);
+          setTimeout(handleSend, 100);
+        }
 
-  function handleKeyPress(e) {
-    if (e.key === 'Enter') handleSend();
-  }
+        function handleKeyPress(e) {
+          if (e.key === 'Enter') handleSend();
+        }
 
-  // Modal style
-  return (
-// Modal style
-return (
-  <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/30 backdrop-blur-sm" onClick={onClose}>
-    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl flex flex-col overflow-hidden" style={{maxHeight: '90vh'}} onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white px-6 py-4 flex justify-between items-center">
-          <div>
-            <span className="font-bold text-lg"><i className="fas fa-robot mr-2"></i>AK Energy Consultant</span>
-            <div className="text-xs opacity-80">Upstream Oil & Gas Analysis • Python Automation • Market Intelligence</div>
-          </div>
-          <button className="text-white text-xl hover:text-red-400 transition" onClick={onClose} aria-label="Close chatbot">
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-        {/* Quick Questions */}
-        <div className="flex flex-wrap gap-2 px-4 py-2 bg-blue-50 border-b border-blue-100">
-          <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('Tell me about his education')}>📚 Education</button>
-          <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('What is his upstream expertise?')}>🛢️ Upstream Expertise</button>
-          <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('Show me his experience')}>💼 Experience</button>
-          <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('What are his technical skills?')}>💻 Technical Skills</button>
-          <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('Tell me about his projects')}>🔥 Projects</button>
-          <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('How can I contact him?')}>📞 Contact</button>
-        </div>
-        {/* Chat Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-3" style={{background:'#f8f9fa'}}>
-          {messages.map((msg, idx) => (
-            <div key={idx} className={`flex mb-4 ${msg.sender==='user'?'flex-row-reverse':''}`}>
-              <div className={`message-avatar ${msg.sender==='bot'?'bg-blue-600':'bg-green-600'} text-white flex items-center justify-center rounded-full w-9 h-9`}>
-                <i className={`fa-solid ${msg.sender==='bot'?'fa-robot':'fa-user'}`}></i>
-              </div>
-              <div className="ml-2 mr-2">
-                <div className={`message-content preformatted`} style={{
-                  background: msg.sender==='bot'?'#f1f3f5':'#667eea',
-                  color: msg.sender==='bot'?'#333':'#fff',
-                  borderRadius: '18px',
-                  borderBottomLeftRadius: msg.sender==='bot'?'4px':'18px',
-                  borderBottomRightRadius: msg.sender==='user'?'4px':'18px',
-                  padding: '12px 16px',
-                  maxWidth: '80vw',
-                  fontSize: '14px',
-                  whiteSpace: 'pre-wrap'
-                }}>{msg.content}</div>
-                <div className="message-time text-xs opacity-60 mt-1">{msg.time}</div>
-              </div>
-            </div>
-          ))}
-          {isTyping && (
-            <div className="flex mb-4">
-              <div className="message-avatar bg-blue-600 text-white flex items-center justify-center rounded-full w-9 h-9">
-                <i className="fa-solid fa-robot"></i>
-              </div>
-              <div className="ml-2">
-                <div className="typing-indicator flex items-center gap-2 bg-[#f1f3f5] rounded-[18px] border-b-[4px] border-blue-200 px-4 py-2" style={{maxWidth:'80px'}}>
-                  <div className="typing-dots flex gap-1">
-                    <div className="typing-dot" style={{width:'8px',height:'8px',background:'#666',borderRadius:'50%',animation:'typing 1.4s infinite ease-in-out'}}></div>
-                    <div className="typing-dot" style={{width:'8px',height:'8px',background:'#666',borderRadius:'50%',animation:'typing 1.4s infinite ease-in-out',animationDelay:'0.2s'}}></div>
-                    <div className="typing-dot" style={{width:'8px',height:'8px',background:'#666',borderRadius:'50%',animation:'typing 1.4s infinite ease-in-out',animationDelay:'0.4s'}}></div>
-                  </div>
-                  <span style={{fontSize:'11px',marginLeft:'8px'}}>AK is typing...</span>
+        return (
+          <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/30 backdrop-blur-sm" onClick={onClose}>
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl flex flex-col overflow-hidden" style={{maxHeight: '90vh'}} onClick={(e) => e.stopPropagation()}>
+              <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white px-6 py-4 flex justify-between items-center">
+                <div>
+                  <span className="font-bold text-lg"><i className="fas fa-robot mr-2"></i>AK Energy Consultant</span>
+                  <div className="text-xs opacity-80">Upstream Oil & Gas Analysis • Python Automation • Market Intelligence</div>
                 </div>
+                <button className="text-white text-xl hover:text-red-400 transition" onClick={onClose} aria-label="Close chatbot">
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2 px-4 py-2 bg-blue-50 border-b border-blue-100">
+                <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('Tell me about his education')}>📚 Education</button>
+                <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('What is his upstream expertise?')}>🛢️ Upstream Expertise</button>
+                <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('Show me his experience')}>💼 Experience</button>
+                <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('What are his technical skills?')}>💻 Technical Skills</button>
+                <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('Tell me about his projects')}>🔥 Projects</button>
+                <button className="quick-btn" style={{background:'#1976D2',color:'white',borderRadius:'20px',padding:'6px 12px',fontSize:'12px'}} onClick={()=>handleQuick('How can I contact him?')}>📞 Contact</button>
+              </div>
+              <div className="flex-1 overflow-y-auto px-4 py-3" style={{background:'#f8f9fa'}}>
+                {messages.map((msg, idx) => (
+                  <div key={idx} className={`flex mb-4 ${msg.sender==='user'?'flex-row-reverse':''}`}>
+                    <div className={`message-avatar ${msg.sender==='bot'?'bg-blue-600':'bg-green-600'} text-white flex items-center justify-center rounded-full w-9 h-9`}>
+                      <i className={`fa-solid ${msg.sender==='bot'?'fa-robot':'fa-user'}`}></i>
+                    </div>
+                    <div className="ml-2 mr-2">
+                      <div className={`message-content preformatted`} style={{
+                        background: msg.sender==='bot'?'#f1f3f5':'#667eea',
+                        color: msg.sender==='bot'?'#333':'#fff',
+                        borderRadius: '18px',
+                        borderBottomLeftRadius: msg.sender==='bot'?'4px':'18px',
+                        borderBottomRightRadius: msg.sender==='user'?'4px':'18px',
+                        padding: '12px 16px',
+                        maxWidth: '80vw',
+                        fontSize: '14px',
+                        whiteSpace: 'pre-wrap'
+                      }}>{msg.content}</div>
+                      <div className="message-time text-xs opacity-60 mt-1">{msg.time}</div>
+                    </div>
+                  </div>
+                ))}
+                {isTyping && (
+                  <div className="flex mb-4">
+                    <div className="message-avatar bg-blue-600 text-white flex items-center justify-center rounded-full w-9 h-9">
+                      <i className="fa-solid fa-robot"></i>
+                    </div>
+                    <div className="ml-2">
+                      <div className="typing-indicator flex items-center gap-2 bg-[#f1f3f5] rounded-[18px] border-b-[4px] border-blue-200 px-4 py-2" style={{maxWidth:'80px'}}>
+                        <div className="typing-dots flex gap-1">
+                          <div className="typing-dot w-2 h-2 bg-gray-600 rounded-full animate-typing"></div>
+                          <div className="typing-dot w-2 h-2 bg-gray-600 rounded-full animate-typing" style={{animationDelay:'0.2s'}}></div>
+                          <div className="typing-dot w-2 h-2 bg-gray-600 rounded-full animate-typing" style={{animationDelay:'0.4s'}}></div>
+                        </div>
+                        <span style={{fontSize:'11px',marginLeft:'8px'}}>AK is typing...</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="input-container flex items-center gap-2 px-4 py-3 bg-white border-t border-blue-100">
+                <input
+                  type="text"
+                  className="input-field flex-1 px-4 py-2 rounded-full border border-blue-200"
+                  placeholder="Ask about Ayush's expertise..."
+                  value={input}
+                  onChange={e=>setInput(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  autoFocus
+                />
+                <button className={`send-btn w-11 h-11 rounded-full flex items-center justify-center text-white text-lg ${isTyping?'bg-green-600':'bg-blue-600'}`} onClick={handleSend} disabled={isTyping}>
+                  {isTyping ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-paper-plane"></i>}
+                </button>
               </div>
             </div>
-          )}
-        </div>
-        {/* Input */}
-        <div className="input-container flex items-center gap-2 px-4 py-3 bg-white border-t border-blue-100">
-          <input
-            type="text"
-            className="input-field flex-1 px-4 py-2 rounded-full border border-blue-200"
-            placeholder="Ask about Ayush's expertise..."
-            value={input}
-            onChange={e=>setInput(e.target.value)}
-            onKeyPress={handleKeyPress}
-            autoFocus
-          />
-          <button className={`send-btn w-11 h-11 rounded-full flex items-center justify-center text-white text-lg ${isTyping?'bg-green-600':'bg-blue-600'}`} onClick={handleSend} disabled={isTyping}>
-            {isTyping ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-paper-plane"></i>}
-          </button>
-        </div>
-      </div>
-      {/* Modal backdrop click closes modal */}
-      <style>{`
-        @keyframes typing {
-          0%, 60%, 100% { transform: translateY(0); }
-          30% { transform: translateY(-10px); }
-        }
-   <style>{`
-        @keyframes typing {
-          0%, 60%, 100% { transform: translateY(0); }
-          30% { transform: translateY(-10px); }
-        }
-      `}</style>
-    </div>
+          </div>
+        );
+      };
 
-      // --- MAIN APP COMPONENT ---
       const App = () => {
         const [theme, setTheme] = useState(() => {
           if (typeof window !== 'undefined' && window.localStorage) {
@@ -1497,7 +1461,6 @@ return (
             <Footer />
             <ScrollToTopButton />
             <IronManNavigator visible={showGuide} onClose={() => setShowGuide(false)} />
-            {/* JARVIS Launch Button */}
             <button
               className="fixed left-4 bottom-8 z-50 bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-6 py-3 rounded-full shadow-2xl shadow-cyan-400/30 flex items-center gap-3 font-mono font-bold hover:scale-110 hover:shadow-cyan-400/50 transition-all duration-300 border border-cyan-400/30 group"
               style={{ pointerEvents: 'auto' }}
@@ -1508,7 +1471,6 @@ return (
               <span className="text-sm">JARVIS</span>
               <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse opacity-70"></div>
             </button>
-            {/* --- AI Chatbot Floating Button --- */}
             <button
               className="fixed right-4 bottom-8 z-50 bg-gradient-to-r from-blue-600 to-blue-400 text-white px-5 py-3 rounded-full shadow-2xl shadow-blue-400/30 flex items-center gap-2 font-mono font-bold hover:scale-110 hover:shadow-blue-400/50 transition-all duration-300 border border-blue-400/30 group"
               style={{ pointerEvents: 'auto' }}
@@ -1523,7 +1485,6 @@ return (
         );
       };
 
-      // --- RENDER THE APP ---
       const rootElement = document.getElementById('root');
       const root = ReactDOM.createRoot(rootElement);
       root.render(<App />);
