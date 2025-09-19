@@ -1,0 +1,9 @@
+[[redirects]]
+  from = "/services"
+  to = "/Services.html"
+  status = 200
+
+[[redirects]]
+  from = "/detailed-services"
+  to = "/Services.html"
+  status = 200
