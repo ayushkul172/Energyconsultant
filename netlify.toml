@@ -1,9 +1,10 @@
 [[redirects]]
-  from = "/services"
+  from = "/services.html"
   to = "/Services.html"
-  status = 200
+  status = 301
 
-[[redirects]]
-  from = "/detailed-services"
-  to = "/Services.html"
-  status = 200
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
