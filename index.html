@@ -80,6 +80,32 @@
               typing: {
                 '0%, 60%, 100%': { transform: 'translateY(0)' },
                 '30%': { transform: 'translateY(-10px)' },
+              },
+              pulse3d: {
+                '0%, 100%': { transform: 'scale(1) rotateY(0deg)', boxShadow: '0 0 20px rgba(6, 182, 212, 0.5)' },
+                '50%': { transform: 'scale(1.05) rotateY(5deg)', boxShadow: '0 0 40px rgba(6, 182, 212, 0.8)' }
+              },
+              slideInLeft: {
+                '0%': { transform: 'translateX(-100%) scale(0.8)', opacity: '0' },
+                '100%': { transform: 'translateX(0) scale(1)', opacity: '1' }
+              },
+              slideInRight: {
+                '0%': { transform: 'translateX(100%) scale(0.8)', opacity: '0' },
+                '100%': { transform: 'translateX(0) scale(1)', opacity: '1' }
+              },              
+              bounceIn: {
+                '0%': { transform: 'scale(0) rotate(-180deg)', opacity: '0' },
+                '50%': { transform: 'scale(1.2) rotate(-90deg)', opacity: '0.8' },
+                '100%': { transform: 'scale(1) rotate(0deg)', opacity: '1' }
+              },
+              glowPulse: {
+                '0%, 100%': { boxShadow: '0 0 5px rgba(6, 182, 212, 0.5), inset 0 0 5px rgba(6, 182, 212, 0.2)' },
+                '50%': { boxShadow: '0 0 20px rgba(6, 182, 212, 0.8), inset 0 0 10px rgba(6, 182, 212, 0.4)' }
+              },
+              matrixRain: {
+                '0%': { transform: 'translateY(-100%)', opacity: '0' },
+                '50%': { opacity: '1' },
+                '100%': { transform: 'translateY(100vh)', opacity: '0' }
               }
             },
             animation: {
@@ -88,6 +114,12 @@
               reveal: 'reveal 1s ease-in-out forwards',
               bounceSlow: 'bounceSlow 2s infinite',
               typing: 'typing 1.4s infinite ease-in-out',
+              pulse3d: 'pulse3d 2s ease-in-out infinite',
+              slideInLeft: 'slideInLeft 0.8s ease-out forwards',
+              slideInRight: 'slideInRight 0.8s ease-out forwards',
+              bounceIn: 'bounceIn 1s ease-out forwards',
+              glowPulse: 'glowPulse 2s ease-in-out infinite',
+              matrixRain: 'matrixRain 3s linear infinite'
             }
           }
         }
@@ -121,6 +153,41 @@
       body {
         background-color: transparent !important;
       }
+      .hologram-effect {
+        background: linear-gradient(45deg, rgba(6, 182, 212, 0.1), rgba(34, 211, 238, 0.2));
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(6, 182, 212, 0.3);
+        box-shadow: 0 8px 32px rgba(6, 182, 212, 0.2), inset 0 2px 4px rgba(255, 255, 255, 0.1);
+      }
+      
+      .service-card-3d {
+        transform-style: preserve-3d;
+        transition: transform 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+      }
+      
+      .service-card-3d:hover {
+        transform: rotateY(10deg) rotateX(5deg) scale(1.05);
+      }
+      
+      .matrix-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+          radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+          radial-gradient(circle at 80% 80%, rgba(34, 211, 238, 0.1) 0%, transparent 50%),
+          radial-gradient(circle at 40% 60%, rgba(14, 116, 144, 0.05) 0%, transparent 50%);
+        pointer-events: none;
+      }
+      
+      .typing-effect {
+        overflow: hidden;
+        border-right: 2px solid rgba(6, 182, 212, 0.8);
+        animation: typing 2s steps(20, end), blink-cursor 1s step-end infinite;
+      }
     </style>
 </head>
 <body class="bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text transition-colors duration-300">
@@ -136,6 +203,111 @@
       const { useState, useEffect, useRef, useId, Fragment } = React;
 
       // --- DATA CONSTANTS ---
+      const services = [
+        {
+            icon: 'fa-solid fa-robot',
+            title: '🚀 Custom AI Tool Development',
+            description: 'Cutting-edge AI solutions tailored to transform your business operations with intelligent automation.',
+            pricing: 'Custom AI Solutions',
+            features: ["Customizable solutions", "Expert consultation", "Scalable for growth"]
+        },
+        {
+            icon: 'fa-solid fa-code',
+            title: '⚡ Dynamic Website Creation',
+            description: 'Modern, responsive websites with interactive features and seamless user experiences.',
+            pricing: 'Full-Stack Development',
+            features: ["Customizable solutions", "Expert consultation", "Scalable for growth"]
+        },
+        {
+            icon: 'fa-solid fa-oil-well',
+            title: '🛢️ Energy Consulting (Upstream Production)',
+            description: 'Specialized consulting for upstream oil & gas operations with data-driven insights.',
+            pricing: 'Industry Expertise',
+            features: ["Customizable solutions", "Expert consultation", "Scalable for growth"]
+        },
+        {
+            icon: 'fa-solid fa-gears',
+            title: '🔄 Automation & Data Ingestion',
+            description: 'Streamline workflows with intelligent automation and seamless data integration systems.',
+            pricing: 'Process Optimization',
+            features: ["Customizable solutions", "Expert consultation", "Scalable for growth"]
+        },
+        {
+            icon: 'fa-solid fa-chart-line',
+            title: '📊 Data Analytics & Science',
+            description: 'Advanced analytics and machine learning to unlock valuable insights from your data.',
+            pricing: 'Insights & Intelligence',
+            features: ["Customizable solutions", "Expert consultation", "Scalable for growth"]
+        },
+        {
+            icon: 'fa-solid fa-mobile-screen',
+            title: '📱 App Development',
+            description: 'Cross-platform mobile and desktop applications with modern UI and robust functionality.',
+            pricing: 'Mobile Solutions',
+            features: ["Customizable solutions", "Expert consultation", "Scalable for growth"]
+        },
+        {
+            icon: 'fa-solid fa-palette',
+            title: '🎨 Digital Content Creation',
+            description: 'Compelling digital content including graphics, animations, and multimedia experiences.',
+            pricing: 'Creative Solutions',
+            features: ["Customizable solutions", "Expert consultation", "Scalable for growth"]
+        },
+        {
+            icon: 'fa-solid fa-magnifying-glass-chart',
+            title: '🔍 Energy Market Research',
+            description: 'In-depth market analysis and intelligence for strategic energy sector decision-making.',
+            pricing: 'Market Intelligence',
+            features: ["Customizable solutions", "Expert consultation", "Scalable for growth"]
+        }
+      ];
+
+      const popupServices = [
+        {
+          icon: 'fa-solid fa-robot',
+          title: 'Custom AI Tool Development',
+          description: 'Cutting-edge AI solutions with 90% efficiency gains',
+          metrics: ['90% Time Reduction', '100% Automation', 'Real-time Processing'],
+          color: 'from-blue-600 to-cyan-500'
+        },
+        {
+          icon: 'fa-solid fa-code',
+          title: 'Dynamic Website Creation',
+          description: 'Modern, responsive websites with interactive features',
+          metrics: ['Full-Stack Dev', 'Responsive Design', 'SEO Optimized'],
+          color: 'from-purple-600 to-blue-500'
+        },
+        {
+          icon: 'fa-solid fa-oil-well',
+          title: 'Energy Consulting',
+          description: 'Upstream oil & gas operations with data-driven insights',
+          metrics: ['Market Analysis', 'Risk Assessment', 'Strategic Planning'],
+          color: 'from-green-600 to-teal-500'
+        },
+        {
+          icon: 'fa-solid fa-gears',
+          title: 'Automation & Data Ingestion',
+          description: 'Intelligent automation and seamless data integration',
+          metrics: ['Process Optimization', 'Data Integration', 'Workflow Auto'],
+          color: 'from-orange-600 to-red-500'
+        },
+        {
+          icon: 'fa-solid fa-chart-line',
+          title: 'Data Analytics & Science',
+          description: 'Advanced ML to unlock valuable insights from data',
+          metrics: ['ML Algorithms', 'Predictive Models', 'Business Intelligence'],
+          color: 'from-indigo-600 to-purple-500'
+        },
+        {
+          icon: 'fa-solid fa-mobile-screen',
+          title: 'App Development',
+          description: 'Cross-platform applications with robust functionality',
+          metrics: ['Cross-Platform', 'Modern UI', 'Cloud Integration'],
+          color: 'from-pink-600 to-rose-500'
+        }
+      ];
+
+      
       const spotlightProjects = [
           {
               title: "Upstream AI Analyzer Tool",
@@ -258,6 +430,248 @@
           { icon: 'fa-solid fa-award', title: 'Introduction to Web Development with HTML5, CSS3, and JavaScript', issuer: 'Issued by IBM' }
       ];
 
+      const EnhancedServicesPopup = ({ isOpen, onClose }) => {
+        const [currentServiceIndex, setCurrentServiceIndex] = useState(0);
+        const [showServices, setShowServices] = useState(false);
+        const [animationPhase, setAnimationPhase] = useState('intro');
+
+        useEffect(() => {
+          if (!isOpen) return;
+          
+          const phases = [
+            { phase: 'intro', duration: 2000 },
+            { phase: 'services', duration: 1000 },
+            { phase: 'showcase', duration: 0 }
+          ];
+          
+          let currentPhaseIndex = 0;
+          const runPhase = () => {
+            if (currentPhaseIndex < phases.length) {
+              const { phase, duration } = phases[currentPhaseIndex];
+              setAnimationPhase(phase);
+              
+              if (phase === 'services') {
+                setTimeout(() => setShowServices(true), 500);
+              }
+              
+              if (duration > 0) {
+                setTimeout(() => {
+                  currentPhaseIndex++;
+                  runPhase();
+                }, duration);
+              }
+            }
+          };
+          
+          runPhase();
+        }, [isOpen]);
+
+        useEffect(() => {
+          if (!showServices) return;
+          
+          const interval = setInterval(() => {
+            setCurrentServiceIndex((prev) => (prev + 1) % popupServices.length);
+          }, 2500);
+          
+          return () => clearInterval(interval);
+        }, [showServices]);
+
+        if (!isOpen) return null;
+
+        const currentService = popupServices[currentServiceIndex];
+
+        return (
+          <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+            <div className="relative w-full max-w-5xl mx-4">
+              {/* Matrix Background Effect */}
+              <div className="absolute inset-0 matrix-bg">
+                {[...Array(20)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute text-cyan-400 text-xs font-mono opacity-20 animate-matrixRain"
+                    style={{
+                      left: `${Math.random() * 100}%`,
+                      animationDelay: `${Math.random() * 3}s`,
+                      animationDuration: `${3 + Math.random() * 2}s`
+                    }}
+                  >
+                    {Math.random().toString(2).substr(2, 8)}
+                  </div>
+                ))}
+              </div>
+
+              {/* Main Container */}
+              <div className="relative bg-slate-900/95 border-2 border-cyan-400/40 rounded-3xl shadow-2xl shadow-cyan-400/20 backdrop-blur-md overflow-hidden">
+                
+                {/* Header */}
+                <div className="relative bg-gradient-to-r from-slate-800 to-slate-900 p-6 border-b border-cyan-400/30">
+                  <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center text-cyan-400 hover:text-red-400 transition-colors border border-cyan-400/30 rounded-full hover:border-red-400/50 group z-10"
+                  >
+                    <i className="fa-solid fa-power-off group-hover:animate-pulse"></i>
+                  </button>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-400/20 to-blue-400/20 flex items-center justify-center border-2 border-cyan-400/40 animate-pulse3d">
+                      <i className="fa-solid fa-robot text-3xl text-cyan-400"></i>
+                    </div>
+                    <div>
+                      <h2 className="text-3xl font-bold text-cyan-300 font-mono">
+                        {animationPhase === 'intro' && (
+                          <span className="typing-effect inline-block whitespace-nowrap">
+                            JARVIS SERVICE PROTOCOL
+                          </span>
+                        )}
+                        {animationPhase !== 'intro' && 'JARVIS SERVICE PROTOCOL'}
+                      </h2>
+                      <p className="text-cyan-400/70 font-mono text-sm mt-1">
+                        COMPREHENSIVE ANALYTICS SOLUTIONS INITIALIZED
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Status Indicators */}
+                  <div className="flex justify-end gap-4 mt-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
+                      <span className="text-green-400 font-mono text-xs">SYSTEMS ONLINE</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse shadow-lg shadow-blue-400/50"></div>
+                      <span className="text-blue-400 font-mono text-xs">AI ENHANCED</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-8">
+                  {animationPhase === 'intro' && (
+                    <div className="text-center space-y-6">
+                      <div className="w-24 h-24 mx-auto relative">
+                        <div className="absolute inset-0 rounded-full border-4 border-cyan-400/30"></div>
+                        <div className="absolute inset-0 rounded-full border-t-4 border-cyan-400 animate-spin"></div>
+                        <div className="absolute inset-4 bg-gradient-to-br from-cyan-400/20 to-blue-400/20 rounded-full flex items-center justify-center">
+                          <div className="w-8 h-8 bg-cyan-400 rounded-full shadow-lg shadow-cyan-400/50 animate-pulse"></div>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-cyan-300 font-mono text-lg animate-pulse">
+                          ACCESSING SERVICE DATABASE...
+                        </p>
+                        <p className="text-cyan-400/70 font-mono text-sm">
+                          ANALYZING OPTIMAL SOLUTIONS FOR YOUR BUSINESS
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {animationPhase !== 'intro' && (
+                    <div className="space-y-8">
+                      {/* Service Spotlight */}
+                      <div className="text-center mb-8">
+                        <h3 className="text-2xl font-bold text-cyan-300 font-mono mb-2">
+                          FEATURED SERVICE SPOTLIGHT
+                        </h3>
+                        <div className="w-32 h-1 bg-gradient-to-r from-cyan-400 to-blue-400 mx-auto rounded-full animate-glowPulse"></div>
+                      </div>
+
+                      {/* Current Service Display */}
+                      <div className="relative">
+                        <div className={`hologram-effect rounded-2xl p-8 service-card-3d animate-bounceIn bg-gradient-to-br ${currentService.color}`}>
+                          <div className="flex items-center gap-6 mb-6">
+                            <div className="w-20 h-20 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 animate-pulse3d">
+                              <i className={`${currentService.icon} text-4xl text-white`}></i>
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="text-2xl font-bold text-white mb-2 font-mono">
+                                {currentService.title}
+                              </h4>
+                              <p className="text-white/80 text-lg">
+                                {currentService.description}
+                              </p>
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-3 gap-4">
+                            {currentService.metrics.map((metric, index) => (
+                              <div 
+                                key={index}
+                                className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center border border-white/20 transform transition-all duration-500 hover:scale-105"
+                                style={{ animationDelay: `${index * 0.2}s` }}
+                              >
+                                <div className="text-2xl font-bold text-white font-mono">
+                                  <i className="fa-solid fa-check text-green-400 mr-2"></i>
+                                </div>
+                                <p className="text-white/80 text-sm font-mono">
+                                  {metric}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Service Grid Preview */}
+                      <div className="grid grid-cols-3 lg:grid-cols-6 gap-4 mt-8">
+                        {popupServices.map((service, index) => (
+                          <div 
+                            key={index}
+                            className={`relative p-4 rounded-xl border-2 transition-all duration-500 cursor-pointer ${
+                              index === currentServiceIndex 
+                                ? 'border-cyan-400 bg-cyan-400/20 scale-110 shadow-lg shadow-cyan-400/30' 
+                                : 'border-slate-600 bg-slate-800/50 hover:border-slate-500 hover:scale-105'
+                            }`}
+                            style={{ 
+                              animationDelay: `${index * 0.1}s`,
+                              animation: showServices ? 'slideInLeft 0.8s ease-out forwards' : ''
+                            }}
+                          >
+                            <div className="text-center">
+                              <i className={`${service.icon} text-2xl mb-2 ${
+                                index === currentServiceIndex ? 'text-cyan-400' : 'text-slate-400'
+                              }`}></i>
+                              <p className={`text-xs font-mono ${
+                                index === currentServiceIndex ? 'text-cyan-300' : 'text-slate-300'
+                              }`}>
+                                {service.title.split(' ')[0]}
+                              </p>
+                            </div>
+                            {index === currentServiceIndex && (
+                              <div className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-400 rounded-full animate-pulse shadow-lg shadow-cyan-400/50"></div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Call to Action */}
+                      <div className="text-center pt-6 border-t border-cyan-400/30">
+                        <p className="text-cyan-300 font-mono text-lg mb-4">
+                          READY TO OPTIMIZE YOUR OPERATIONS?
+                        </p>
+                        <div className="flex justify-center gap-4">
+                          <button className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg font-bold font-mono transition-all hover:scale-105 shadow-lg shadow-cyan-400/20 border border-cyan-400/30">
+                            <i className="fa-solid fa-rocket mr-2"></i>
+                            INITIATE CONSULTATION
+                          </button>
+                          <button 
+                            onClick={onClose}
+                            className="px-6 py-3 bg-slate-700 text-cyan-300 rounded-lg font-bold font-mono transition-all hover:scale-105 border border-slate-600"
+                          >
+                            <i className="fa-solid fa-eye mr-2"></i>
+                            CONTINUE TOUR
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
       // --- REUSABLE COMPONENTS ---
       const smoothScrollTo = (selector) => {
         const element = document.querySelector(selector);
@@ -368,6 +782,7 @@
         const navLinks = [
               { href: '#home', label: 'Home' },
               { href: '#about', label: 'About' },
+              { href: '#services', label: 'Services' },
               { href: '#spotlight', label: 'Spotlight' },
               { href: '#projects', label: 'Projects' },
               { href: '#experience', label: 'Experience' },
@@ -484,8 +899,8 @@
                               <p className="text-slate-200 text-sm">Utilizing market benchmarking and data visualization to enhance competitive positioning.</p>
                           </div>
                       </div>
-                      <a href="#spotlight" onClick={handleScrollClick} className="mt-12 inline-block bg-secondary-dark text-white py-3 px-8 rounded-full font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 hover:bg-cyan-300 hover:text-slate-900 shadow-lg opacity-0 animate-fadeInUp" style={{ animationDelay: '0.7s' }}>
-                          View Featured Project <i className="fa-solid fa-arrow-right-long ml-2"></i>
+                  <a href="#services" onClick={handleScrollClick} className="mt-12 inline-block bg-secondary-dark text-white py-3 px-8 rounded-full font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 hover:bg-cyan-300 hover:text-slate-900 shadow-lg opacity-0 animate-fadeInUp" style={{ animationDelay: '0.7s' }}>
+                      Explore Services <i className="fa-solid fa-arrow-right-long ml-2"></i>
                       </a>
                   </div>
                   <a
@@ -540,10 +955,84 @@
                       </div>
                   </div>
                 </div>
-                <NextSectionLink href="#spotlight" text="View my featured work" />
+                <NextSectionLink href="#services" text="Discover our service offerings" />
             </Section>
           );
       };
+
+      const ServiceCard = ({ service }) => (
+          <div className="bg-light-card dark:bg-dark-card p-8 rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700 h-full flex flex-col">
+              <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 rounded-lg bg-secondary-light/10 dark:bg-secondary-dark/10 flex items-center justify-center">
+                      <i className={`${service.icon} text-2xl text-secondary-light dark:text-secondary-dark`}></i>
+                  </div>
+                  <h3 className="font-montserrat text-xl font-bold text-primary-light dark:text-primary-dark">{service.title}</h3>
+              </div>
+              <p className="text-light-subtle dark:text-dark-subtle mb-6 flex-grow">{service.description}</p>
+              <div className="space-y-4">
+                  <div>
+                      <h4 className="font-semibold text-light-text dark:text-dark-text mb-3">Key Features:</h4>
+                      <ul className="space-y-2">
+                          {service.features.map((feature, index) => (
+                              <li key={index} className="flex items-center gap-2 text-sm text-light-subtle dark:text-dark-subtle">
+                                  <i className="fa-solid fa-check text-secondary-light dark:text-secondary-dark text-xs"></i>
+                                  <span>{feature}</span>
+                              </li>
+                          ))}
+                      </ul>
+                  </div>
+                  <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
+                      <p className="text-sm font-medium text-light-text dark:text-dark-text">
+                          <i className="fa-solid fa-tag text-secondary-light dark:text-secondary-dark mr-2"></i>
+                          {service.pricing}
+                      </p>
+                  </div>
+              </div>
+          </div>
+      );
+
+      const Services = () => (
+          <Section 
+            id="services" 
+            className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
+          >
+              <div className="text-center mb-16">
+                  <p className="font-montserrat font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-widest mb-2">Our Services</p>
+                  <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Comprehensive Energy Analytics Solutions</h2>
+                  <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle">Transform your energy operations with AI-powered analytics, market intelligence, and strategic insights that deliver measurable competitive advantages.</p>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                  {services.map((service, index) => <ServiceCard key={index} service={service} />)}
+              </div>
+              <div className="text-center bg-light-card dark:bg-dark-card p-8 rounded-xl shadow-lg ring-1 ring-slate-200 dark:ring-slate-700">
+                  <h3 className="font-montserrat text-2xl font-bold text-primary-light dark:text-primary-dark mb-4">Ready to Transform Your Energy Analytics?</h3>
+                  <p className="text-light-subtle dark:text-dark-subtle mb-6">Get detailed information about our service offerings, methodologies, and success stories.</p>
+                  <div className="flex flex-wrap justify-center gap-4">
+                      <a 
+                          href="https://github.com/ayushkul172/Energyconsultant/blob/main/Services.html" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-3 bg-secondary-light dark:bg-secondary-dark text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-md hover:bg-primary-light dark:hover:bg-primary-dark"
+                      >
+                          <i className="fa-solid fa-external-link-alt"></i>
+                          <span>View Detailed Services</span>
+                      </a>
+                      <a 
+                          href="#contact"
+                          onClick={(e) => {
+                              e.preventDefault();
+                              smoothScrollTo('#contact');
+                          }}
+                          className="inline-flex items-center gap-3 bg-light-card dark:bg-dark-card text-secondary-light dark:text-secondary-dark py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-md ring-2 ring-inset ring-secondary-light dark:ring-secondary-dark hover:bg-secondary-light/10 dark:hover:bg-secondary-dark/10"
+                      >
+                          <i className="fa-solid fa-calendar-check"></i>
+                          <span>Schedule Consultation</span>
+                      </a>
+                  </div>
+              </div>
+              <NextSectionLink href="#spotlight" text="See our work in action" />
+          </Section>
+      );
 
       const ProjectShowcase = ({ projects }) => {
           const [currentIndex, setCurrentIndex] = useState(0);
@@ -567,7 +1056,7 @@
           return (
               <Section 
                   id="spotlight" 
-                  className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
+                  className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
               >
                   <div className="text-center mb-16">
                       <p className="font-montserrat font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-widest mb-2">Project Spotlight</p>
@@ -582,7 +1071,7 @@
                           >
                               {projects.map((project, index) => (
                                   <div key={index} className="w-full flex-shrink-0 p-2">
-                                      <div className="grid md:grid-cols-2 gap-12 items-start bg-light-card dark:bg-dark-card p-8 rounded-xl shadow-lg ring-1 ring-slate-200 dark:ring-slate-700">
+                                      <div className="grid md:grid-cols-2 gap-12 items-start bg-light-bg dark:bg-dark-bg p-8 rounded-xl shadow-lg ring-1 ring-slate-200 dark:ring-slate-700">
                                           <div className="space-y-8">
                                               <h3 className="font-montserrat text-2xl font-bold text-primary-light dark:text-primary-dark -mt-2">{project.title}</h3>
                                               <div>
@@ -617,7 +1106,7 @@
                                                   <h4 className="font-montserrat text-xl font-bold mb-4 text-light-text dark:text-dark-text">✅ Key Outcomes</h4>
                                                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
                                                       {project.results.map((res, i) => (
-                                                          <div key={i} className="bg-light-bg dark:bg-dark-bg p-4 rounded-lg shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                                                          <div key={i} className="bg-light-card dark:bg-dark-card p-4 rounded-lg shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
                                                               <p className="text-3xl font-bold font-montserrat text-secondary-light dark:text-secondary-dark">{res.metric}</p>
                                                               <p className="text-sm text-light-subtle dark:text-dark-subtle">{res.description}</p>
                                                           </div>
@@ -684,7 +1173,7 @@
       const Projects = () => (
           <Section 
             id="projects" 
-            className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
+            className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
           >
               <div className="text-center">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Additional Case Studies</h2>
@@ -708,7 +1197,7 @@
       const Expertise = () => (
           <Section 
             id="expertise" 
-            className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
+            className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
           >
               <div className="text-center">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Core Competencies & Technical Toolkit</h2>
@@ -766,7 +1255,7 @@
           return (
               <Section 
                 id="experience" 
-                className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
+                className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
               >
                   <div className="text-center">
                       <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Career Journey</h2>
@@ -796,7 +1285,7 @@
       const Certifications = () => (
           <Section 
             id="certifications" 
-            className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
+            className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
           >
               <div className="text-center">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Certifications & Credentials</h2>
@@ -812,12 +1301,12 @@
       const Contact = () => (
           <Section 
             id="contact" 
-            className="bg-light-card/75 dark:bg-dark-card/75 backdrop-blur-md ring-1 ring-white/10"
+            className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
           >
               <div className="text-center max-w-3xl mx-auto">
                   <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Let's Talk</h2>
                   <p className="mb-12 text-light-subtle dark:text-dark-subtle">I am always open to discussing new opportunities, projects, and collaborations. Please get in touch using the form below or through my social channels.</p>
-                  <div className="bg-light-bg dark:bg-dark-bg p-8 rounded-xl shadow-2xl ring-1 ring-slate-300 dark:ring-slate-600">
+                  <div className="bg-light-card dark:bg-dark-card p-8 rounded-xl shadow-2xl ring-1 ring-slate-300 dark:ring-slate-600">
                       <form action="https://formspree.io/f/myzjobjp" method="POST" className="text-left space-y-6">
                           <div>
                               <label htmlFor="name" className="block mb-2 font-medium text-light-text dark:text-dark-text">Your Name</label>
@@ -892,6 +1381,7 @@
         const navSteps = [
           { selector: '#home', label: 'JARVIS: Welcome, Sir. Initializing portfolio systems.' },
           { selector: '#about', label: 'JARVIS: Accessing biographical data and credentials.' },
+          { selector: '#services', label: 'JARVIS: Loading comprehensive service catalog.', showServicesPopup: true },
           { selector: '#spotlight', label: 'JARVIS: Displaying featured project analytics.' },
           { selector: '#projects', label: 'JARVIS: Loading additional case study archives.' },
           { selector: '#expertise', label: 'JARVIS: Scanning technical competency matrix.' },
@@ -899,13 +1389,21 @@
           { selector: '#certifications', label: 'JARVIS: Verifying professional certifications.' },
           { selector: '#contact', label: 'JARVIS: Communication protocols ready, Sir.' },
         ];
+        
         const [step, setStep] = useState(0);
         const [isInitializing, setIsInitializing] = useState(true);
+        const [showServicesPopup, setShowServicesPopup] = useState(false);
 
         useEffect(() => {
           if (!visible) return;
           setIsInitializing(true);
           const timer = setTimeout(() => setIsInitializing(false), 1200);
+          
+          // Check if we should show services popup
+          if (navSteps[step]?.showServicesPopup) {
+            setTimeout(() => setShowServicesPopup(true), 1500);
+          }
+          
           const el = document.querySelector(navSteps[step].selector);
           if (el) {
             el.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -913,11 +1411,28 @@
           return () => clearTimeout(timer);
         }, [step, visible]);
 
+        const handleNext = () => {
+          setShowServicesPopup(false);
+          setStep(s => s + 1);
+        };
+
+        const handlePrev = () => {
+          setShowServicesPopup(false);
+          setStep(s => Math.max(0, s - 1));
+        };
+
         if (!visible) return null;
 
         return (
           <>
-            <div className="fixed bottom-8 left-8 z-[200] pointer-events-auto">
+            {/* Enhanced Services Popup */}
+            <EnhancedServicesPopup 
+              isOpen={showServicesPopup} 
+              onClose={() => setShowServicesPopup(false)} 
+            />
+
+            {/* Original Navigator (simplified when services popup is shown) */}
+            <div className={`fixed bottom-8 left-8 z-[200] pointer-events-auto transition-opacity duration-300 ${showServicesPopup ? 'opacity-50' : 'opacity-100'}`}>
               <div className="relative w-[370px] h-[320px]">
                 <div className="absolute inset-0 bg-gradient-to-br from-slate-900/95 to-blue-950/90 border-2 border-cyan-400/40 rounded-2xl shadow-2xl shadow-cyan-400/20 backdrop-blur-md flex flex-col items-center justify-center text-center">
                   {isInitializing ? (
@@ -930,9 +1445,6 @@
                         </div>
                       </div>
                       <p className="text-cyan-300 font-mono text-sm animate-pulse">Initializing JARVIS Protocol...</p>
-                      <div className="w-32 h-1 bg-slate-700 rounded-full mx-auto overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-cyan-400 to-blue-400 animate-pulse rounded-full" style={{ width: '75%' }}></div>
-                      </div>
                     </div>
                   ) : (
                     <>
@@ -943,7 +1455,6 @@
                       <button
                         className="absolute top-4 left-4 w-8 h-8 flex items-center justify-center text-cyan-400 hover:text-red-400 transition-colors border border-cyan-400/30 rounded-full hover:border-red-400/50 group"
                         onClick={onClose}
-                        aria-label="Close JARVIS interface"
                         style={{ pointerEvents: 'auto' }}
                       >
                         <i className="fa-solid fa-power-off text-sm group-hover:animate-pulse"></i>
@@ -974,7 +1485,7 @@
                         <div className="flex justify-between items-center gap-4 pt-2">
                           <button
                             className="flex items-center gap-2 px-4 py-2 bg-slate-700/50 text-cyan-400 border border-cyan-400/30 rounded-lg font-mono text-sm transition-all hover:bg-cyan-400/10 hover:border-cyan-400/50 disabled:opacity-30 disabled:cursor-not-allowed"
-                            onClick={() => setStep(s => Math.max(0, s - 1))}
+                            onClick={handlePrev}
                             disabled={step === 0}
                           >
                             <i className="fa-solid fa-chevron-left"></i>
@@ -983,7 +1494,7 @@
                           {step < navSteps.length - 1 ? (
                             <button
                               className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg font-mono text-sm font-bold transition-all hover:from-cyan-500 hover:to-blue-500 hover:scale-105 shadow-lg shadow-cyan-400/20"
-                              onClick={() => setStep(s => s + 1)}
+                              onClick={handleNext}
                             >
                               NEXT
                               <i className="fa-solid fa-chevron-right"></i>
@@ -1009,6 +1520,7 @@
                 </div>
               </div>
             </div>
+
             <div className="fixed top-8 left-8 space-y-2 pointer-events-none">
               <div className="text-cyan-400 font-mono text-xs opacity-70">STARK INDUSTRIES</div>
               <div className="text-green-400 font-mono text-xs">SECURITY: AUTHORIZED</div>
@@ -1018,13 +1530,6 @@
               <div className="text-cyan-400 font-mono text-xs opacity-70">PORTFOLIO v2.1</div>
               <div className="text-yellow-400 font-mono text-xs">POWER: 100%</div>
               <div className="text-green-400 font-mono text-xs">STATUS: ACTIVE</div>
-            </div>
-            <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 pointer-events-none">
-              <div className="flex items-center gap-4 text-cyan-400 font-mono text-xs">
-                <span className="opacity-70">SYSTEM: OPERATIONAL</span>
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="opacity-70">JARVIS: ONLINE</span>
-              </div>
             </div>
           </>
         );
@@ -1397,7 +1902,7 @@ I transform complex data challenges into streamlined, intelligent solutions!`;
         }, []);
 
         useEffect(() => {
-          const sectionIds = ['home', 'about', 'spotlight', 'projects', 'expertise', 'experience', 'certifications', 'contact'];
+          const sectionIds = ['home', 'about', 'services', 'spotlight', 'projects', 'expertise', 'experience', 'certifications', 'contact'];
           const sections = sectionIds.map(id => document.getElementById(id));
 
           const handleScroll = () => {
@@ -1451,6 +1956,7 @@ I transform complex data challenges into streamlined, intelligent solutions!`;
             <main>
               <Hero />
               <About />
+              <Services />
               <ProjectShowcase projects={spotlightProjects} />
               <Projects />
               <Expertise />
