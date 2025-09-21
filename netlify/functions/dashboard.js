@@ -176,9 +176,9 @@
             position: relative;
         }
 
-        #visitorChart {
-            background-color: var(--darker);
-            padding: 1rem;
+        .interactive-chart img {
+            max-width: 100%;
+            height: auto;
             border-radius: 1rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -268,7 +268,7 @@
         <div class="chart-header">
             <div class="chart-title">
                 <i class="fas fa-chart-area"></i>
-                Performance Trends
+                Entry Trends
             </div>
             <div class="chart-actions">
                 <button class="btn btn-secondary" onclick="toggleChartType()">
@@ -283,6 +283,18 @@
         </div>
     </div>
 
+    <!-- New card for a static image, for example, a screenshot of a dashboard -->
+    <div class="card">
+        <div class="chart-header">
+            <div class="chart-title">
+                <i class="fas fa-image"></i>
+                Sample Dashboard View
+            </div>
+        </div>
+        <div class="interactive-chart">
+            <img src="https://placehold.co/1200x600/1a1d29/764ba2?text=Sample+Dashboard+Screenshot" alt="Sample Dashboard Screenshot" loading="lazy">
+        </div>
+    </div>
 </div>
 
 <script>
