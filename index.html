@@ -2002,5 +2002,77 @@ useEffect(() => {
       const root = ReactDOM.createRoot(rootElement);
       root.render(<App />);
     </script>
+<!-- AK Energy Consultant - Independent Visitor Tracking -->
+<script>
+(function() {
+    'use strict';
+    
+    // Configuration
+    const config = {
+        respectDoNotTrack: true,
+        debug: true  // Enable for testing, set to false later
+    };
+    
+    // Check if we should track
+    function shouldTrack() {
+        if (config.respectDoNotTrack && navigator.doNotTrack === '1') return false;
+        const ua = navigator.userAgent.toLowerCase();
+        if (['bot', 'crawler', 'spider'].some(bot => ua.includes(bot))) return false;
+        return true;
+    }
+    
+    // Main tracking function
+    function trackVisit() {
+        if (!shouldTrack()) return;
+        
+        const data = {
+            page_url: window.location.pathname + window.location.search,
+            referrer: document.referrer,
+            title: document.title,
+            timestamp: new Date().toISOString(),
+            screen_resolution: `${screen.width}x${screen.height}`,
+            viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+            language: navigator.language
+        };
+        
+        // Try POST request first
+        fetch('/.netlify/functions/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (config.debug) console.log('✅ AK Tracker: POST successful');
+        })
+        .catch(() => {
+            // Fallback to pixel tracking
+            const params = new URLSearchParams({
+                page: data.page_url,
+                ref: data.referrer || '',
+                t: Date.now()
+            });
+            
+            const img = new Image();
+            img.src = '/.netlify/functions/track-pixel?' + params.toString();
+            
+            if (config.debug) console.log('🔄 AK Tracker: Using pixel fallback');
+        });
+    }
+    
+    // Track when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', trackVisit);
+    } else {
+        trackVisit();
+    }
+    
+    // Expose global API
+    window.AKTracker = { track: trackVisit };
+    
+    if (config.debug) console.log('🚀 AK Tracker: Loaded successfully');
+})();
+</script>
 </body>
 </html>
+
+
