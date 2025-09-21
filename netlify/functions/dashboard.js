@@ -1,5 +1,5 @@
 // netlify/functions/dashboard.js
-// Analytics dashboard function
+// Analytics dashboard function for AK Energy Consultant
 
 exports.handler = async (event, context) => {
   // Only allow GET requests
@@ -229,7 +229,7 @@ exports.handler = async (event, context) => {
 <body>
     <div class="container">
         <div class="header">
-            <h1>🚀 AK Energy Consultant</h1>
+            <h1>AK Energy Consultant</h1>
             <p>Independent Visitor Analytics Dashboard</p>
         </div>
         
@@ -401,8 +401,27 @@ exports.handler = async (event, context) => {
                         </tbody>
                     </table>
                 </div>
-                
-                <div class="chart-container">
-                    <h3 class="chart-title">📅 Daily Visits (Last 30 Days)</h3>
-                    <table class="table">
-                        <thead>
+            \`;
+            
+            document.getElementById('analytics-content').innerHTML = content;
+        }
+        
+        // Load analytics on page load
+        document.addEventListener('DOMContentLoaded', loadAnalytics);
+        
+        // Auto-refresh every 5 minutes
+        setInterval(loadAnalytics, 5 * 60 * 1000);
+    </script>
+</body>
+</html>
+  `;
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'text/html',
+      'Cache-Control': 'no-cache'
+    },
+    body: dashboardHTML
+  };
+};
