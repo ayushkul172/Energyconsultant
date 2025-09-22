@@ -180,7 +180,7 @@
             </div>
         </div>
 
-        <!-- Enhanced Main Metrics - Exact Layout Match -->
+        <!-- Enhanced Main Metrics -->
         <div class="grid grid-cols-2 lg:grid-cols-6 gap-6 mb-8">
             <!-- Total Visits -->
             <div class="metric-card rounded-2xl p-6 hover:border-blue-500/30 transition-all duration-300">
@@ -284,7 +284,7 @@
             </div>
         </div>
 
-        <!-- Advanced Visitor Analytics Chart - Exact Match -->
+        <!-- Advanced Visitor Analytics Chart -->
         <div class="chart-container rounded-2xl p-8 glow-effect">
             <div class="flex items-center justify-between mb-8">
                 <div class="flex items-center space-x-3">
@@ -331,13 +331,12 @@
         </div>
     </div>
 
-    <!-- Include your tracking script -->
+    <!-- Fixed tracking script -->
     <script>
-        // Enhanced client-side tracking script
         (function() {
           'use strict';
           
-          const TRACKING_ENDPOINT = '/.netlify/functions/track-pixel';
+          const TRACKING_ENDPOINT = '/.netlify/functions/track';
           const TRACK_SCROLL_DEPTH = true;
           const TRACK_TIME_ON_PAGE = true;
           const TRACK_CLICKS = true;
@@ -452,21 +451,36 @@
           
           function sendTrackingData(additionalData = {}) {
             const utmParams = getUtmParameters();
-            const params = new URLSearchParams({
+            
+            const payload = {
               ...trackingData,
               ...additionalData,
               ...utmParams,
-              timestamp: Date.now()
+              timestamp: Date.now(),
+              page_url: trackingData.page,
+              title: document.title,
+              screen_resolution: `${screen.width}x${screen.height}`,
+              viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+              language: navigator.language
+            };
+            
+            // Remove null/undefined values
+            Object.keys(payload).forEach(key => {
+              if (payload[key] === null || payload[key] === undefined) {
+                delete payload[key];
+              }
             });
             
-            for (const [key, value] of params.entries()) {
-              if (value === null || value === undefined || value === 'null') {
-                params.delete(key);
-              }
-            }
-            
-            const img = new Image(1, 1);
-            img.src = `${TRACKING_ENDPOINT}?${params.toString()}`;
+            // Send via POST request instead of GET
+            fetch(TRACKING_ENDPOINT, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(payload)
+            }).catch(error => {
+              console.warn('Tracking failed:', error);
+            });
           }
           
           function trackPageVisibility() {
@@ -544,8 +558,9 @@
         })();
     </script>
 
-    <!-- Enhanced Dashboard Analytics Script -->
+    <!-- Fixed Dashboard Analytics Script -->
     <script>
+        // Use in-memory storage instead of localStorage
         let dashboardData = {
             totalVisits: 1,
             uniqueVisitors: 1,
@@ -567,32 +582,11 @@
 
         function initDashboard() {
             updateLastSync();
-            loadStoredData();
             initAdvancedChart();
             updateDashboard();
             startRealTimeUpdates();
             setupEventListeners();
             simulateRealTimeData();
-        }
-
-        function loadStoredData() {
-            const stored = localStorage.getItem('akEnergyAnalytics');
-            if (stored) {
-                try {
-                    const parsed = JSON.parse(stored);
-                    dashboardData = { ...dashboardData, ...parsed };
-                } catch (e) {
-                    console.warn('Failed to load stored analytics data');
-                }
-            }
-        }
-
-        function saveData() {
-            try {
-                localStorage.setItem('akEnergyAnalytics', JSON.stringify(dashboardData));
-            } catch (e) {
-                console.warn('Failed to save analytics data');
-            }
         }
 
         async function fetchAnalyticsData() {
@@ -640,7 +634,6 @@
                     ? Math.round((singlePageSessions.length / dashboardData.sessions.length) * 100) 
                     : 42;
 
-                saveData();
                 return dashboardData;
             } catch (error) {
                 console.error('Error fetching analytics data:', error);
@@ -656,9 +649,9 @@
             document.getElementById('avgLoadTime').textContent = `${dashboardData.loadTime}s`;
 
             // Update growth rates with realistic variations
-            const totalGrowth = Math.floor(Math.random() * 15) + 20; // 20-35%
-            const visitorGrowth = Math.floor(Math.random() * 10) + 15; // 15-25%
-            const bounceImprovement = Math.floor(Math.random() * 5) + 5; // 5-10%
+            const totalGrowth = Math.floor(Math.random() * 15) + 20;
+            const visitorGrowth = Math.floor(Math.random() * 10) + 15;
+            const bounceImprovement = Math.floor(Math.random() * 5) + 5;
 
             document.getElementById('totalVisitsChange').textContent = `+${totalGrowth}% growth rate`;
             document.getElementById('uniqueVisitorsChange').textContent = `+${visitorGrowth}% vs previous period`;
@@ -787,23 +780,19 @@
 
         function simulateRealTimeData() {
             setInterval(() => {
-                // Simulate new data points every 30 seconds
                 if (Math.random() > 0.7) {
                     const newValue = Math.floor(Math.random() * 10) + 5;
                     
-                    // Update chart data
                     advancedChart.data.datasets[0].data.push(newValue);
                     advancedChart.data.datasets[1].data.push(Math.floor(newValue * 0.7));
                     advancedChart.data.datasets[2].data.push(Math.floor(newValue * 0.5));
                     
-                    // Add new label
                     const now = new Date();
                     advancedChart.data.labels.push(now.toLocaleTimeString('en-US', { 
                         hour: '2-digit', 
                         minute: '2-digit' 
                     }));
                     
-                    // Keep only last 30 points
                     if (advancedChart.data.labels.length > 30) {
                         advancedChart.data.labels.shift();
                         advancedChart.data.datasets.forEach(dataset => {
@@ -832,7 +821,7 @@
         }
 
         function startRealTimeUpdates() {
-            updateInterval = setInterval(updateDashboard, 8000); // Update every 8 seconds
+            updateInterval = setInterval(updateDashboard, 8000);
         }
 
         function setupEventListeners() {
@@ -850,7 +839,8 @@
             });
         }
 
-        async function refreshData() {
+        // Global functions for button clicks
+        window.refreshData = async function() {
             const btn = event.target.closest('button');
             const originalHTML = btn.innerHTML;
             btn.innerHTML = '<svg class="w-5 h-5 animate-spin mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg><span class="font-medium">Refreshing...</span>';
@@ -860,9 +850,9 @@
             setTimeout(() => {
                 btn.innerHTML = originalHTML;
             }, 1500);
-        }
+        };
 
-        function exportData() {
+        window.exportData = function() {
             const exportData = {
                 timestamp: new Date().toISOString(),
                 timeRange: currentTimeRange,
@@ -881,15 +871,15 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-        }
+        };
 
-        function toggleFullscreen() {
+        window.toggleFullscreen = function() {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen();
             } else {
                 document.exitFullscreen();
             }
-        }
+        };
 
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', initDashboard);
@@ -903,9 +893,8 @@
             }
         });
 
-        // Add some visual enhancements
+        // Add visual enhancements on load
         window.addEventListener('load', () => {
-            // Animate metric cards on load
             document.querySelectorAll('.metric-card').forEach((card, index) => {
                 setTimeout(() => {
                     card.style.transform = 'translateY(0)';
