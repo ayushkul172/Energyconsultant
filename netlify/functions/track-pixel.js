@@ -1,398 +1,399 @@
-// Enhanced client-side tracking script - Fixed version
-// Compatible with the corrected Netlify function
+// netlify/functions/track.js
+const crypto = require('crypto');
 
-(function() {
-  'use strict';
+// In-memory storage for demo
+let visitors = [];
+let pageStats = new Map();
+let dailyStats = new Map();
+
+const MAX_VISITORS = 5000;
+const DATA_RETENTION_DAYS = 30;
+const CLEANUP_FREQUENCY = 100;
+
+function hashIP(ip) {
+  try {
+    return crypto.createHash('sha256').update(ip).digest('hex').substring(0, 16);
+  } catch (error) {
+    return 'unknown_hash';
+  }
+}
+
+function generateSessionId(ipHash, userAgent) {
+  try {
+    const date = new Date().toISOString().split('T')[0];
+    const sessionData = `${ipHash}_${userAgent}_${date}`;
+    return crypto.createHash('md5').update(sessionData).digest('hex').substring(0, 12);
+  } catch (error) {
+    return 'unknown_session';
+  }
+}
+
+function detectDeviceType(userAgent) {
+  if (!userAgent) return 'Unknown';
+  const ua = userAgent.toLowerCase();
+  if (/mobile|android|iphone/.test(ua)) return 'Mobile';
+  if (/tablet|ipad/.test(ua)) return 'Tablet';
+  return 'Desktop';
+}
+
+function getCountry(headers) {
+  return headers['x-country'] || headers['cf-ipcountry'] || headers['x-vercel-ip-country'] || 'Unknown';
+}
+
+function cleanOldData() {
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - DATA_RETENTION_DAYS);
   
-  // Configuration - Updated to match fixed function
-  const TRACKING_ENDPOINT = '/.netlify/functions/track';
-  const TRACK_SCROLL_DEPTH = true;
-  const TRACK_TIME_ON_PAGE = true;
-  const TRACK_CLICKS = true;
-  const HEARTBEAT_INTERVAL = 30000; // 30 seconds
+  const originalLength = visitors.length;
+  visitors = visitors.filter(visitor => 
+    new Date(visitor.timestamp) > cutoffDate
+  );
   
-  // Tracking data object
-  let trackingData = {
-    page: window.location.pathname + window.location.search,
-    referrer: document.referrer || 'direct',
-    loadTime: null,
-    domReady: null,
-    startTime: Date.now(),
-    scrollDepth: 0,
-    clicks: 0,
-    timeOnPage: 0,
-    isActive: true
+  console.log(`Cleaned ${originalLength - visitors.length} old records`);
+}
+
+function validateTrackingData(data) {
+  const errors = [];
+  
+  if (!data.page_url) {
+    data.page_url = '/';
+  }
+  
+  if (!data.title) {
+    data.title = 'Unknown Page';
+  }
+  
+  if (data.timeOnPage && isNaN(data.timeOnPage)) {
+    data.timeOnPage = 0;
+  }
+  
+  if (data.scrollDepth && (isNaN(data.scrollDepth) || data.scrollDepth < 0 || data.scrollDepth > 100)) {
+    data.scrollDepth = 0;
+  }
+  
+  return { isValid: errors.length === 0, errors, data };
+}
+
+function extractReferrerDomain(referrer) {
+  if (!referrer || referrer === '' || referrer === 'direct') {
+    return 'direct';
+  }
+  
+  try {
+    const url = new URL(referrer);
+    return url.hostname;
+  } catch (error) {
+    return 'unknown';
+  }
+}
+
+exports.handler = async (event, context) => {
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type, User-Agent',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Content-Type': 'application/json',
+    'Cache-Control': 'no-cache'
   };
-  
-  // Session management
-  let sessionId = null;
-  let lastHeartbeat = Date.now();
-  
-  // Get UTM parameters from URL
-  function getUtmParameters() {
-    const params = new URLSearchParams(window.location.search);
+
+  if (event.httpMethod === 'OPTIONS') {
     return {
-      utm_source: params.get('utm_source'),
-      utm_medium: params.get('utm_medium'),
-      utm_campaign: params.get('utm_campaign'),
-      utm_term: params.get('utm_term'),
-      utm_content: params.get('utm_content')
+      statusCode: 200,
+      headers,
+      body: ''
     };
   }
-  
-  // Track page load performance
-  function trackPagePerformance() {
-    // Use both Navigation Timing API and Performance Observer
-    window.addEventListener('load', function() {
-      setTimeout(() => {
-        if (window.performance && window.performance.timing) {
-          const timing = window.performance.timing;
-          trackingData.loadTime = timing.loadEventEnd - timing.navigationStart;
-          trackingData.domReady = timing.domContentLoadedEventEnd - timing.navigationStart;
-        }
-        
-        // Also try Performance Navigation API (newer)
-        if (window.performance && window.performance.getEntriesByType) {
-          const navEntries = window.performance.getEntriesByType('navigation');
-          if (navEntries.length > 0) {
-            trackingData.loadTime = Math.round(navEntries[0].loadEventEnd);
-            trackingData.domReady = Math.round(navEntries[0].domContentLoadedEventEnd);
-          }
-        }
-      }, 100);
-    });
-  }
-  
-  // Track scroll depth with throttling
-  function trackScrollDepth() {
-    if (!TRACK_SCROLL_DEPTH) return;
-    
-    let maxScroll = 0;
-    let ticking = false;
-    
-    function updateScrollDepth() {
+
+  if (event.httpMethod === 'POST') {
+    try {
+      let data = {};
+      
       try {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
-        const documentHeight = Math.max(
-          document.documentElement.scrollHeight,
-          document.body.scrollHeight
-        ) - window.innerHeight;
-        
-        if (documentHeight > 0) {
-          const currentScroll = Math.round((scrollTop / documentHeight) * 100);
-          maxScroll = Math.max(maxScroll, Math.min(currentScroll, 100));
-          trackingData.scrollDepth = maxScroll;
-        }
-      } catch (error) {
-        console.warn('Error tracking scroll depth:', error);
+        data = JSON.parse(event.body || '{}');
+      } catch (parseError) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({
+            status: 'error',
+            message: 'Invalid JSON in request body',
+            error: parseError.message
+          })
+        };
       }
-      ticking = false;
-    }
-    
-    window.addEventListener('scroll', function() {
-      if (!ticking) {
-        requestAnimationFrame(updateScrollDepth);
-        ticking = true;
+
+      const validation = validateTrackingData(data);
+      if (!validation.isValid) {
+        console.warn('Data validation warnings:', validation.errors);
       }
-    }, { passive: true });
-  }
-  
-  // Track time on page with activity detection
-  function trackTimeOnPage() {
-    if (!TRACK_TIME_ON_PAGE) return;
-    
-    let lastActivity = Date.now();
-    
-    function handleActivity() {
-      trackingData.isActive = true;
-      lastActivity = Date.now();
-    }
-    
-    function handleInactivity() {
-      trackingData.isActive = false;
-    }
-    
-    // Activity events
-    const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
-    activityEvents.forEach(function(event) {
-      document.addEventListener(event, handleActivity, { passive: true });
-    });
-    
-    // Visibility events
-    window.addEventListener('blur', handleInactivity);
-    window.addEventListener('focus', handleActivity);
-    
-    // Page visibility API
-    document.addEventListener('visibilitychange', function() {
-      if (document.hidden) {
-        handleInactivity();
-      } else {
-        handleActivity();
-      }
-    });
-    
-    // Update time periodically, only when active
-    setInterval(function() {
-      if (trackingData.isActive && (Date.now() - lastActivity) < 60000) {
-        trackingData.timeOnPage = Date.now() - trackingData.startTime;
-      }
-    }, 1000);
-  }
-  
-  // Track clicks with detailed information
-  function trackClicks() {
-    if (!TRACK_CLICKS) return;
-    
-    document.addEventListener('click', function(e) {
-      trackingData.clicks++;
+      data = validation.data;
+
+      const clientIP = event.headers['x-forwarded-for']?.split(',')[0]?.trim() || 
+                      event.headers['client-ip'] || 
+                      context.clientContext?.ip || 
+                      'unknown';
       
-      // Store detailed click information
-      const target = e.target;
-      const elementData = {
-        tag: target.tagName ? target.tagName.toLowerCase() : 'unknown',
-        id: target.id || null,
-        className: target.className || null,
-        href: target.href || null,
-        text: target.textContent ? target.textContent.substring(0, 50).trim() : null,
-        x: e.clientX,
-        y: e.clientY
+      const ipHash = hashIP(clientIP);
+      const userAgent = event.headers['user-agent'] || 'Unknown Browser';
+      const timestamp = new Date().toISOString();
+      const sessionId = generateSessionId(ipHash, userAgent);
+      const deviceType = detectDeviceType(userAgent);
+      const country = getCountry(event.headers);
+      const referrerDomain = extractReferrerDomain(data.referrer);
+
+      const visitor = {
+        id: crypto.randomUUID(),
+        ipHash,
+        sessionId,
+        pageUrl: data.page_url,
+        referrer: data.referrer || null,
+        referrerDomain,
+        title: data.title,
+        userAgent,
+        deviceType,
+        country,
+        timestamp,
+        screenResolution: data.screen_resolution || null,
+        viewportSize: data.viewport_size || null,
+        language: data.language || null,
+        event: data.event || 'page_view',
+        timeOnPage: data.timeOnPage || 0,
+        scrollDepth: data.scrollDepth || 0,
+        clicks: data.clicks || 0,
+        loadTime: data.loadTime || null
       };
-      
-      // Store in global array for access
-      if (!window.clickData) window.clickData = [];
-      window.clickData.push({
-        timestamp: Date.now(),
-        element: elementData
-      });
-      
-      // Send click event immediately for important elements
-      if (target.tagName === 'A' || target.tagName === 'BUTTON') {
-        sendTrackingData({
-          event: 'click',
-          elementType: target.tagName.toLowerCase(),
-          elementText: elementData.text,
-          href: elementData.href
+
+      visitors.push(visitor);
+
+      const pageKey = visitor.pageUrl;
+      if (!pageStats.has(pageKey)) {
+        pageStats.set(pageKey, { 
+          viewCount: 0, 
+          uniqueVisitors: new Set(),
+          totalTimeOnPage: 0,
+          totalScrollDepth: 0
         });
       }
-    }, { passive: true });
-  }
-  
-  // Enhanced data sending with proper error handling
-  function sendTrackingData(additionalData = {}) {
-    try {
-      const utmParams = getUtmParameters();
       
-      const payload = {
-        // Basic page info
-        page_url: trackingData.page,
-        referrer: trackingData.referrer,
-        title: document.title || 'Untitled',
-        
-        // Performance metrics
-        loadTime: trackingData.loadTime,
-        domReady: trackingData.domReady,
-        timeOnPage: trackingData.timeOnPage,
-        scrollDepth: trackingData.scrollDepth,
-        clicks: trackingData.clicks,
-        
-        // Device info
-        screen_resolution: `${screen.width}x${screen.height}`,
-        viewport_size: `${window.innerWidth}x${window.innerHeight}`,
-        language: navigator.language || 'unknown',
-        user_agent: navigator.userAgent,
-        
-        // Session info
-        session_id: sessionId,
-        timestamp: Date.now(),
-        is_active: trackingData.isActive,
-        
-        // UTM parameters
-        ...utmParams,
-        
-        // Additional data
-        ...additionalData
+      const pageStat = pageStats.get(pageKey);
+      pageStat.viewCount++;
+      pageStat.uniqueVisitors.add(visitor.sessionId);
+      if (visitor.timeOnPage) pageStat.totalTimeOnPage += visitor.timeOnPage;
+      if (visitor.scrollDepth) pageStat.totalScrollDepth += visitor.scrollDepth;
+
+      const dateKey = timestamp.split('T')[0];
+      if (!dailyStats.has(dateKey)) {
+        dailyStats.set(dateKey, { 
+          visits: 0, 
+          uniqueVisitors: new Set(),
+          totalTimeOnPage: 0,
+          avgScrollDepth: 0
+        });
+      }
+      
+      const dailyStat = dailyStats.get(dateKey);
+      dailyStat.visits++;
+      dailyStat.uniqueVisitors.add(visitor.sessionId);
+      if (visitor.timeOnPage) dailyStat.totalTimeOnPage += visitor.timeOnPage;
+
+      if (visitors.length % CLEANUP_FREQUENCY === 0) {
+        cleanOldData();
+      }
+
+      if (visitors.length > MAX_VISITORS) {
+        visitors = visitors.slice(-MAX_VISITORS);
+      }
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          status: 'success',
+          message: 'Visit tracked successfully',
+          sessionId: visitor.sessionId,
+          timestamp,
+          visitorCount: visitors.length
+        })
       };
-      
-      // Remove null/undefined values
-      Object.keys(payload).forEach(key => {
-        if (payload[key] === null || payload[key] === undefined || payload[key] === '') {
-          delete payload[key];
+
+    } catch (error) {
+      console.error('Tracking error:', error);
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({
+          status: 'error',
+          message: 'Internal server error while tracking visit',
+          error: error.message
+        })
+      };
+    }
+  }
+
+  if (event.httpMethod === 'GET') {
+    try {
+      const now = new Date();
+      const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+      const recentVisitors = visitors.filter(v => new Date(v.timestamp) > thirtyDaysAgo);
+      const weeklyVisitors = visitors.filter(v => new Date(v.timestamp) > sevenDaysAgo);
+      const dailyVisitors = visitors.filter(v => new Date(v.timestamp) > oneDayAgo);
+
+      const uniqueVisitors30d = new Set(recentVisitors.map(v => v.sessionId)).size;
+      const uniqueVisitors7d = new Set(weeklyVisitors.map(v => v.sessionId)).size;
+      const uniqueVisitors24h = new Set(dailyVisitors.map(v => v.sessionId)).size;
+
+      const topPages = Array.from(pageStats.entries())
+        .map(([page, stats]) => ({
+          page,
+          visits: stats.viewCount,
+          uniqueVisitors: stats.uniqueVisitors.size,
+          avgTimeOnPage: stats.viewCount > 0 ? Math.round(stats.totalTimeOnPage / stats.viewCount) : 0,
+          avgScrollDepth: stats.viewCount > 0 ? Math.round(stats.totalScrollDepth / stats.viewCount) : 0
+        }))
+        .sort((a, b) => b.visits - a.visits)
+        .slice(0, 10);
+
+      const deviceBreakdown = {};
+      recentVisitors.forEach(v => {
+        deviceBreakdown[v.deviceType] = (deviceBreakdown[v.deviceType] || 0) + 1;
+      });
+
+      const countryBreakdown = {};
+      recentVisitors.forEach(v => {
+        countryBreakdown[v.country] = (countryBreakdown[v.country] || 0) + 1;
+      });
+
+      const referrerBreakdown = {};
+      recentVisitors.forEach(v => {
+        if (v.referrerDomain && v.referrerDomain !== 'direct') {
+          referrerBreakdown[v.referrerDomain] = (referrerBreakdown[v.referrerDomain] || 0) + 1;
         }
       });
-      
-      // Send via fetch with proper error handling
-      return fetch(TRACKING_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+
+      const dailyStatsArray = [];
+      for (let i = 29; i >= 0; i--) {
+        const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+        const dateKey = date.toISOString().split('T')[0];
+        const dayVisitors = visitors.filter(v => v.timestamp.startsWith(dateKey));
+        const dayUniqueVisitors = new Set(dayVisitors.map(v => v.sessionId));
+
+        dailyStatsArray.push({
+          date: dateKey,
+          visits: dayVisitors.length,
+          uniqueVisitors: dayUniqueVisitors.size,
+          avgTimeOnPage: dayVisitors.length > 0 ? 
+            Math.round(dayVisitors.reduce((sum, v) => sum + (v.timeOnPage || 0), 0) / dayVisitors.length) : 0
+        });
+      }
+
+      const avgLoadTime = recentVisitors
+        .filter(v => v.loadTime && v.loadTime > 0)
+        .reduce((sum, v, _, arr) => sum + v.loadTime / arr.length, 0);
+
+      const avgScrollDepth = recentVisitors
+        .filter(v => v.scrollDepth && v.scrollDepth > 0)
+        .reduce((sum, v, _, arr) => sum + v.scrollDepth / arr.length, 0);
+
+      const bounceRate = recentVisitors.length > 0 ? 
+        Math.round((recentVisitors.filter(v => v.timeOnPage < 10000).length / recentVisitors.length) * 100) : 0;
+
+      const activeThreshold = 5 * 60 * 1000;
+      const activeVisitors = visitors.filter(v => 
+        (Date.now() - new Date(v.timestamp).getTime()) < activeThreshold
+      );
+
+      const stats = {
+        overview: {
+          totalVisits30d: recentVisitors.length,
+          totalVisits7d: weeklyVisitors.length,
+          totalVisits24h: dailyVisitors.length,
+          uniqueVisitors30d: uniqueVisitors30d,
+          uniqueVisitors7d: uniqueVisitors7d,
+          uniqueVisitors24h: uniqueVisitors24h,
+          avgDailyVisits: Math.round(recentVisitors.length / 30),
+          bounceRate: bounceRate,
+          avgLoadTime: Math.round(avgLoadTime),
+          avgScrollDepth: Math.round(avgScrollDepth),
+          activeVisitors: activeVisitors.length
         },
-        body: JSON.stringify(payload),
-        keepalive: true // Important for tracking during page unload
-      }).then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        return response.json();
-      }).then(data => {
-        if (data.sessionId && !sessionId) {
-          sessionId = data.sessionId;
-        }
-        return data;
-      }).catch(error => {
-        console.warn('Tracking failed:', error);
-        // Fallback: try sending via image pixel
-        return sendViaPixel(payload);
-      });
-      
-    } catch (error) {
-      console.error('Error preparing tracking data:', error);
-      return Promise.reject(error);
-    }
-  }
-  
-  // Fallback method using image pixel
-  function sendViaPixel(data) {
-    try {
-      const params = new URLSearchParams();
-      Object.entries(data).forEach(([key, value]) => {
-        if (value !== null && value !== undefined) {
-          params.append(key, value.toString());
-        }
-      });
-      
-      const img = new Image(1, 1);
-      img.src = `${TRACKING_ENDPOINT}?${params.toString()}`;
-      
-      return new Promise((resolve) => {
-        img.onload = () => resolve({ status: 'success', method: 'pixel' });
-        img.onerror = () => resolve({ status: 'failed', method: 'pixel' });
-      });
-    } catch (error) {
-      console.warn('Pixel fallback failed:', error);
-      return Promise.resolve({ status: 'failed', method: 'pixel' });
-    }
-  }
-  
-  // Enhanced page visibility tracking
-  function trackPageVisibility() {
-    let isVisible = !document.hidden;
-    let visibilityStartTime = Date.now();
-    let totalVisibleTime = 0;
-    
-    document.addEventListener('visibilitychange', function() {
-      const now = Date.now();
-      
-      if (document.hidden) {
-        // Page became hidden
-        if (isVisible) {
-          totalVisibleTime += now - visibilityStartTime;
-          isVisible = false;
-          
-          sendTrackingData({
-            event: 'visibility_hidden',
-            visible_time: totalVisibleTime,
-            total_time: now - trackingData.startTime
-          });
-        }
-      } else {
-        // Page became visible
-        isVisible = true;
-        visibilityStartTime = now;
         
-        sendTrackingData({
-          event: 'visibility_shown',
-          hidden_duration: now - visibilityStartTime
-        });
-      }
-    });
-    
-    // Track page unload
-    const unloadHandler = function() {
-      if (isVisible) {
-        totalVisibleTime += Date.now() - visibilityStartTime;
-      }
-      
-      sendTrackingData({
-        event: 'page_unload',
-        total_visible_time: totalVisibleTime,
-        total_time: Date.now() - trackingData.startTime,
-        final_scroll_depth: trackingData.scrollDepth,
-        final_clicks: trackingData.clicks
-      });
-    };
-    
-    // Use multiple unload events for better coverage
-    window.addEventListener('beforeunload', unloadHandler);
-    window.addEventListener('unload', unloadHandler);
-    window.addEventListener('pagehide', unloadHandler);
-  }
-  
-  // Initialize all tracking
-  function initTracking() {
-    trackPagePerformance();
-    trackScrollDepth();
-    trackTimeOnPage();
-    trackClicks();
-    trackPageVisibility();
-    
-    // Send initial page view
-    const sendInitialTracking = () => {
-      sendTrackingData({ event: 'page_view' })
-        .then(response => {
-          console.log('Tracking initialized:', response);
-        });
-    };
-    
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(sendInitialTracking, 100);
-      });
-    } else {
-      setTimeout(sendInitialTracking, 100);
+        topPages: topPages,
+        
+        deviceBreakdown: Object.entries(deviceBreakdown)
+          .map(([device, count]) => ({
+            device,
+            count,
+            percentage: Math.round((count / recentVisitors.length) * 100)
+          }))
+          .sort((a, b) => b.count - a.count),
+
+        countryBreakdown: Object.entries(countryBreakdown)
+          .map(([country, count]) => ({
+            country,
+            count,
+            percentage: Math.round((count / recentVisitors.length) * 100)
+          }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 10),
+
+        topReferrers: Object.entries(referrerBreakdown)
+          .map(([referrer, count]) => ({
+            referrer,
+            count,
+            percentage: Math.round((count / recentVisitors.length) * 100)
+          }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 10),
+
+        dailyStats: dailyStatsArray,
+        
+        realTimeEvents: visitors
+          .filter(v => (Date.now() - new Date(v.timestamp).getTime()) < 60000)
+          .map(v => ({
+            timestamp: v.timestamp,
+            page: v.pageUrl,
+            country: v.country,
+            device: v.deviceType,
+            event: v.event
+          })),
+
+        metadata: {
+          lastUpdated: new Date().toISOString(),
+          dataRetention: `${DATA_RETENTION_DAYS} days`,
+          totalRecords: visitors.length,
+          oldestRecord: visitors.length > 0 ? visitors[0].timestamp : null
+        }
+      };
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify(stats)
+      };
+
+    } catch (error) {
+      console.error('Stats generation error:', error);
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({
+          status: 'error',
+          message: 'Failed to generate analytics',
+          error: error.message
+        })
+      };
     }
-    
-    // Send periodic heartbeat
-    setInterval(function() {
-      if (trackingData.isActive && (Date.now() - lastHeartbeat) >= HEARTBEAT_INTERVAL) {
-        sendTrackingData({ event: 'heartbeat' });
-        lastHeartbeat = Date.now();
-      }
-    }, HEARTBEAT_INTERVAL);
   }
-  
-  // Start tracking when ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initTracking);
-  } else {
-    initTracking();
-  }
-  
-  // Global API for manual event tracking
-  window.trackEvent = function(eventName, eventData = {}) {
-    return sendTrackingData({
-      event: eventName,
-      ...eventData
-    });
+
+  return {
+    statusCode: 405,
+    headers,
+    body: JSON.stringify({
+      status: 'error',
+      message: 'Method not allowed. Use GET for analytics or POST for tracking.'
+    })
   };
-  
-  // Global API to get current tracking data
-  window.getTrackingData = function() {
-    return {
-      ...trackingData,
-      sessionId: sessionId,
-      currentUrl: window.location.href,
-      timestamp: Date.now()
-    };
-  };
-  
-  // Global API to get analytics (calls the GET endpoint)
-  window.getAnalytics = function() {
-    return fetch(TRACKING_ENDPOINT, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      }
-    }).then(response => response.json());
-  };
-  
-})();
+};
