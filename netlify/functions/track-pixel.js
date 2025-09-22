@@ -1,106 +1,240 @@
-// netlify/functions/track-pixel.js
-// Pixel tracking fallback function
+// Enhanced client-side tracking script
+// Add this to your HTML pages or as a separate JS file
 
-const crypto = require('crypto');
-
-// Import or reuse visitor storage (in real implementation, use shared storage)
-let visitors = [];
-
-function hashIP(ip) {
-  return crypto.createHash('sha256').update(ip).digest('hex').substring(0, 16);
-}
-
-function generateSessionId(ipHash, userAgent) {
-  const date = new Date().toISOString().split('T')[0];
-  const sessionData = `${ipHash}_${userAgent}_${date}`;
-  return crypto.createHash('md5').update(sessionData).digest('hex').substring(0, 12);
-}
-
-function detectDeviceType(userAgent) {
-  const ua = userAgent.toLowerCase();
-  if (/mobile|android|iphone/.test(ua)) return 'Mobile';
-  if (/tablet|ipad/.test(ua)) return 'Tablet';
-  return 'Desktop';
-}
-
-exports.handler = async (event, context) => {
-  try {
-    // Get visitor information
-    const ip = event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'unknown';
-    const ipHash = hashIP(ip);
-    const userAgent = event.headers['user-agent'] || 'Unknown';
-    const timestamp = new Date().toISOString();
-    const sessionId = generateSessionId(ipHash, userAgent);
-    const deviceType = detectDeviceType(userAgent);
-    const country = event.headers['x-country'] || event.headers['cf-ipcountry'] || 'Unknown';
-    
-    // Get tracking data from query parameters
-    const pageUrl = event.queryStringParameters?.page || '/';
-    const referrer = event.queryStringParameters?.ref || null;
-    
-    // Create visitor record
-    const visitor = {
-      id: crypto.randomUUID(),
-      ipHash: ipHash,
-      sessionId: sessionId,
-      pageUrl: pageUrl,
-      referrer: referrer,
-      userAgent: userAgent,
-      deviceType: deviceType,
-      country: country,
-      timestamp: timestamp,
-      trackingMethod: 'pixel'
-    };
-
-    // Store visitor data
-    visitors.push(visitor);
-    
-    // Limit memory usage
-    if (visitors.length > 5000) {
-      visitors = visitors.slice(-5000);
-    }
-
-    // Return 1x1 transparent GIF
-    const gifBuffer = Buffer.from([
-      0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 0x80, 0x00,
-      0x00, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x21, 0xf9, 0x04, 0x01, 0x00,
-      0x00, 0x00, 0x00, 0x2c, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00,
-      0x00, 0x02, 0x02, 0x04, 0x01, 0x00, 0x3b
-    ]);
-
+(function() {
+  'use strict';
+  
+  // Configuration
+  const TRACKING_ENDPOINT = '/.netlify/functions/track-pixel';
+  const TRACK_SCROLL_DEPTH = true;
+  const TRACK_TIME_ON_PAGE = true;
+  const TRACK_CLICKS = true;
+  
+  // Tracking data object
+  let trackingData = {
+    page: window.location.pathname + window.location.search,
+    referrer: document.referrer || 'direct',
+    loadTime: null,
+    domReady: null,
+    startTime: Date.now(),
+    scrollDepth: 0,
+    clicks: 0,
+    timeOnPage: 0
+  };
+  
+  // Get UTM parameters from URL
+  function getUtmParameters() {
+    const params = new URLSearchParams(window.location.search);
     return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'image/gif',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0',
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: gifBuffer.toString('base64'),
-      isBase64Encoded: true
-    };
-
-  } catch (error) {
-    console.error('Pixel tracking error:', error);
-    
-    // Return empty GIF even on error
-    const errorGif = Buffer.from([
-      0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 0x80, 0x00,
-      0x00, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x21, 0xf9, 0x04, 0x01, 0x00,
-      0x00, 0x00, 0x00, 0x2c, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00,
-      0x00, 0x02, 0x02, 0x04, 0x01, 0x00, 0x3b
-    ]);
-
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'image/gif',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: errorGif.toString('base64'),
-      isBase64Encoded: true
+      utm_source: params.get('utm_source'),
+      utm_medium: params.get('utm_medium'),
+      utm_campaign: params.get('utm_campaign'),
+      utm_term: params.get('utm_term'),
+      utm_content: params.get('utm_content')
     };
   }
-};
+  
+  // Track page load performance
+  function trackPagePerformance() {
+    // Wait for load event
+    window.addEventListener('load', function() {
+      if (window.performance && window.performance.timing) {
+        const timing = window.performance.timing;
+        trackingData.loadTime = timing.loadEventEnd - timing.navigationStart;
+        trackingData.domReady = timing.domContentLoadedEventEnd - timing.navigationStart;
+      }
+    });
+  }
+  
+  // Track scroll depth
+  function trackScrollDepth() {
+    if (!TRACK_SCROLL_DEPTH) return;
+    
+    let maxScroll = 0;
+    let ticking = false;
+    
+    function updateScrollDepth() {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const currentScroll = Math.round((scrollTop / documentHeight) * 100);
+      
+      maxScroll = Math.max(maxScroll, currentScroll);
+      trackingData.scrollDepth = Math.min(maxScroll, 100);
+      ticking = false;
+    }
+    
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(updateScrollDepth);
+        ticking = true;
+      }
+    });
+  }
+  
+  // Track time on page
+  function trackTimeOnPage() {
+    if (!TRACK_TIME_ON_PAGE) return;
+    
+    let isActive = true;
+    let lastActivity = Date.now();
+    
+    // Track when user becomes inactive
+    function handleActivity() {
+      isActive = true;
+      lastActivity = Date.now();
+    }
+    
+    function handleInactivity() {
+      isActive = false;
+    }
+    
+    // Activity events
+    ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'].forEach(function(event) {
+      document.addEventListener(event, handleActivity, true);
+    });
+    
+    // Inactivity events
+    window.addEventListener('blur', handleInactivity);
+    window.addEventListener('focus', handleActivity);
+    
+    // Update time on page periodically
+    setInterval(function() {
+      if (isActive) {
+        trackingData.timeOnPage = Date.now() - trackingData.startTime;
+      }
+    }, 1000);
+  }
+  
+  // Track clicks
+  function trackClicks() {
+    if (!TRACK_CLICKS) return;
+    
+    document.addEventListener('click', function(e) {
+      trackingData.clicks++;
+      
+      // Track specific element clicks
+      const target = e.target;
+      const elementData = {
+        tag: target.tagName.toLowerCase(),
+        id: target.id || null,
+        className: target.className || null,
+        href: target.href || null,
+        text: target.textContent ? target.textContent.substring(0, 50) : null
+      };
+      
+      // Store click data (you might want to send this separately)
+      if (!window.clickData) window.clickData = [];
+      window.clickData.push({
+        timestamp: Date.now(),
+        element: elementData,
+        x: e.clientX,
+        y: e.clientY
+      });
+    });
+  }
+  
+  // Send tracking data
+  function sendTrackingData(additionalData = {}) {
+    const utmParams = getUtmParameters();
+    const params = new URLSearchParams({
+      ...trackingData,
+      ...additionalData,
+      ...utmParams,
+      timestamp: Date.now()
+    });
+    
+    // Remove null/undefined values
+    for (const [key, value] of params.entries()) {
+      if (value === null || value === undefined || value === 'null') {
+        params.delete(key);
+      }
+    }
+    
+    // Create tracking pixel
+    const img = new Image(1, 1);
+    img.src = `${TRACKING_ENDPOINT}?${params.toString()}`;
+    
+    // For debugging - remove in production
+    // console.log('Tracking data sent:', Object.fromEntries(params));
+  }
+  
+  // Enhanced visibility API tracking
+  function trackPageVisibility() {
+    let isVisible = !document.hidden;
+    let visibilityStartTime = Date.now();
+    let totalVisibleTime = 0;
+    
+    document.addEventListener('visibilitychange', function() {
+      const now = Date.now();
+      
+      if (document.hidden) {
+        // Page became hidden
+        if (isVisible) {
+          totalVisibleTime += now - visibilityStartTime;
+          isVisible = false;
+          
+          // Send data when page becomes hidden
+          sendTrackingData({
+            event: 'visibility_hidden',
+            visibleTime: totalVisibleTime
+          });
+        }
+      } else {
+        // Page became visible
+        isVisible = true;
+        visibilityStartTime = now;
+      }
+    });
+    
+    // Send visible time on unload
+    window.addEventListener('beforeunload', function() {
+      if (isVisible) {
+        totalVisibleTime += Date.now() - visibilityStartTime;
+      }
+      sendTrackingData({
+        event: 'page_unload',
+        totalVisibleTime: totalVisibleTime
+      });
+    });
+  }
+  
+  // Initialize tracking
+  function initTracking() {
+    // Basic page view tracking
+    trackPagePerformance();
+    trackScrollDepth();
+    trackTimeOnPage();
+    trackClicks();
+    trackPageVisibility();
+    
+    // Send initial page view
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => sendTrackingData({ event: 'page_view' }), 100);
+      });
+    } else {
+      setTimeout(() => sendTrackingData({ event: 'page_view' }), 100);
+    }
+    
+    // Send data periodically for long sessions
+    setInterval(function() {
+      sendTrackingData({ event: 'heartbeat' });
+    }, 30000); // Every 30 seconds
+  }
+  
+  // Start tracking when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTracking);
+  } else {
+    initTracking();
+  }
+  
+  // Expose tracking function globally for manual events
+  window.trackEvent = function(eventName, eventData = {}) {
+    sendTrackingData({
+      event: eventName,
+      ...eventData
+    });
+  };
+  
+})();
