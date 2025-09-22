@@ -1,14 +1,15 @@
-// Enhanced client-side tracking script
-// Add this to your HTML pages or as a separate JS file
+// Enhanced client-side tracking script - Fixed version
+// Compatible with the corrected Netlify function
 
 (function() {
   'use strict';
   
-  // Configuration
-  const TRACKING_ENDPOINT = '/.netlify/functions/track-pixel';
+  // Configuration - Updated to match fixed function
+  const TRACKING_ENDPOINT = '/.netlify/functions/track';
   const TRACK_SCROLL_DEPTH = true;
   const TRACK_TIME_ON_PAGE = true;
   const TRACK_CLICKS = true;
+  const HEARTBEAT_INTERVAL = 30000; // 30 seconds
   
   // Tracking data object
   let trackingData = {
@@ -19,8 +20,13 @@
     startTime: Date.now(),
     scrollDepth: 0,
     clicks: 0,
-    timeOnPage: 0
+    timeOnPage: 0,
+    isActive: true
   };
+  
+  // Session management
+  let sessionId = null;
+  let lastHeartbeat = Date.now();
   
   // Get UTM parameters from URL
   function getUtmParameters() {
@@ -36,17 +42,28 @@
   
   // Track page load performance
   function trackPagePerformance() {
-    // Wait for load event
+    // Use both Navigation Timing API and Performance Observer
     window.addEventListener('load', function() {
-      if (window.performance && window.performance.timing) {
-        const timing = window.performance.timing;
-        trackingData.loadTime = timing.loadEventEnd - timing.navigationStart;
-        trackingData.domReady = timing.domContentLoadedEventEnd - timing.navigationStart;
-      }
+      setTimeout(() => {
+        if (window.performance && window.performance.timing) {
+          const timing = window.performance.timing;
+          trackingData.loadTime = timing.loadEventEnd - timing.navigationStart;
+          trackingData.domReady = timing.domContentLoadedEventEnd - timing.navigationStart;
+        }
+        
+        // Also try Performance Navigation API (newer)
+        if (window.performance && window.performance.getEntriesByType) {
+          const navEntries = window.performance.getEntriesByType('navigation');
+          if (navEntries.length > 0) {
+            trackingData.loadTime = Math.round(navEntries[0].loadEventEnd);
+            trackingData.domReady = Math.round(navEntries[0].domContentLoadedEventEnd);
+          }
+        }
+      }, 100);
     });
   }
   
-  // Track scroll depth
+  // Track scroll depth with throttling
   function trackScrollDepth() {
     if (!TRACK_SCROLL_DEPTH) return;
     
@@ -54,12 +71,21 @@
     let ticking = false;
     
     function updateScrollDepth() {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const currentScroll = Math.round((scrollTop / documentHeight) * 100);
-      
-      maxScroll = Math.max(maxScroll, currentScroll);
-      trackingData.scrollDepth = Math.min(maxScroll, 100);
+      try {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+        const documentHeight = Math.max(
+          document.documentElement.scrollHeight,
+          document.body.scrollHeight
+        ) - window.innerHeight;
+        
+        if (documentHeight > 0) {
+          const currentScroll = Math.round((scrollTop / documentHeight) * 100);
+          maxScroll = Math.max(maxScroll, Math.min(currentScroll, 100));
+          trackingData.scrollDepth = maxScroll;
+        }
+      } catch (error) {
+        console.warn('Error tracking scroll depth:', error);
+      }
       ticking = false;
     }
     
@@ -68,97 +94,186 @@
         requestAnimationFrame(updateScrollDepth);
         ticking = true;
       }
-    });
+    }, { passive: true });
   }
   
-  // Track time on page
+  // Track time on page with activity detection
   function trackTimeOnPage() {
     if (!TRACK_TIME_ON_PAGE) return;
     
-    let isActive = true;
     let lastActivity = Date.now();
     
-    // Track when user becomes inactive
     function handleActivity() {
-      isActive = true;
+      trackingData.isActive = true;
       lastActivity = Date.now();
     }
     
     function handleInactivity() {
-      isActive = false;
+      trackingData.isActive = false;
     }
     
     // Activity events
-    ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'].forEach(function(event) {
-      document.addEventListener(event, handleActivity, true);
+    const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+    activityEvents.forEach(function(event) {
+      document.addEventListener(event, handleActivity, { passive: true });
     });
     
-    // Inactivity events
+    // Visibility events
     window.addEventListener('blur', handleInactivity);
     window.addEventListener('focus', handleActivity);
     
-    // Update time on page periodically
+    // Page visibility API
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        handleInactivity();
+      } else {
+        handleActivity();
+      }
+    });
+    
+    // Update time periodically, only when active
     setInterval(function() {
-      if (isActive) {
+      if (trackingData.isActive && (Date.now() - lastActivity) < 60000) {
         trackingData.timeOnPage = Date.now() - trackingData.startTime;
       }
     }, 1000);
   }
   
-  // Track clicks
+  // Track clicks with detailed information
   function trackClicks() {
     if (!TRACK_CLICKS) return;
     
     document.addEventListener('click', function(e) {
       trackingData.clicks++;
       
-      // Track specific element clicks
+      // Store detailed click information
       const target = e.target;
       const elementData = {
-        tag: target.tagName.toLowerCase(),
+        tag: target.tagName ? target.tagName.toLowerCase() : 'unknown',
         id: target.id || null,
         className: target.className || null,
         href: target.href || null,
-        text: target.textContent ? target.textContent.substring(0, 50) : null
+        text: target.textContent ? target.textContent.substring(0, 50).trim() : null,
+        x: e.clientX,
+        y: e.clientY
       };
       
-      // Store click data (you might want to send this separately)
+      // Store in global array for access
       if (!window.clickData) window.clickData = [];
       window.clickData.push({
         timestamp: Date.now(),
-        element: elementData,
-        x: e.clientX,
-        y: e.clientY
+        element: elementData
       });
-    });
-  }
-  
-  // Send tracking data
-  function sendTrackingData(additionalData = {}) {
-    const utmParams = getUtmParameters();
-    const params = new URLSearchParams({
-      ...trackingData,
-      ...additionalData,
-      ...utmParams,
-      timestamp: Date.now()
-    });
-    
-    // Remove null/undefined values
-    for (const [key, value] of params.entries()) {
-      if (value === null || value === undefined || value === 'null') {
-        params.delete(key);
+      
+      // Send click event immediately for important elements
+      if (target.tagName === 'A' || target.tagName === 'BUTTON') {
+        sendTrackingData({
+          event: 'click',
+          elementType: target.tagName.toLowerCase(),
+          elementText: elementData.text,
+          href: elementData.href
+        });
       }
-    }
-    
-    // Create tracking pixel
-    const img = new Image(1, 1);
-    img.src = `${TRACKING_ENDPOINT}?${params.toString()}`;
-    
-    // For debugging - remove in production
-    // console.log('Tracking data sent:', Object.fromEntries(params));
+    }, { passive: true });
   }
   
-  // Enhanced visibility API tracking
+  // Enhanced data sending with proper error handling
+  function sendTrackingData(additionalData = {}) {
+    try {
+      const utmParams = getUtmParameters();
+      
+      const payload = {
+        // Basic page info
+        page_url: trackingData.page,
+        referrer: trackingData.referrer,
+        title: document.title || 'Untitled',
+        
+        // Performance metrics
+        loadTime: trackingData.loadTime,
+        domReady: trackingData.domReady,
+        timeOnPage: trackingData.timeOnPage,
+        scrollDepth: trackingData.scrollDepth,
+        clicks: trackingData.clicks,
+        
+        // Device info
+        screen_resolution: `${screen.width}x${screen.height}`,
+        viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+        language: navigator.language || 'unknown',
+        user_agent: navigator.userAgent,
+        
+        // Session info
+        session_id: sessionId,
+        timestamp: Date.now(),
+        is_active: trackingData.isActive,
+        
+        // UTM parameters
+        ...utmParams,
+        
+        // Additional data
+        ...additionalData
+      };
+      
+      // Remove null/undefined values
+      Object.keys(payload).forEach(key => {
+        if (payload[key] === null || payload[key] === undefined || payload[key] === '') {
+          delete payload[key];
+        }
+      });
+      
+      // Send via fetch with proper error handling
+      return fetch(TRACKING_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+        keepalive: true // Important for tracking during page unload
+      }).then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+      }).then(data => {
+        if (data.sessionId && !sessionId) {
+          sessionId = data.sessionId;
+        }
+        return data;
+      }).catch(error => {
+        console.warn('Tracking failed:', error);
+        // Fallback: try sending via image pixel
+        return sendViaPixel(payload);
+      });
+      
+    } catch (error) {
+      console.error('Error preparing tracking data:', error);
+      return Promise.reject(error);
+    }
+  }
+  
+  // Fallback method using image pixel
+  function sendViaPixel(data) {
+    try {
+      const params = new URLSearchParams();
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          params.append(key, value.toString());
+        }
+      });
+      
+      const img = new Image(1, 1);
+      img.src = `${TRACKING_ENDPOINT}?${params.toString()}`;
+      
+      return new Promise((resolve) => {
+        img.onload = () => resolve({ status: 'success', method: 'pixel' });
+        img.onerror = () => resolve({ status: 'failed', method: 'pixel' });
+      });
+    } catch (error) {
+      console.warn('Pixel fallback failed:', error);
+      return Promise.resolve({ status: 'failed', method: 'pixel' });
+    }
+  }
+  
+  // Enhanced page visibility tracking
   function trackPageVisibility() {
     let isVisible = !document.hidden;
     let visibilityStartTime = Date.now();
@@ -173,34 +288,47 @@
           totalVisibleTime += now - visibilityStartTime;
           isVisible = false;
           
-          // Send data when page becomes hidden
           sendTrackingData({
             event: 'visibility_hidden',
-            visibleTime: totalVisibleTime
+            visible_time: totalVisibleTime,
+            total_time: now - trackingData.startTime
           });
         }
       } else {
         // Page became visible
         isVisible = true;
         visibilityStartTime = now;
+        
+        sendTrackingData({
+          event: 'visibility_shown',
+          hidden_duration: now - visibilityStartTime
+        });
       }
     });
     
-    // Send visible time on unload
-    window.addEventListener('beforeunload', function() {
+    // Track page unload
+    const unloadHandler = function() {
       if (isVisible) {
         totalVisibleTime += Date.now() - visibilityStartTime;
       }
+      
       sendTrackingData({
         event: 'page_unload',
-        totalVisibleTime: totalVisibleTime
+        total_visible_time: totalVisibleTime,
+        total_time: Date.now() - trackingData.startTime,
+        final_scroll_depth: trackingData.scrollDepth,
+        final_clicks: trackingData.clicks
       });
-    });
+    };
+    
+    // Use multiple unload events for better coverage
+    window.addEventListener('beforeunload', unloadHandler);
+    window.addEventListener('unload', unloadHandler);
+    window.addEventListener('pagehide', unloadHandler);
   }
   
-  // Initialize tracking
+  // Initialize all tracking
   function initTracking() {
-    // Basic page view tracking
     trackPagePerformance();
     trackScrollDepth();
     trackTimeOnPage();
@@ -208,33 +336,63 @@
     trackPageVisibility();
     
     // Send initial page view
+    const sendInitialTracking = () => {
+      sendTrackingData({ event: 'page_view' })
+        .then(response => {
+          console.log('Tracking initialized:', response);
+        });
+    };
+    
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(() => sendTrackingData({ event: 'page_view' }), 100);
+        setTimeout(sendInitialTracking, 100);
       });
     } else {
-      setTimeout(() => sendTrackingData({ event: 'page_view' }), 100);
+      setTimeout(sendInitialTracking, 100);
     }
     
-    // Send data periodically for long sessions
+    // Send periodic heartbeat
     setInterval(function() {
-      sendTrackingData({ event: 'heartbeat' });
-    }, 30000); // Every 30 seconds
+      if (trackingData.isActive && (Date.now() - lastHeartbeat) >= HEARTBEAT_INTERVAL) {
+        sendTrackingData({ event: 'heartbeat' });
+        lastHeartbeat = Date.now();
+      }
+    }, HEARTBEAT_INTERVAL);
   }
   
-  // Start tracking when DOM is ready
+  // Start tracking when ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initTracking);
   } else {
     initTracking();
   }
   
-  // Expose tracking function globally for manual events
+  // Global API for manual event tracking
   window.trackEvent = function(eventName, eventData = {}) {
-    sendTrackingData({
+    return sendTrackingData({
       event: eventName,
       ...eventData
     });
+  };
+  
+  // Global API to get current tracking data
+  window.getTrackingData = function() {
+    return {
+      ...trackingData,
+      sessionId: sessionId,
+      currentUrl: window.location.href,
+      timestamp: Date.now()
+    };
+  };
+  
+  // Global API to get analytics (calls the GET endpoint)
+  window.getAnalytics = function() {
+    return fetch(TRACKING_ENDPOINT, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      }
+    }).then(response => response.json());
   };
   
 })();
