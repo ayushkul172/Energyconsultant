@@ -619,513 +619,7 @@ exports.handler = async (event, context) => {
     <div class="container">
         <div class="header">
             <div class="header-content">
-                <div class="insight-panel">
-                    <div class="insight-title">
-                        <i class="fas fa-lightbulb"></i>
-                        Key Insights & Recommendations
-                    </div>
-                    <div class="insight-item" onclick="expandInsight(this)">
-                        <div class="insight-icon"><i class="fas fa-trending-up"></i></div>
-                        <div>
-                            <strong>Peak Traffic Hours:</strong> Your highest traffic occurs between 2-4 PM IST. Consider scheduling content releases during these hours for maximum visibility.
-                        </div>
-                    </div>
-                    <div class="insight-item" onclick="expandInsight(this)">
-                        <div class="insight-icon"><i class="fas fa-mobile-alt"></i></div>
-                        <div>
-                            <strong>Mobile Optimization:</strong> ${Math.floor(Math.random() * 30 + 60)}% of visitors use mobile devices. Ensure your site is fully mobile-responsive.
-                        </div>
-                    </div>
-                    <div class="insight-item" onclick="expandInsight(this)">
-                        <div class="insight-icon"><i class="fas fa-globe"></i></div>
-                        <div>
-                            <strong>International Growth:</strong> Visitors from ${(data.countryBreakdown || []).length} countries show expanding global reach.
-                        </div>
-                    </div>
-                    <div class="insight-item" onclick="expandInsight(this)">
-                        <div class="insight-icon"><i class="fas fa-clock"></i></div>
-                        <div>
-                            <strong>Session Quality:</strong> Users spending more time on your services and portfolio pages indicate strong engagement.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="data-table">
-                    <div class="table-header">
-                        <div class="table-title">
-                            <i class="fas fa-chart-bar"></i>
-                            Top Performing Pages
-                        </div>
-                    </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th onclick="sortTable(0)">Page URL <i class="fas fa-sort"></i></th>
-                                <th onclick="sortTable(1)">Visits <i class="fas fa-sort"></i></th>
-                                <th onclick="sortTable(2)">Unique Views <i class="fas fa-sort"></i></th>
-                                <th>Avg. Time</th>
-                                <th>Bounce Rate</th>
-                                <th>Performance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${(data.topPages || []).map(page => `
-                                <tr onclick="highlightRow(this)">
-                                    <td>${page.page}</td>
-                                    <td>${page.visits.toLocaleString()}</td>
-                                    <td>${page.uniqueVisitors.toLocaleString()}</td>
-                                    <td>${Math.floor(Math.random() * 5 + 1)}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}</td>
-                                    <td>${Math.floor(Math.random() * 40 + 20)}%</td>
-                                    <td>
-                                        <div class="progress-bar">
-                                            <div class="progress-fill" style="width: ${Math.round((page.visits / (data.totalVisits30d || 1)) * 100)}%"></div>
-                                        </div>
-                                        ${Math.round((page.visits / (data.totalVisits30d || 1)) * 100)}%
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="data-table">
-                    <div class="table-header">
-                        <div class="table-title">
-                            <i class="fas fa-globe-americas"></i>
-                            Geographic Distribution
-                        </div>
-                    </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th onclick="sortTable(0)">Country <i class="fas fa-sort"></i></th>
-                                <th onclick="sortTable(1)">Visitors <i class="fas fa-sort"></i></th>
-                                <th>Sessions</th>
-                                <th>Avg Duration</th>
-                                <th>Share</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${(data.countryBreakdown || []).slice(0, 8).map(country => `
-                                <tr onclick="highlightRow(this)">
-                                    <td>${country.country}</td>
-                                    <td>${country.count.toLocaleString()}</td>
-                                    <td>${Math.floor(country.count * (Math.random() * 0.5 + 1.2)).toLocaleString()}</td>
-                                    <td>${Math.floor(Math.random() * 4 + 2)}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}</td>
-                                    <td>
-                                        <div class="progress-bar">
-                                            <div class="progress-fill" style="width: ${country.percentage}%"></div>
-                                        </div>
-                                        ${country.percentage}%
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="data-table">
-                    <div class="table-header">
-                        <div class="table-title">
-                            <i class="fas fa-devices"></i>
-                            Device & Browser Analytics
-                        </div>
-                    </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Device Type</th>
-                                <th onclick="sortTable(1)">Count <i class="fas fa-sort"></i></th>
-                                <th>Conversion Rate</th>
-                                <th>Avg Session</th>
-                                <th>Market Share</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${(data.deviceBreakdown || []).map(device => `
-                                <tr onclick="highlightRow(this)">
-                                    <td>
-                                        <i class="fas fa-${device.device === 'Mobile' ? 'mobile-alt' : device.device === 'Tablet' ? 'tablet-alt' : 'desktop'}"></i>
-                                        ${device.device}
-                                    </td>
-                                    <td>${device.count.toLocaleString()}</td>
-                                    <td>${Math.floor(Math.random() * 15 + 5)}%</td>
-                                    <td>${Math.floor(Math.random() * 4 + 2)}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}</td>
-                                    <td>
-                                        <div class="progress-bar">
-                                            <div class="progress-fill" style="width: ${device.percentage}%"></div>
-                                        </div>
-                                        ${device.percentage}%
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <i class="fas fa-chart-pie"></i>
-                            Traffic Sources
-                        </div>
-                    </div>
-                    <div class="interactive-chart">
-                        <canvas id="sourceChart" width="400" height="200"></canvas>
-                    </div>
-                </div>
-
-                <div style="background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); padding: 24px; border-radius: 20px; text-align: center;">
-                    <h3 style="color: white; margin-bottom: 15px;">
-                        <i class="fas fa-file-export"></i>
-                        Export Analytics Data
-                    </h3>
-                    <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 20px;">
-                        Download comprehensive reports in multiple formats
-                    </p>
-                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                        <button class="btn" onclick="exportToPDF()">
-                            <i class="fas fa-file-pdf"></i>
-                            Export PDF
-                        </button>
-                        <button class="btn btn-secondary" onclick="exportToCSV()">
-                            <i class="fas fa-file-csv"></i>
-                            Export CSV
-                        </button>
-                        <button class="btn btn-secondary" onclick="exportToExcel()">
-                            <i class="fas fa-file-excel"></i>
-                            Export Excel
-                        </button>
-                        <button class="btn btn-secondary" onclick="shareReport()">
-                            <i class="fas fa-share-alt"></i>
-                            Share Report
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('analytics-content').innerHTML = content;
-            
-            // Create charts
-            setTimeout(() => {
-                createVisitorChart(data);
-                createSourceChart(data);
-            }, 100);
-        }
-
-        function createVisitorChart(data) {
-            const ctx = document.getElementById('visitorChart');
-            if (!ctx) return;
-
-            const labels = [];
-            const visitorData = [];
-            const uniqueData = [];
-            
-            for (let i = 29; i >= 0; i--) {
-                const date = new Date();
-                date.setDate(date.getDate() - i);
-                labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-                
-                const baseVisits = Math.floor((data.totalVisits30d || 100) / 30);
-                const variation = Math.floor(Math.random() * baseVisits * 0.5);
-                visitorData.push(baseVisits + variation);
-                uniqueData.push(Math.floor((baseVisits + variation) * 0.7));
-            }
-
-            if (charts.visitorChart) {
-                charts.visitorChart.destroy();
-            }
-
-            charts.visitorChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Total Visits',
-                        data: visitorData,
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    }, {
-                        label: 'Unique Visitors',
-                        data: uniqueData,
-                        borderColor: '#00d4aa',
-                        backgroundColor: 'rgba(0, 212, 170, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
-                    onHover: (event, elements) => {
-                        if (elements.length > 0) {
-                            const dataIndex = elements[0].index;
-                            const overlay = document.getElementById('chartOverlay');
-                            overlay.style.opacity = '1';
-                            overlay.innerHTML = \`Date: \${labels[dataIndex]}<br>Visits: \${visitorData[dataIndex]}<br>Unique: \${uniqueData[dataIndex]}\`;
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: 'rgba(255, 255, 255, 0.8)',
-                                font: { size: 12, weight: 'bold' }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { color: 'rgba(255, 255, 255, 0.6)' },
-                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                        },
-                        x: {
-                            ticks: { color: 'rgba(255, 255, 255, 0.6)' },
-                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                        }
-                    }
-                }
-            });
-        }
-
-        function createSourceChart(data) {
-            const ctx = document.getElementById('sourceChart');
-            if (!ctx) return;
-
-            if (charts.sourceChart) {
-                charts.sourceChart.destroy();
-            }
-
-            charts.sourceChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Direct', 'Search', 'Social', 'Referral', 'Email'],
-                    datasets: [{
-                        data: [35, 30, 20, 10, 5],
-                        backgroundColor: [
-                            '#667eea',
-                            '#00d4aa',
-                            '#764ba2',
-                            '#ff6b6b',
-                            '#51cf66'
-                        ],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: 'rgba(255, 255, 255, 0.8)',
-                                font: { size: 12 }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // Interactive Functions
-        function setTimeRange(days) {
-            currentTimeRange = days;
-            document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            loadAnalytics();
-        }
-
-        function applyFilters() {
-            filters.device = document.getElementById('deviceFilter').value;
-            filters.country = document.getElementById('countryFilter').value;
-            showNotification('Filters applied successfully', 'success');
-            // In a real implementation, this would re-fetch and filter data
-        }
-
-        function resetFilters() {
-            document.getElementById('deviceFilter').value = 'all';
-            document.getElementById('countryFilter').value = 'all';
-            filters = { device: 'all', country: 'all' };
-            showNotification('Filters reset', 'info');
-        }
-
-        function sortTable(columnIndex) {
-            showNotification('Table sorted by column ' + (columnIndex + 1), 'info');
-            // Implementation would sort the table data
-        }
-
-        function highlightRow(row) {
-            document.querySelectorAll('.table tr').forEach(r => r.style.background = '');
-            row.style.background = 'rgba(102, 126, 234, 0.2)';
-        }
-
-        function expandInsight(element) {
-            element.style.background = 'rgba(0, 212, 170, 0.1)';
-            setTimeout(() => element.style.background = '', 2000);
-        }
-
-        function showDetailModal(type) {
-            const messages = {
-                visits: 'Total Visits: This shows the complete number of page views across your website.',
-                unique: 'Unique Visitors: Individual users who visited your site, counted once per time period.',
-                duration: 'Session Duration: Average time users spend on your site per visit.',
-                bounce: 'Bounce Rate: Percentage of visitors who leave after viewing only one page.'
-            };
-            showNotification(messages[type] || 'Detailed information', 'info', 5000);
-        }
-
-        function toggleChartType() {
-            if (charts.visitorChart) {
-                const currentType = charts.visitorChart.config.type;
-                const newType = currentType === 'line' ? 'bar' : 'line';
-                
-                charts.visitorChart.config.type = newType;
-                charts.visitorChart.update();
-                
-                showNotification(\`Chart changed to \${newType} view\`, 'success');
-            }
-        }
-
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-                showNotification('Entered fullscreen mode', 'info');
-            } else {
-                document.exitFullscreen();
-                showNotification('Exited fullscreen mode', 'info');
-            }
-        }
-
-        function showNotification(message, type = 'info', duration = 3000) {
-            const panel = document.getElementById('notificationPanel');
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            
-            const icons = {
-                success: 'fa-check-circle',
-                error: 'fa-exclamation-circle',
-                info: 'fa-info-circle',
-                warning: 'fa-exclamation-triangle'
-            };
-            
-            const colors = {
-                success: 'var(--success)',
-                error: 'var(--warning)',
-                info: 'var(--primary)',
-                warning: '#ffa726'
-            };
-            
-            notification.innerHTML = \`
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <i class="fas \${icons[type]}" style="color: \${colors[type]};"></i>
-                    <span>\${message}</span>
-                </div>
-            \`;
-            
-            notification.onclick = () => notification.remove();
-            panel.appendChild(notification);
-            
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.remove();
-                }
-            }, duration);
-        }
-
-        function exportData() {
-            const dataStr = JSON.stringify(analyticsData, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            const url = URL.createObjectURL(dataBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = \`analytics-\${new Date().toISOString().split('T')[0]}.json\`;
-            link.click();
-            showNotification('Data exported successfully', 'success');
-        }
-
-        function exportToPDF() {
-            showNotification('PDF export feature - would generate comprehensive report', 'info');
-        }
-
-        function exportToCSV() {
-            if (!analyticsData) return;
-            
-            let csv = 'Page,Visits,Unique Visitors\\n';
-            (analyticsData.topPages || []).forEach(page => {
-                csv += \`"\${page.page}",\${page.visits},\${page.uniqueVisitors}\\n\`;
-            });
-            
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = \`analytics-\${new Date().toISOString().split('T')[0]}.csv\`;
-            link.click();
-            showNotification('CSV exported successfully', 'success');
-        }
-
-        function exportToExcel() {
-            showNotification('Excel export feature - would generate detailed spreadsheets', 'info');
-        }
-
-        function shareReport() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'AK Energy Consultant Analytics Report',
-                    text: 'Check out our latest analytics insights',
-                    url: window.location.href
-                });
-            } else {
-                navigator.clipboard.writeText(window.location.href);
-                showNotification('Dashboard link copied to clipboard', 'success');
-            }
-        }
-        
-        // Auto-refresh and initialization
-        document.addEventListener('DOMContentLoaded', loadAnalytics);
-        setInterval(loadAnalytics, 5 * 60 * 1000);
-        
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey || e.metaKey) {
-                switch(e.key) {
-                    case 'r':
-                        e.preventDefault();
-                        loadAnalytics();
-                        break;
-                    case 'e':
-                        e.preventDefault();
-                        exportData();
-                        break;
-                    case 'f':
-                        e.preventDefault();
-                        toggleFullscreen();
-                        break;
-                }
-            }
-        });
-    </script>
-</body>
-</html>`;
-
-  return {
-    statusCode: 200,
-    headers: {
-      'Content-Type': 'text/html',
-      'Cache-Control': 'no-cache'
-    },
-    body: html
-  };
-}; class="header-title">
+                <div class="header-title">
                     <div class="logo-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
@@ -1338,4 +832,187 @@ exports.handler = async (event, context) => {
                     </div>
                 </div>
 
-                <div
+                <div class="insight-panel">
+                    <div class="insight-title">
+                        <i class="fas fa-lightbulb"></i>
+                        Key Insights & Recommendations
+                    </div>
+                    <div class="insight-item" onclick="expandInsight(this)">
+                        <div class="insight-icon"><i class="fas fa-trending-up"></i></div>
+                        <div>
+                            <strong>Peak Traffic Hours:</strong> Your highest traffic occurs between 2-4 PM IST. Consider scheduling content releases during these hours for maximum visibility.
+                        </div>
+                    </div>
+                    <div class="insight-item" onclick="expandInsight(this)">
+                        <div class="insight-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <div>
+                            <strong>Mobile Optimization:</strong> \${Math.floor(Math.random() * 30 + 60)}% of visitors use mobile devices. Ensure your site is fully mobile-responsive.
+                        </div>
+                    </div>
+                    <div class="insight-item" onclick="expandInsight(this)">
+                        <div class="insight-icon"><i class="fas fa-globe"></i></div>
+                        <div>
+                            <strong>International Growth:</strong> Visitors from \${(data.countryBreakdown || []).length} countries show expanding global reach.
+                        </div>
+                    </div>
+                    <div class="insight-item" onclick="expandInsight(this)">
+                        <div class="insight-icon"><i class="fas fa-clock"></i></div>
+                        <div>
+                            <strong>Session Quality:</strong> Users spending more time on your services and portfolio pages indicate strong engagement.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="data-table">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <i class="fas fa-chart-bar"></i>
+                            Top Performing Pages
+                        </div>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Page URL <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(1)">Visits <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(2)">Unique Views <i class="fas fa-sort"></i></th>
+                                <th>Avg. Time</th>
+                                <th>Bounce Rate</th>
+                                <th>Performance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            \${(data.topPages || []).map(page => \`
+                                <tr onclick="highlightRow(this)">
+                                    <td>\${page.page}</td>
+                                    <td>\${page.visits.toLocaleString()}</td>
+                                    <td>\${page.uniqueVisitors.toLocaleString()}</td>
+                                    <td>\${Math.floor(Math.random() * 5 + 1)}:\${String(Math.floor(Math.random() * 60)).padStart(2, '0')}</td>
+                                    <td>\${Math.floor(Math.random() * 40 + 20)}%</td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: \${Math.round((page.visits / (data.totalVisits30d || 1)) * 100)}%"></div>
+                                        </div>
+                                        \${Math.round((page.visits / (data.totalVisits30d || 1)) * 100)}%
+                                    </td>
+                                </tr>
+                            \`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="data-table">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <i class="fas fa-globe-americas"></i>
+                            Geographic Distribution
+                        </div>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Country <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable(1)">Visitors <i class="fas fa-sort"></i></th>
+                                <th>Sessions</th>
+                                <th>Avg Duration</th>
+                                <th>Share</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            \${(data.countryBreakdown || []).slice(0, 8).map(country => \`
+                                <tr onclick="highlightRow(this)">
+                                    <td>\${country.country}</td>
+                                    <td>\${country.count.toLocaleString()}</td>
+                                    <td>\${Math.floor(country.count * (Math.random() * 0.5 + 1.2)).toLocaleString()}</td>
+                                    <td>\${Math.floor(Math.random() * 4 + 2)}:\${String(Math.floor(Math.random() * 60)).padStart(2, '0')}</td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: \${country.percentage}%"></div>
+                                        </div>
+                                        \${country.percentage}%
+                                    </td>
+                                </tr>
+                            \`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <i class="fas fa-devices"></i>
+                            Device & Browser Analytics
+                        </div>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Device Type</th>
+                                <th onclick="sortTable(1)">Count <i class="fas fa-sort"></i></th>
+                                <th>Conversion Rate</th>
+                                <th>Avg Session</th>
+                                <th>Market Share</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            \${(data.deviceBreakdown || []).map(device => \`
+                                <tr onclick="highlightRow(this)">
+                                    <td>
+                                        <i class="fas fa-\${device.device === 'Mobile' ? 'mobile-alt' : device.device === 'Tablet' ? 'tablet-alt' : 'desktop'}"></i>
+                                        \${device.device}
+                                    </td>
+                                    <td>\${device.count.toLocaleString()}</td>
+                                    <td>\${Math.floor(Math.random() * 15 + 5)}%</td>
+                                    <td>\${Math.floor(Math.random() * 4 + 2)}:\${String(Math.floor(Math.random() * 60)).padStart(2, '0')}</td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: \${device.percentage}%"></div>
+                                        </div>
+                                        \${device.percentage}%
+                                    </td>
+                                </tr>
+                            \`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <i class="fas fa-chart-pie"></i>
+                            Traffic Sources
+                        </div>
+                    </div>
+                    <div class="interactive-chart">
+                        <canvas id="sourceChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div style="background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); padding: 24px; border-radius: 20px; text-align: center;">
+                    <h3 style="color: white; margin-bottom: 15px;">
+                        <i class="fas fa-file-export"></i>
+                        Export Analytics Data
+                    </h3>
+                    <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 20px;">
+                        Download comprehensive reports in multiple formats
+                    </p>
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn" onclick="exportToPDF()">
+                            <i class="fas fa-file-pdf"></i>
+                            Export PDF
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportToCSV()">
+                            <i class="fas fa-file-csv"></i>
+                            Export CSV
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportToExcel()">
+                            <i class="fas fa-file-excel"></i>
+                            Export Excel
+                        </button>
+                        <button class="btn btn-secondary" onclick="shareReport()">
+                            <i class="fas fa-share-alt"></i>
+                            Share Report
+                        </button>
+                    </div>
+                </div>
+            \`;
