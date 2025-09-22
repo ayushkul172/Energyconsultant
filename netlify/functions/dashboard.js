@@ -316,109 +316,6 @@ exports.handler = async (event, context) => {
             gap: 10px;
         }
 
-        .metric-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .metric-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            padding: 20px;
-            border-radius: 16px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .metric-card:hover { transform: scale(1.02); }
-
-        .metric-value {
-            font-size: 1.8em;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 5px;
-        }
-
-        .metric-label {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .data-table {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-
-        .table-header {
-            background: rgba(102, 126, 234, 0.2);
-            padding: 20px;
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        .table-title {
-            font-size: 1.2em;
-            font-weight: 700;
-            color: white;
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .table th {
-            background: rgba(102, 126, 234, 0.1);
-            color: rgba(255, 255, 255, 0.9);
-            padding: 16px;
-            text-align: left;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-        }
-
-        .table th:hover {
-            background: rgba(102, 126, 234, 0.2);
-        }
-
-        .table td {
-            padding: 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .table tr:hover td {
-            background: rgba(102, 126, 234, 0.1);
-            color: white;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            overflow: hidden;
-            margin-top: 8px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            border-radius: 3px;
-            transition: width 0.8s ease;
-        }
-
         .loading {
             display: flex;
             flex-direction: column;
@@ -452,52 +349,9 @@ exports.handler = async (event, context) => {
             margin: 20px 0;
         }
 
-        .insight-panel {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            padding: 24px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-        }
-
-        .insight-title {
-            font-size: 1.3em;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .insight-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .insight-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding-left: 16px;
-        }
-
-        .insight-item:last-child { border-bottom: none; }
-
-        .insight-icon {
-            width: 32px; height: 32px;
-            background: linear-gradient(135deg, var(--accent), var(--primary));
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: white;
+        .interactive-chart {
+            position: relative;
+            height: 300px;
         }
 
         .notification-panel {
@@ -524,55 +378,6 @@ exports.handler = async (event, context) => {
             to { transform: translateX(0); opacity: 1; }
         }
 
-        .filter-panel {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .filter-select {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .tooltip {
-            position: relative;
-            cursor: help;
-        }
-
-        .tooltip::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-
-        .tooltip:hover::after { opacity: 1; }
-
         @media (max-width: 768px) {
             .container { padding: 15px; }
             .header-content { flex-direction: column; text-align: center; }
@@ -590,24 +395,6 @@ exports.handler = async (event, context) => {
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-        }
-
-        .interactive-chart {
-            position: relative;
-            height: 300px;
-        }
-
-        .chart-overlay {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            opacity: 0;
-            transition: opacity 0.3s;
         }
     </style>
 </head>
@@ -648,10 +435,6 @@ exports.handler = async (event, context) => {
                     <i class="fas fa-download"></i>
                     Export
                 </button>
-                <button class="btn btn-secondary" onclick="toggleFullscreen()">
-                    <i class="fas fa-expand"></i>
-                    Fullscreen
-                </button>
             </div>
             <div class="time-range">
                 <button class="time-btn active" onclick="setTimeRange(7)">7D</button>
@@ -660,28 +443,6 @@ exports.handler = async (event, context) => {
             </div>
             <div class="control-group">
                 <span style="color: rgba(255, 255, 255, 0.7); font-size: 14px;" id="lastUpdated">Loading...</span>
-            </div>
-        </div>
-
-        <div class="filter-panel">
-            <div class="filter-group">
-                <label style="color: rgba(255, 255, 255, 0.8);">Filter by:</label>
-                <select class="filter-select" id="deviceFilter" onchange="applyFilters()">
-                    <option value="all">All Devices</option>
-                    <option value="desktop">Desktop</option>
-                    <option value="mobile">Mobile</option>
-                    <option value="tablet">Tablet</option>
-                </select>
-                <select class="filter-select" id="countryFilter" onchange="applyFilters()">
-                    <option value="all">All Countries</option>
-                    <option value="india">India</option>
-                    <option value="usa">USA</option>
-                    <option value="uk">UK</option>
-                </select>
-                <button class="btn btn-secondary" onclick="resetFilters()">
-                    <i class="fas fa-undo"></i>
-                    Reset Filters
-                </button>
             </div>
         </div>
         
@@ -697,322 +458,242 @@ exports.handler = async (event, context) => {
         let analyticsData = null;
         let currentTimeRange = 30;
         let charts = {};
-        let filters = { device: 'all', country: 'all' };
         
         async function loadAnalytics() {
             try {
                 showNotification('Refreshing analytics data...', 'info');
                 
-                document.getElementById('analytics-content').innerHTML = \`
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>Loading advanced analytics data...</p>
-                    </div>
-                \`;
+                document.getElementById('analytics-content').innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading advanced analytics data...</p></div>';
                 document.getElementById('lastUpdated').textContent = 'Loading...';
                 
                 const response = await fetch('/.netlify/functions/track');
                 
                 if (!response.ok) {
-                    throw new Error(\`HTTP error! status: \${response.status}\`);
+                    throw new Error('HTTP error! status: ' + response.status);
                 }
                 
                 analyticsData = await response.json();
-                renderAdvancedAnalytics(analyticsData);
+                renderAnalytics(analyticsData);
                 
                 const now = new Date();
-                document.getElementById('lastUpdated').textContent = \`Updated: \${now.toLocaleTimeString()}\`;
+                document.getElementById('lastUpdated').textContent = 'Updated: ' + now.toLocaleTimeString();
                 
                 showNotification('Analytics data refreshed successfully!', 'success');
                 
             } catch (error) {
                 console.error('Error loading analytics:', error);
                 showNotification('Error loading analytics data', 'error');
-                document.getElementById('analytics-content').innerHTML = \`
-                    <div class="error">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
-                        <h3>Analytics Error</h3>
-                        <p>Error loading analytics data: \${error.message}</p>
-                        <button class="btn" onclick="loadAnalytics()" style="margin-top: 15px;">
-                            <i class="fas fa-redo"></i>
-                            Try Again
-                        </button>
-                    </div>
-                \`;
+                document.getElementById('analytics-content').innerHTML = '<div class="error"><i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i><h3>Analytics Error</h3><p>Error loading analytics data: ' + error.message + '</p><button class="btn" onclick="loadAnalytics()" style="margin-top: 15px;"><i class="fas fa-redo"></i> Try Again</button></div>';
             }
         }
         
-        function renderAdvancedAnalytics(data) {
-            const content = \`
-                <div class="stats-grid">
-                    <div class="stat-card tooltip" data-tooltip="Total number of page views in the selected period" onclick="showDetailModal('visits')">
-                        <div class="stat-header">
-                            <span class="stat-title">Total Visits</span>
-                            <div class="stat-icon"><i class="fas fa-users"></i></div>
-                        </div>
-                        <div class="stat-number">\${(data.totalVisits30d || 0).toLocaleString()}</div>
-                        <div class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i>
-                            +\${Math.floor(Math.random() * 20 + 5)}% vs last period
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card tooltip" data-tooltip="Number of unique visitors in the selected period" onclick="showDetailModal('unique')">
-                        <div class="stat-header">
-                            <span class="stat-title">Unique Visitors</span>
-                            <div class="stat-icon"><i class="fas fa-user-friends"></i></div>
-                        </div>
-                        <div class="stat-number">\${(data.uniqueVisitors30d || 0).toLocaleString()}</div>
-                        <div class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i>
-                            +\${Math.floor(Math.random() * 15 + 3)}% vs last period
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card tooltip" data-tooltip="Average time spent on site per session" onclick="showDetailModal('duration')">
-                        <div class="stat-header">
-                            <span class="stat-title">Avg Session Duration</span>
-                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                        </div>
-                        <div class="stat-number">\${Math.floor(Math.random() * 5 + 2)}:\${String(Math.floor(Math.random() * 60)).padStart(2, '0')}</div>
-                        <div class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i>
-                            +\${Math.floor(Math.random() * 10 + 2)}% vs last period
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card tooltip" data-tooltip="Percentage of single-page sessions" onclick="showDetailModal('bounce')">
-                        <div class="stat-header">
-                            <span class="stat-title">Bounce Rate</span>
-                            <div class="stat-icon"><i class="fas fa-share"></i></div>
-                        </div>
-                        <div class="stat-number">\${Math.floor(Math.random() * 20 + 25)}%</div>
-                        <div class="stat-change negative">
-                            <i class="fas fa-arrow-down"></i>
-                            -\${Math.floor(Math.random() * 5 + 2)}% vs last period
-                        </div>
-                    </div>
-                </div>
+        function renderAnalytics(data) {
+            const totalVisits = data.totalVisits30d || 0;
+            const uniqueVisitors = data.uniqueVisitors30d || 0;
+            const avgDaily = data.avgDailyVisits || 0;
+            
+            const content = '<div class="stats-grid">' +
+                '<div class="stat-card">' +
+                    '<div class="stat-header">' +
+                        '<span class="stat-title">Total Visits</span>' +
+                        '<div class="stat-icon"><i class="fas fa-users"></i></div>' +
+                    '</div>' +
+                    '<div class="stat-number">' + totalVisits.toLocaleString() + '</div>' +
+                    '<div class="stat-change positive">' +
+                        '<i class="fas fa-arrow-up"></i>' +
+                        '+' + Math.floor(Math.random() * 20 + 5) + '% vs last period' +
+                    '</div>' +
+                '</div>' +
+                '<div class="stat-card">' +
+                    '<div class="stat-header">' +
+                        '<span class="stat-title">Unique Visitors</span>' +
+                        '<div class="stat-icon"><i class="fas fa-user-friends"></i></div>' +
+                    '</div>' +
+                    '<div class="stat-number">' + uniqueVisitors.toLocaleString() + '</div>' +
+                    '<div class="stat-change positive">' +
+                        '<i class="fas fa-arrow-up"></i>' +
+                        '+' + Math.floor(Math.random() * 15 + 3) + '% vs last period' +
+                    '</div>' +
+                '</div>' +
+                '<div class="stat-card">' +
+                    '<div class="stat-header">' +
+                        '<span class="stat-title">Daily Average</span>' +
+                        '<div class="stat-icon"><i class="fas fa-calendar-day"></i></div>' +
+                    '</div>' +
+                    '<div class="stat-number">' + avgDaily.toLocaleString() + '</div>' +
+                    '<div class="stat-change positive">' +
+                        '<i class="fas fa-arrow-up"></i>' +
+                        '+' + Math.floor(Math.random() * 10 + 2) + '% vs last period' +
+                    '</div>' +
+                '</div>' +
+                '<div class="stat-card">' +
+                    '<div class="stat-header">' +
+                        '<span class="stat-title">Bounce Rate</span>' +
+                        '<div class="stat-icon"><i class="fas fa-share"></i></div>' +
+                    '</div>' +
+                    '<div class="stat-number">' + Math.floor(Math.random() * 20 + 25) + '%</div>' +
+                    '<div class="stat-change negative">' +
+                        '<i class="fas fa-arrow-down"></i>' +
+                        '-' + Math.floor(Math.random() * 5 + 2) + '% vs last period' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="chart-container">' +
+                '<div class="chart-header">' +
+                    '<div class="chart-title">' +
+                        '<i class="fas fa-chart-area"></i>' +
+                        'Visitor Trends' +
+                    '</div>' +
+                '</div>' +
+                '<div class="interactive-chart">' +
+                    '<canvas id="visitorChart" width="400" height="200"></canvas>' +
+                '</div>' +
+            '</div>';
+            
+            document.getElementById('analytics-content').innerHTML = content;
+            
+            setTimeout(function() {
+                createVisitorChart(data);
+            }, 100);
+        }
 
-                <div class="metric-cards">
-                    <div class="metric-card tooltip" data-tooltip="Average visits per day">
-                        <div class="metric-value">\${(data.avgDailyVisits || 0).toLocaleString()}</div>
-                        <div class="metric-label">Daily Average</div>
-                    </div>
-                    <div class="metric-card tooltip" data-tooltip="Average pages viewed per session">
-                        <div class="metric-value">\${Math.floor((data.totalVisits30d || 0) / (data.uniqueVisitors30d || 1) * 100) / 100}</div>
-                        <div class="metric-label">Pages per Session</div>
-                    </div>
-                    <div class="metric-card tooltip" data-tooltip="Percentage of returning visitors">
-                        <div class="metric-value">\${Math.floor(Math.random() * 70 + 20)}%</div>
-                        <div class="metric-label">Returning Visitors</div>
-                    </div>
-                    <div class="metric-card tooltip" data-tooltip="Overall user engagement rate">
-                        <div class="metric-value">\${Math.floor(Math.random() * 80 + 60)}%</div>
-                        <div class="metric-label">Engagement Rate</div>
-                    </div>
-                </div>
+        function createVisitorChart(data) {
+            const ctx = document.getElementById('visitorChart');
+            if (!ctx) return;
 
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <i class="fas fa-chart-area"></i>
-                            Visitor Trends
-                        </div>
-                        <div class="chart-actions">
-                            <button class="btn btn-secondary" onclick="toggleChartType()">
-                                <i class="fas fa-chart-bar"></i>
-                                Toggle View
-                            </button>
-                        </div>
-                    </div>
-                    <div class="interactive-chart">
-                        <canvas id="visitorChart" width="400" height="200"></canvas>
-                        <div class="chart-overlay" id="chartOverlay"></div>
-                    </div>
-                </div>
-
-                <div class="insight-panel">
-                    <div class="insight-title">
-                        <i class="fas fa-lightbulb"></i>
-                        Key Insights & Recommendations
-                    </div>
-                    <div class="insight-item" onclick="expandInsight(this)">
-                        <div class="insight-icon"><i class="fas fa-trending-up"></i></div>
-                        <div>
-                            <strong>Peak Traffic Hours:</strong> Your highest traffic occurs between 2-4 PM IST. Consider scheduling content releases during these hours for maximum visibility.
-                        </div>
-                    </div>
-                    <div class="insight-item" onclick="expandInsight(this)">
-                        <div class="insight-icon"><i class="fas fa-mobile-alt"></i></div>
-                        <div>
-                            <strong>Mobile Optimization:</strong> \${Math.floor(Math.random() * 30 + 60)}% of visitors use mobile devices. Ensure your site is fully mobile-responsive.
-                        </div>
-                    </div>
-                    <div class="insight-item" onclick="expandInsight(this)">
-                        <div class="insight-icon"><i class="fas fa-globe"></i></div>
-                        <div>
-                            <strong>International Growth:</strong> Visitors from \${(data.countryBreakdown || []).length} countries show expanding global reach.
-                        </div>
-                    </div>
-                    <div class="insight-item" onclick="expandInsight(this)">
-                        <div class="insight-icon"><i class="fas fa-clock"></i></div>
-                        <div>
-                            <strong>Session Quality:</strong> Users spending more time on your services and portfolio pages indicate strong engagement.
-                        </div>
-                    </div>
-                </div>
+            const labels = [];
+            const visitorData = [];
+            
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
                 
-                <div class="data-table">
-                    <div class="table-header">
-                        <div class="table-title">
-                            <i class="fas fa-chart-bar"></i>
-                            Top Performing Pages
-                        </div>
-                    </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th onclick="sortTable(0)">Page URL <i class="fas fa-sort"></i></th>
-                                <th onclick="sortTable(1)">Visits <i class="fas fa-sort"></i></th>
-                                <th onclick="sortTable(2)">Unique Views <i class="fas fa-sort"></i></th>
-                                <th>Avg. Time</th>
-                                <th>Bounce Rate</th>
-                                <th>Performance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            \${(data.topPages || []).map(page => \`
-                                <tr onclick="highlightRow(this)">
-                                    <td>\${page.page}</td>
-                                    <td>\${page.visits.toLocaleString()}</td>
-                                    <td>\${page.uniqueVisitors.toLocaleString()}</td>
-                                    <td>\${Math.floor(Math.random() * 5 + 1)}:\${String(Math.floor(Math.random() * 60)).padStart(2, '0')}</td>
-                                    <td>\${Math.floor(Math.random() * 40 + 20)}%</td>
-                                    <td>
-                                        <div class="progress-bar">
-                                            <div class="progress-fill" style="width: \${Math.round((page.visits / (data.totalVisits30d || 1)) * 100)}%"></div>
-                                        </div>
-                                        \${Math.round((page.visits / (data.totalVisits30d || 1)) * 100)}%
-                                    </td>
-                                </tr>
-                            \`).join('')}
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="data-table">
-                    <div class="table-header">
-                        <div class="table-title">
-                            <i class="fas fa-globe-americas"></i>
-                            Geographic Distribution
-                        </div>
-                    </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th onclick="sortTable(0)">Country <i class="fas fa-sort"></i></th>
-                                <th onclick="sortTable(1)">Visitors <i class="fas fa-sort"></i></th>
-                                <th>Sessions</th>
-                                <th>Avg Duration</th>
-                                <th>Share</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            \${(data.countryBreakdown || []).slice(0, 8).map(country => \`
-                                <tr onclick="highlightRow(this)">
-                                    <td>\${country.country}</td>
-                                    <td>\${country.count.toLocaleString()}</td>
-                                    <td>\${Math.floor(country.count * (Math.random() * 0.5 + 1.2)).toLocaleString()}</td>
-                                    <td>\${Math.floor(Math.random() * 4 + 2)}:\${String(Math.floor(Math.random() * 60)).padStart(2, '0')}</td>
-                                    <td>
-                                        <div class="progress-bar">
-                                            <div class="progress-fill" style="width: \${country.percentage}%"></div>
-                                        </div>
-                                        \${country.percentage}%
-                                    </td>
-                                </tr>
-                            \`).join('')}
-                        </tbody>
-                    </table>
-                </div>
+                const baseVisits = Math.floor((data.totalVisits30d || 100) / 30);
+                const variation = Math.floor(Math.random() * baseVisits * 0.5);
+                visitorData.push(baseVisits + variation);
+            }
 
-                <div class="data-table">
-                    <div class="table-header">
-                        <div class="table-title">
-                            <i class="fas fa-devices"></i>
-                            Device & Browser Analytics
-                        </div>
-                    </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Device Type</th>
-                                <th onclick="sortTable(1)">Count <i class="fas fa-sort"></i></th>
-                                <th>Conversion Rate</th>
-                                <th>Avg Session</th>
-                                <th>Market Share</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            \${(data.deviceBreakdown || []).map(device => \`
-                                <tr onclick="highlightRow(this)">
-                                    <td>
-                                        <i class="fas fa-\${device.device === 'Mobile' ? 'mobile-alt' : device.device === 'Tablet' ? 'tablet-alt' : 'desktop'}"></i>
-                                        \${device.device}
-                                    </td>
-                                    <td>\${device.count.toLocaleString()}</td>
-                                    <td>\${Math.floor(Math.random() * 15 + 5)}%</td>
-                                    <td>\${Math.floor(Math.random() * 4 + 2)}:\${String(Math.floor(Math.random() * 60)).padStart(2, '0')}</td>
-                                    <td>
-                                        <div class="progress-bar">
-                                            <div class="progress-fill" style="width: \${device.percentage}%"></div>
-                                        </div>
-                                        \${device.percentage}%
-                                    </td>
-                                </tr>
-                            \`).join('')}
-                        </tbody>
-                    </table>
-                </div>
+            if (charts.visitorChart) {
+                charts.visitorChart.destroy();
+            }
 
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <i class="fas fa-chart-pie"></i>
-                            Traffic Sources
-                        </div>
-                    </div>
-                    <div class="interactive-chart">
-                        <canvas id="sourceChart" width="400" height="200"></canvas>
-                    </div>
-                </div>
+            charts.visitorChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Daily Visits',
+                        data: visitorData,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.8)',
+                                font: { size: 12, weight: 'bold' }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: 'rgba(255, 255, 255, 0.6)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: 'rgba(255, 255, 255, 0.6)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
 
-                <div style="background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); padding: 24px; border-radius: 20px; text-align: center;">
-                    <h3 style="color: white; margin-bottom: 15px;">
-                        <i class="fas fa-file-export"></i>
-                        Export Analytics Data
-                    </h3>
-                    <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 20px;">
-                        Download comprehensive reports in multiple formats
-                    </p>
-                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                        <button class="btn" onclick="exportToPDF()">
-                            <i class="fas fa-file-pdf"></i>
-                            Export PDF
-                        </button>
-                        <button class="btn btn-secondary" onclick="exportToCSV()">
-                            <i class="fas fa-file-csv"></i>
-                            Export CSV
-                        </button>
-                        <button class="btn btn-secondary" onclick="exportToExcel()">
-                            <i class="fas fa-file-excel"></i>
-                            Export Excel
-                        </button>
-                        <button class="btn btn-secondary" onclick="shareReport()">
-                            <i class="fas fa-share-alt"></i>
-                            Share Report
-                        </button>
-                    </div>
-                </div>
-            \`;
+        function setTimeRange(days) {
+            currentTimeRange = days;
+            document.querySelectorAll('.time-btn').forEach(function(btn) { 
+                btn.classList.remove('active'); 
+            });
+            event.target.classList.add('active');
+            loadAnalytics();
+        }
+
+        function showNotification(message, type, duration) {
+            type = type || 'info';
+            duration = duration || 3000;
+            
+            const panel = document.getElementById('notificationPanel');
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                info: 'fa-info-circle',
+                warning: 'fa-exclamation-triangle'
+            };
+            
+            const colors = {
+                success: 'var(--success)',
+                error: 'var(--warning)',
+                info: 'var(--primary)',
+                warning: '#ffa726'
+            };
+            
+            notification.innerHTML = '<div style="display: flex; align-items: center; gap: 10px;"><i class="fas ' + icons[type] + '" style="color: ' + colors[type] + ';"></i><span>' + message + '</span></div>';
+            
+            notification.onclick = function() { 
+                notification.remove(); 
+            };
+            panel.appendChild(notification);
+            
+            setTimeout(function() {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, duration);
+        }
+
+        function exportData() {
+            if (!analyticsData) {
+                showNotification('No data to export', 'warning');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(analyticsData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'analytics-' + new Date().toISOString().split('T')[0] + '.json';
+            link.click();
+            showNotification('Data exported successfully', 'success');
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadAnalytics);
+        
+        // Auto-refresh every 5 minutes
+        setInterval(loadAnalytics, 5 * 60 * 1000);
+    </script>
+</body>
+</html>`;
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'text/html',
+      'Cache-Control': 'no-cache'
+    },
+    body: html
+  };
+};
