@@ -446,6 +446,12 @@
                 flex-direction: column;
             }
         }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+        }
     </style>
 </head>
 <body>
@@ -461,10 +467,10 @@
         </div>
 
         <div class="tabs">
-<button class="tab active" onclick="showTab('realtime', this)">⚡ Real-time</button>
-            <button class="tab" onclick="showTab('historical')">📊 Historical Data</button>
-            <button class="tab" onclick="showTab('analytics')">📈 Analytics</button>
-            <button class="tab" onclick="showTab('ip-tracking')">🌐 IP Tracking</button>
+            <button class="tab active" onclick="showTab('realtime', this)">⚡ Real-time</button>
+            <button class="tab" onclick="showTab('historical', this)">📊 Historical Data</button>
+            <button class="tab" onclick="showTab('analytics', this)">📈 Analytics</button>
+            <button class="tab" onclick="showTab('ip-tracking', this)">🌐 IP Tracking</button>
         </div>
 
         <!-- Real-time Tab -->
@@ -472,23 +478,23 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3>Active Sessions</h3>
-                    <div class="stat-value" id="activeSessions">12</div>
+                    <div class="stat-value" id="activeSessions">0</div>
                     <div class="stat-change positive">↗ Currently browsing</div>
                 </div>
                 <div class="stat-card">
                     <h3>Today's Visitors</h3>
-                    <div class="stat-value" id="todayVisitors">247</div>
+                    <div class="stat-value" id="todayVisitors">0</div>
                     <div class="stat-change positive">↗ +18% from yesterday</div>
                 </div>
                 <div class="stat-card">
                     <h3>Unique IPs Today</h3>
-                    <div class="stat-value" id="uniqueIPs">189</div>
-                    <div class="stat-change positive">↗ New: 43</div>
+                    <div class="stat-value" id="uniqueIPs">0</div>
+                    <div class="stat-change positive">↗ New visitors</div>
                 </div>
                 <div class="stat-card">
                     <h3>Page Views</h3>
-                    <div class="stat-value" id="pageViews">567</div>
-                    <div class="stat-change positive">↗ +22% increase</div>
+                    <div class="stat-value" id="pageViews">0</div>
+                    <div class="stat-change positive">↗ Total views</div>
                 </div>
             </div>
 
@@ -520,7 +526,7 @@
                             </tr>
                         </thead>
                         <tbody id="realtimeData">
-                            <!-- Real-time data populated here -->
+                            <tr><td colspan="9" class="loading">Loading visitor data...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -532,23 +538,23 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3>Total Visitors (Year)</h3>
-                    <div class="stat-value" id="yearlyVisitors">45,892</div>
-                    <div class="stat-change positive">↗ +156% growth</div>
+                    <div class="stat-value" id="yearlyVisitors">0</div>
+                    <div class="stat-change positive">↗ Annual growth</div>
                 </div>
                 <div class="stat-card">
                     <h3>Unique IPs (Year)</h3>
-                    <div class="stat-value" id="yearlyUniqueIPs">32,456</div>
-                    <div class="stat-change positive">↗ From 187 countries</div>
+                    <div class="stat-value" id="yearlyUniqueIPs">0</div>
+                    <div class="stat-change positive">↗ Global reach</div>
                 </div>
                 <div class="stat-card">
                     <h3>Avg. Monthly Visitors</h3>
-                    <div class="stat-value" id="monthlyAvg">3,824</div>
+                    <div class="stat-value" id="monthlyAvg">0</div>
                     <div class="stat-change positive">↗ Steady growth</div>
                 </div>
                 <div class="stat-card">
                     <h3>Return Visitors</h3>
-                    <div class="stat-value" id="returnVisitors">28%</div>
-                    <div class="stat-change positive">↗ +5% this month</div>
+                    <div class="stat-value" id="returnVisitors">0%</div>
+                    <div class="stat-change positive">↗ Retention rate</div>
                 </div>
             </div>
 
@@ -567,7 +573,7 @@
             <div class="visitor-table">
                 <div class="table-header">
                     <span>📈 Historical Visitor Data</span>
-                    <span class="table-info" id="historicalCount">Showing 50 of 45,892 records</span>
+                    <span class="table-info" id="historicalCount">Loading records...</span>
                 </div>
                 <div class="table-content">
                     <table>
@@ -585,7 +591,7 @@
                             </tr>
                         </thead>
                         <tbody id="historicalData">
-                            <!-- Historical data populated here -->
+                            <tr><td colspan="9" class="loading">Loading historical data...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -601,25 +607,25 @@
                 <div class="summary-card">
                     <h4>🌍 Top Countries</h4>
                     <ul class="summary-list" id="topCountries">
-                        <!-- Populated by JavaScript -->
+                        <li class="loading">Loading analytics...</li>
                     </ul>
                 </div>
                 <div class="summary-card">
                     <h4>🖥️ Device Types</h4>
                     <ul class="summary-list" id="deviceTypes">
-                        <!-- Populated by JavaScript -->
+                        <li class="loading">Loading analytics...</li>
                     </ul>
                 </div>
                 <div class="summary-card">
                     <h4>📱 Popular Browsers</h4>
                     <ul class="summary-list" id="topBrowsers">
-                        <!-- Populated by JavaScript -->
+                        <li class="loading">Loading analytics...</li>
                     </ul>
                 </div>
                 <div class="summary-card">
                     <h4>📄 Most Visited Pages</h4>
                     <ul class="summary-list" id="topPages">
-                        <!-- Populated by JavaScript -->
+                        <li class="loading">Loading analytics...</li>
                     </ul>
                 </div>
             </div>
@@ -630,22 +636,22 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3>Total IP Addresses</h3>
-                    <div class="stat-value" id="totalIPs">32,456</div>
+                    <div class="stat-value" id="totalIPs">0</div>
                     <div class="stat-change positive">↗ All time recorded</div>
                 </div>
                 <div class="stat-card">
                     <h3>Unique Countries</h3>
-                    <div class="stat-value" id="uniqueCountries">187</div>
+                    <div class="stat-value" id="uniqueCountries">0</div>
                     <div class="stat-change positive">↗ Global reach</div>
                 </div>
                 <div class="stat-card">
                     <h3>Return IP Addresses</h3>
-                    <div class="stat-value" id="returnIPs">8,942</div>
-                    <div class="stat-change positive">↗ 28% return rate</div>
+                    <div class="stat-value" id="returnIPs">0</div>
+                    <div class="stat-change positive">↗ Return visitors</div>
                 </div>
                 <div class="stat-card">
                     <h3>Blocked IPs</h3>
-                    <div class="stat-value" id="blockedIPs">23</div>
+                    <div class="stat-value" id="blockedIPs">0</div>
                     <div class="stat-change negative">⚠️ Security filtered</div>
                 </div>
             </div>
@@ -678,7 +684,7 @@
                             </tr>
                         </thead>
                         <tbody id="ipTrackingData">
-                            <!-- IP tracking data populated here -->
+                            <tr><td colspan="9" class="loading">Loading IP database...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -709,7 +715,11 @@
                 this.trackCurrentVisitor();
                 
                 // Set current date for date input
-                document.getElementById('dateTo').value = new Date().toISOString().split('T')[0];
+                const today = new Date().toISOString().split('T')[0];
+                const dateToElement = document.getElementById('dateTo');
+                if (dateToElement) {
+                    dateToElement.value = today;
+                }
             }
 
             generateIP() {
@@ -718,10 +728,10 @@
 
             generateUserAgent() {
                 const userAgents = [
-                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-                    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36',
-                    'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15',
+                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                    'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1',
                     'Mozilla/5.0 (Android 11; Mobile; rv:68.0) Gecko/68.0 Firefox/88.0'
                 ];
                 return userAgents[Math.floor(Math.random() * userAgents.length)];
@@ -750,48 +760,6 @@
                 for (let i = 0; i < 15; i++) {
                     const location = locations[Math.floor(Math.random() * locations.length)];
                     const sessionTime = Math.floor(Math.random() * 1800) + 30;
-                    const ip = this.generateIP();
-                    
-                    const visitor = {
-                        id: 'RT' + (1000 + i),
-                        ip: ip,
-                        location: location,
-                        browser: browsers[Math.floor(Math.random() * browsers.length)],
-                        os: os[Math.floor(Math.random() * os.length)],
-                        device: devices[Math.floor(Math.random() * devices.length)],
-                        currentPage: pages[Math.floor(Math.random() * pages.length)],
-                        entryPage: '/home',
-                        sessionTime: sessionTime,
-                        pageViews: Math.floor(Math.random() * 10) + 1,
-                        status: Math.random() > 0.2 ? 'online' : 'offline',
-                        timestamp: new Date(Date.now() - sessionTime * 1000),
-                        referrer: Math.random() > 0.5 ? 'Google Search' : 'Direct',
-                        userAgent: this.generateUserAgent()
-                    };
-                    
-                    this.visitors.push(visitor);
-                    this.updateIPDatabase(ip, visitor);
-                }
-            }
-
-            generateHistoricalData() {
-                const locations = [
-                    { country: 'India', city: 'New Delhi', flag: '🇮🇳', isp: 'Airtel' },
-                    { country: 'USA', city: 'New York', flag: '🇺🇸', isp: 'Verizon' },
-                    { country: 'UK', city: 'London', flag: '🇬🇧', isp: 'BT' },
-                    { country: 'Canada', city: 'Toronto', flag: '🇨🇦', isp: 'Rogers' },
-                    { country: 'Australia', city: 'Sydney', flag: '🇦🇺', isp: 'Telstra' }
-                ];
-                
-                const browsers = ['Chrome', 'Firefox', 'Safari', 'Edge'];
-                const os = ['Windows', 'macOS', 'Linux', 'iOS', 'Android'];
-                const devices = ['Desktop', 'Mobile', 'Tablet'];
-                const pages = ['/home', '/services', '/about', '/contact', '/energy-audit'];
-
-                // Generate historical data for the past year
-                for (let i = 0; i < 1000; i++) {
-                    const location = locations[Math.floor(Math.random() * locations.length)];
-                    const sessionDuration = Math.floor(Math.random() * 3600) + 30;
                     const ip = this.generateIP();
                     const visitDate = new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000);
                     
@@ -962,8 +930,8 @@
                 this.visitors.unshift(newVisitor);
                 this.updateIPDatabase(ip, newVisitor);
                 
-                // Update counters
-                const currentTotal = parseInt(document.getElementById('todayVisitors').textContent);
+                // Update counters safely
+                const currentTotal = parseInt(document.getElementById('todayVisitors').textContent) || 0;
                 document.getElementById('todayVisitors').textContent = currentTotal + 1;
             }
 
@@ -972,6 +940,41 @@
                 this.updateHistoricalDisplay();
                 this.updateAnalyticsDisplay();
                 this.updateIPTrackingDisplay();
+                this.updateStats();
+            }
+
+            updateStats() {
+                // Update real-time stats
+                const onlineVisitors = this.visitors.filter(v => v.status === 'online').length;
+                const todayVisitors = this.visitors.length;
+                const uniqueIPs = new Set(this.visitors.map(v => v.ip)).size;
+                const totalPages = this.visitors.reduce((sum, v) => sum + (v.pageViews || 1), 0);
+
+                document.getElementById('activeSessions').textContent = onlineVisitors;
+                document.getElementById('todayVisitors').textContent = todayVisitors;
+                document.getElementById('uniqueIPs').textContent = uniqueIPs;
+                document.getElementById('pageViews').textContent = totalPages;
+
+                // Update historical stats
+                const yearlyVisitors = this.historicalData.length;
+                const yearlyUniqueIPs = new Set(this.historicalData.map(v => v.ip)).size;
+                const monthlyAvg = Math.floor(yearlyVisitors / 12);
+                const returnRate = Math.floor((yearlyUniqueIPs / yearlyVisitors) * 100);
+
+                document.getElementById('yearlyVisitors').textContent = yearlyVisitors.toLocaleString();
+                document.getElementById('yearlyUniqueIPs').textContent = yearlyUniqueIPs.toLocaleString();
+                document.getElementById('monthlyAvg').textContent = monthlyAvg.toLocaleString();
+                document.getElementById('returnVisitors').textContent = returnRate + '%';
+
+                // Update IP tracking stats
+                const totalIPs = this.ipDatabase.size;
+                const uniqueCountries = new Set(Array.from(this.ipDatabase.values()).map(ip => ip.location.country)).size;
+                const returnIPs = Array.from(this.ipDatabase.values()).filter(ip => ip.totalVisits > 1).length;
+
+                document.getElementById('totalIPs').textContent = totalIPs.toLocaleString();
+                document.getElementById('uniqueCountries').textContent = uniqueCountries;
+                document.getElementById('returnIPs').textContent = returnIPs.toLocaleString();
+                document.getElementById('blockedIPs').textContent = '23'; // Static for demo
             }
 
             updateRealtimeDisplay() {
@@ -1012,10 +1015,6 @@
                     `;
                     tbody.appendChild(row);
                 });
-
-                // Update stats
-                const onlineCount = this.visitors.filter(v => v.status === 'online').length;
-                document.getElementById('activeSessions').textContent = onlineCount;
             }
 
             updateHistoricalDisplay() {
@@ -1058,6 +1057,12 @@
                 });
                 
                 this.updatePagination();
+                
+                // Update record count
+                const countElement = document.getElementById('historicalCount');
+                if (countElement) {
+                    countElement.textContent = `Showing ${Math.min(this.pageSize, pageData.length)} of ${this.historicalData.length.toLocaleString()} records`;
+                }
             }
 
             updateAnalyticsDisplay() {
@@ -1258,30 +1263,29 @@
             }
         }
 
-        // Global functions
-    function showTab(tabName) {
-    // Hide all tab contents
-    const tabContents = document.querySelectorAll('.tab-content');
-    tabContents.forEach(content => content.classList.remove('active'));
-    
-    // Remove active class from all tabs
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(tab => tab.classList.remove('active'));
-    
-    // Show selected tab content
-    const selectedContent = document.getElementById(tabName);
-    if (selectedContent) {
-        selectedContent.classList.add('active');
-    }
-    
-    // Find and activate the correct tab by matching the onclick parameter
-    tabs.forEach(tab => {
-        if (tab.onclick && tab.onclick.toString().includes(`'${tabName}'`)) {
-            tab.classList.add('active');
-        }
-    });
+        // Global variables
+        let tracker = null;
 
-   
+        // Global functions with safety checks
+        function showTab(tabName, clickedElement) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            const selectedContent = document.getElementById(tabName);
+            if (selectedContent) {
+                selectedContent.classList.add('active');
+            }
+            
+            // Add active class to clicked tab
+            if (clickedElement) {
+                clickedElement.classList.add('active');
+            }
         }
 
         function refreshData() {
@@ -1289,6 +1293,11 @@
         }
 
         function toggleRealTime() {
+            if (!tracker) {
+                alert('System is still loading...');
+                return;
+            }
+
             const btn = document.getElementById('realTimeBtn');
             const indicator = document.getElementById('realTimeStatus');
             
@@ -1310,6 +1319,11 @@
         }
 
         function exportData(format) {
+            if (!tracker) {
+                alert('System is still loading...');
+                return;
+            }
+
             const data = {
                 visitors: tracker.visitors,
                 historical: tracker.historicalData,
@@ -1320,10 +1334,20 @@
         }
 
         function exportHistorical() {
+            if (!tracker) {
+                alert('System is still loading...');
+                return;
+            }
+
             alert(`📊 Exporting historical data...\n\nIncludes:\n• All ${tracker.historicalData.length} historical visits\n• IP address records\n• Geographic distribution\n• Time-based analytics\n• Session details`);
         }
 
         function exportIPData() {
+            if (!tracker) {
+                alert('System is still loading...');
+                return;
+            }
+
             alert(`🌐 Exporting IP database...\n\nIncludes:\n• ${Array.from(tracker.ipDatabase.values()).length} unique IP addresses\n• Visit history for each IP\n• Geographic locations\n• ISP information\n• Activity patterns`);
         }
 
@@ -1340,6 +1364,11 @@
         }
 
         function viewVisitorDetails(visitorId) {
+            if (!tracker) {
+                alert('System is still loading...');
+                return;
+            }
+
             const visitor = tracker.visitors.find(v => v.id === visitorId) || 
                            tracker.historicalData.find(v => v.id === visitorId);
             
@@ -1370,13 +1399,12 @@
             }
         }
 
-        // Initialize the tracking system
-      let tracker; // Declare globally first
-
-// Then initialize it
-document.addEventListener('DOMContentLoaded', function() {
-    tracker = new AdvancedVisitorTracker();
-});
+        // Initialize the system when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing visitor tracking system...');
+            tracker = new AdvancedVisitorTracker();
+            console.log('Visitor tracking system initialized successfully!');
+        });
 
         // Track page visibility changes
         document.addEventListener('visibilitychange', () => {
@@ -1401,11 +1429,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Send analytics data every 30 seconds (in real implementation)
         setInterval(() => {
+            if (!tracker) return;
+            
             const analyticsData = {
                 mouseMovements: mouseMovements,
                 clicks: clicks,
                 timeOnPage: Math.floor(Date.now() / 1000),
-                scrollDepth: Math.round((window.pageYOffset / (document.body.scrollHeight - window.innerHeight)) * 100)
+                scrollDepth: Math.round((window.pageYOffset / (document.body.scrollHeight - window.innerHeight)) * 100) || 0
             };
             
             // In real implementation, send to server
@@ -1415,3 +1445,53 @@ document.addEventListener('DOMContentLoaded', function() {
             mouseMovements = 0;
             clicks = 0;
         }, 30000);
+
+        // Handle errors gracefully
+        window.addEventListener('error', function(e) {
+            console.error('Application error:', e.error);
+        });
+    </script>
+</body>
+</html>
+                    
+                    const visitor = {
+                        id: 'RT' + (1000 + i),
+                        ip: ip,
+                        location: location,
+                        browser: browsers[Math.floor(Math.random() * browsers.length)],
+                        os: os[Math.floor(Math.random() * os.length)],
+                        device: devices[Math.floor(Math.random() * devices.length)],
+                        currentPage: pages[Math.floor(Math.random() * pages.length)],
+                        entryPage: '/home',
+                        sessionTime: sessionTime,
+                        pageViews: Math.floor(Math.random() * 10) + 1,
+                        status: Math.random() > 0.2 ? 'online' : 'offline',
+                        timestamp: new Date(Date.now() - sessionTime * 1000),
+                        referrer: Math.random() > 0.5 ? 'Google Search' : 'Direct',
+                        userAgent: this.generateUserAgent()
+                    };
+                    
+                    this.visitors.push(visitor);
+                    this.updateIPDatabase(ip, visitor);
+                }
+            }
+
+            generateHistoricalData() {
+                const locations = [
+                    { country: 'India', city: 'New Delhi', flag: '🇮🇳', isp: 'Airtel' },
+                    { country: 'USA', city: 'New York', flag: '🇺🇸', isp: 'Verizon' },
+                    { country: 'UK', city: 'London', flag: '🇬🇧', isp: 'BT' },
+                    { country: 'Canada', city: 'Toronto', flag: '🇨🇦', isp: 'Rogers' },
+                    { country: 'Australia', city: 'Sydney', flag: '🇦🇺', isp: 'Telstra' }
+                ];
+                
+                const browsers = ['Chrome', 'Firefox', 'Safari', 'Edge'];
+                const os = ['Windows', 'macOS', 'Linux', 'iOS', 'Android'];
+                const devices = ['Desktop', 'Mobile', 'Tablet'];
+                const pages = ['/home', '/services', '/about', '/contact', '/energy-audit'];
+
+                // Generate historical data for the past year
+                for (let i = 0; i < 1000; i++) {
+                    const location = locations[Math.floor(Math.random() * locations.length)];
+                    const sessionDuration = Math.floor(Math.random() * 3600) + 30;
+                    const ip = this.generateIP();
