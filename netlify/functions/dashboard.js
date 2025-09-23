@@ -416,6 +416,12 @@
             color: white;
         }
 
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+        }
+
         @media (max-width: 768px) {
             .dashboard {
                 padding: 15px;
@@ -445,12 +451,6 @@
             .tabs {
                 flex-direction: column;
             }
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #7f8c8d;
         }
     </style>
 </head>
@@ -595,9 +595,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="pagination" id="pagination">
-                    <!-- Pagination controls -->
-                </div>
+                <div class="pagination" id="pagination"></div>
             </div>
         </div>
 
@@ -708,13 +706,11 @@
             init() {
                 this.generateSampleData();
                 this.generateHistoricalData();
-                this.generateIPDatabase();
                 this.updateAllDisplays();
                 this.setupEventListeners();
                 this.startRealTimeTracking();
                 this.trackCurrentVisitor();
                 
-                // Set current date for date input
                 const today = new Date().toISOString().split('T')[0];
                 const dateToElement = document.getElementById('dateTo');
                 if (dateToElement) {
@@ -723,15 +719,18 @@
             }
 
             generateIP() {
-                return `${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 256)}`;
+                return Math.floor(Math.random() * 256) + '.' +
+                       Math.floor(Math.random() * 256) + '.' +
+                       Math.floor(Math.random() * 256) + '.' +
+                       Math.floor(Math.random() * 256);
             }
 
             generateUserAgent() {
                 const userAgents = [
-                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-                    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-                    'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1',
+                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+                    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36',
+                    'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15',
                     'Mozilla/5.0 (Android 11; Mobile; rv:68.0) Gecko/68.0 Firefox/88.0'
                 ];
                 return userAgents[Math.floor(Math.random() * userAgents.length)];
@@ -756,15 +755,13 @@
                 const devices = ['Desktop', 'Mobile', 'Tablet'];
                 const pages = ['/home', '/services', '/about', '/contact', '/energy-audit', '/consultation', '/projects', '/blog'];
 
-                // Generate current real-time visitors
                 for (let i = 0; i < 15; i++) {
                     const location = locations[Math.floor(Math.random() * locations.length)];
                     const sessionTime = Math.floor(Math.random() * 1800) + 30;
                     const ip = this.generateIP();
-                    const visitDate = new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000);
                     
                     const visitor = {
-                        id: 'H' + (10000 + i),
+                        id: 'RT' + (1000 + i),
                         ip: ip,
                         location: location,
                         browser: browsers[Math.floor(Math.random() * browsers.length)],
@@ -783,25 +780,22 @@
                     this.updateIPDatabase(ip, visitor);
                 }
                 
-                // Sort by timestamp (most recent first)
                 this.historicalData.sort((a, b) => b.timestamp - a.timestamp);
-            }
-
-            generateIPDatabase() {
-                // This will be populated by updateIPDatabase calls
             }
 
             updateIPDatabase(ip, visitor) {
                 if (this.ipDatabase.has(ip)) {
-                    const ipData = this.ipDatabase.get(ip);
+                    var ipData = this.ipDatabase.get(ip);
                     ipData.totalVisits++;
                     ipData.totalPages += visitor.pageViews;
-                    ipData.totalTime += visitor.sessionDuration || visitor.sessionTime || 0;
+                    var sessionTime = visitor.sessionDuration || visitor.sessionTime || 0;
+                    ipData.totalTime += sessionTime;
                     ipData.lastVisit = visitor.timestamp;
                     if (visitor.timestamp < ipData.firstVisit) {
                         ipData.firstVisit = visitor.timestamp;
                     }
                 } else {
+                    var sessionTime = visitor.sessionDuration || visitor.sessionTime || 0;
                     this.ipDatabase.set(ip, {
                         ip: ip,
                         firstVisit: visitor.timestamp,
@@ -809,15 +803,14 @@
                         totalVisits: 1,
                         location: visitor.location,
                         totalPages: visitor.pageViews || 1,
-                        totalTime: visitor.sessionDuration || visitor.sessionTime || 0,
+                        totalTime: sessionTime,
                         status: 'active'
                     });
                 }
             }
 
             trackCurrentVisitor() {
-                // Track the actual current visitor
-                const currentVisitorIP = this.generateIP(); // In real implementation, get actual IP
+                const currentVisitorIP = this.generateIP();
                 const currentVisitor = {
                     id: 'CURRENT',
                     ip: currentVisitorIP,
@@ -873,26 +866,22 @@
             }
 
             updateRealTimeData() {
-                // Simulate real-time updates
                 this.visitors.forEach(visitor => {
                     if (visitor.status === 'online' && Math.random() > 0.7) {
                         visitor.sessionTime += 3;
                         
-                        // Sometimes change pages
                         if (Math.random() > 0.8) {
                             const pages = ['/home', '/services', '/about', '/contact', '/energy-audit'];
                             visitor.currentPage = pages[Math.floor(Math.random() * pages.length)];
                             visitor.pageViews++;
                         }
                         
-                        // Sometimes go offline
                         if (Math.random() > 0.95) {
                             visitor.status = 'offline';
                         }
                     }
                 });
 
-                // Add new visitors occasionally
                 if (Math.random() > 0.8) {
                     this.addNewVisitor();
                 }
@@ -901,16 +890,16 @@
             }
 
             addNewVisitor() {
-                const locations = [
+                var locations = [
                     { country: 'India', city: 'Mumbai', flag: '🇮🇳', isp: 'Jio' },
                     { country: 'USA', city: 'San Francisco', flag: '🇺🇸', isp: 'Comcast' },
                     { country: 'UK', city: 'Manchester', flag: '🇬🇧', isp: 'Virgin' }
                 ];
                 
-                const location = locations[Math.floor(Math.random() * locations.length)];
-                const ip = this.generateIP();
+                var location = locations[Math.floor(Math.random() * locations.length)];
+                var ip = this.generateIP();
                 
-                const newVisitor = {
+                var newVisitor = {
                     id: 'RT' + Date.now(),
                     ip: ip,
                     location: location,
@@ -930,8 +919,7 @@
                 this.visitors.unshift(newVisitor);
                 this.updateIPDatabase(ip, newVisitor);
                 
-                // Update counters safely
-                const currentTotal = parseInt(document.getElementById('todayVisitors').textContent) || 0;
+                var currentTotal = parseInt(document.getElementById('todayVisitors').textContent) || 0;
                 document.getElementById('todayVisitors').textContent = currentTotal + 1;
             }
 
@@ -944,37 +932,34 @@
             }
 
             updateStats() {
-                // Update real-time stats
-                const onlineVisitors = this.visitors.filter(v => v.status === 'online').length;
-                const todayVisitors = this.visitors.length;
-                const uniqueIPs = new Set(this.visitors.map(v => v.ip)).size;
-                const totalPages = this.visitors.reduce((sum, v) => sum + (v.pageViews || 1), 0);
+                var onlineVisitors = this.visitors.filter(function(v) { return v.status === 'online'; }).length;
+                var todayVisitors = this.visitors.length;
+                var uniqueIPs = new Set(this.visitors.map(function(v) { return v.ip; })).size;
+                var totalPages = this.visitors.reduce(function(sum, v) { return sum + (v.pageViews || 1); }, 0);
 
                 document.getElementById('activeSessions').textContent = onlineVisitors;
                 document.getElementById('todayVisitors').textContent = todayVisitors;
                 document.getElementById('uniqueIPs').textContent = uniqueIPs;
                 document.getElementById('pageViews').textContent = totalPages;
 
-                // Update historical stats
-                const yearlyVisitors = this.historicalData.length;
-                const yearlyUniqueIPs = new Set(this.historicalData.map(v => v.ip)).size;
-                const monthlyAvg = Math.floor(yearlyVisitors / 12);
-                const returnRate = Math.floor((yearlyUniqueIPs / yearlyVisitors) * 100);
+                var yearlyVisitors = this.historicalData.length;
+                var yearlyUniqueIPs = new Set(this.historicalData.map(function(v) { return v.ip; })).size;
+                var monthlyAvg = Math.floor(yearlyVisitors / 12);
+                var returnRate = Math.floor((yearlyUniqueIPs / yearlyVisitors) * 100);
 
                 document.getElementById('yearlyVisitors').textContent = yearlyVisitors.toLocaleString();
                 document.getElementById('yearlyUniqueIPs').textContent = yearlyUniqueIPs.toLocaleString();
                 document.getElementById('monthlyAvg').textContent = monthlyAvg.toLocaleString();
                 document.getElementById('returnVisitors').textContent = returnRate + '%';
 
-                // Update IP tracking stats
-                const totalIPs = this.ipDatabase.size;
-                const uniqueCountries = new Set(Array.from(this.ipDatabase.values()).map(ip => ip.location.country)).size;
-                const returnIPs = Array.from(this.ipDatabase.values()).filter(ip => ip.totalVisits > 1).length;
+                var totalIPs = this.ipDatabase.size;
+                var uniqueCountries = new Set(Array.from(this.ipDatabase.values()).map(function(ip) { return ip.location.country; })).size;
+                var returnIPs = Array.from(this.ipDatabase.values()).filter(function(ip) { return ip.totalVisits > 1; }).length;
 
                 document.getElementById('totalIPs').textContent = totalIPs.toLocaleString();
                 document.getElementById('uniqueCountries').textContent = uniqueCountries;
                 document.getElementById('returnIPs').textContent = returnIPs.toLocaleString();
-                document.getElementById('blockedIPs').textContent = '23'; // Static for demo
+                document.getElementById('blockedIPs').textContent = '23';
             }
 
             updateRealtimeDisplay() {
@@ -985,34 +970,16 @@
                 
                 this.visitors.slice(0, 20).forEach(visitor => {
                     const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${this.formatTimestamp(visitor.timestamp)}</td>
-                        <td><span class="ip-address">${visitor.ip}</span></td>
-                        <td>
-                            <div class="location">
-                                <span class="flag">${visitor.location.flag}</span>
-                                <div>
-                                    <div style="font-weight: 600;">${visitor.location.city}</div>
-                                    <div style="font-size: 0.8em; color: #7f8c8d;">${visitor.location.country}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="device-info">
-                                <div class="device-type">${visitor.device}</div>
-                                <div class="browser-os">${visitor.browser} / ${visitor.os}</div>
-                            </div>
-                        </td>
-                        <td>${visitor.currentPage}</td>
-                        <td>${this.formatDuration(visitor.sessionTime || 0)}</td>
-                        <td>${visitor.pageViews}</td>
-                        <td><span class="status ${visitor.status}">${visitor.status}</span></td>
-                        <td>
-                            <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.8em;" onclick="viewVisitorDetails('${visitor.id}')">
-                                👁️ View
-                            </button>
-                        </td>
-                    `;
+                    row.innerHTML = 
+                        '<td>' + this.formatTimestamp(visitor.timestamp) + '</td>' +
+                        '<td><span class="ip-address">' + visitor.ip + '</span></td>' +
+                        '<td><div class="location"><span class="flag">' + visitor.location.flag + '</span><div><div style="font-weight: 600;">' + visitor.location.city + '</div><div style="font-size: 0.8em; color: #7f8c8d;">' + visitor.location.country + '</div></div></div></td>' +
+                        '<td><div class="device-info"><div class="device-type">' + visitor.device + '</div><div class="browser-os">' + visitor.browser + ' / ' + visitor.os + '</div></div></td>' +
+                        '<td>' + visitor.currentPage + '</td>' +
+                        '<td>' + this.formatDuration(visitor.sessionTime || 0) + '</td>' +
+                        '<td>' + visitor.pageViews + '</td>' +
+                        '<td><span class="status ' + visitor.status + '">' + visitor.status + '</span></td>' +
+                        '<td><button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.8em;" onclick="viewVisitorDetails(\'' + visitor.id + '\')">👁️ View</button></td>';
                     tbody.appendChild(row);
                 });
             }
@@ -1029,93 +996,75 @@
                 
                 pageData.forEach(visitor => {
                     const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${this.formatTimestamp(visitor.timestamp)}</td>
-                        <td><span class="ip-address">${visitor.ip}</span></td>
-                        <td>
-                            <div class="location">
-                                <span class="flag">${visitor.location.flag}</span>
-                                <div>
-                                    <div style="font-weight: 600;">${visitor.location.city}</div>
-                                    <div style="font-size: 0.8em; color: #7f8c8d;">${visitor.location.country}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="device-info">
-                                <div class="device-type">${visitor.device}</div>
-                                <div class="browser-os">${visitor.browser} / ${visitor.os}</div>
-                            </div>
-                        </td>
-                        <td>${visitor.entryPage}</td>
-                        <td>${visitor.exitPage}</td>
-                        <td>${this.formatDuration(visitor.sessionDuration || 0)}</td>
-                        <td>${visitor.pageViews}</td>
-                        <td>${visitor.referrer}</td>
-                    `;
+                    row.innerHTML = 
+                        '<td>' + this.formatTimestamp(visitor.timestamp) + '</td>' +
+                        '<td><span class="ip-address">' + visitor.ip + '</span></td>' +
+                        '<td><div class="location"><span class="flag">' + visitor.location.flag + '</span><div><div style="font-weight: 600;">' + visitor.location.city + '</div><div style="font-size: 0.8em; color: #7f8c8d;">' + visitor.location.country + '</div></div></div></td>' +
+                        '<td><div class="device-info"><div class="device-type">' + visitor.device + '</div><div class="browser-os">' + visitor.browser + ' / ' + visitor.os + '</div></div></td>' +
+                        '<td>' + visitor.entryPage + '</td>' +
+                        '<td>' + visitor.exitPage + '</td>' +
+                        '<td>' + this.formatDuration(visitor.sessionDuration || 0) + '</td>' +
+                        '<td>' + visitor.pageViews + '</td>' +
+                        '<td>' + visitor.referrer + '</td>';
                     tbody.appendChild(row);
                 });
                 
                 this.updatePagination();
                 
-                // Update record count
                 const countElement = document.getElementById('historicalCount');
                 if (countElement) {
-                    countElement.textContent = `Showing ${Math.min(this.pageSize, pageData.length)} of ${this.historicalData.length.toLocaleString()} records`;
+                    countElement.textContent = 'Showing ' + Math.min(this.pageSize, pageData.length) + ' of ' + this.historicalData.length.toLocaleString() + ' records';
                 }
             }
 
             updateAnalyticsDisplay() {
-                // Top Countries
                 const countries = {};
-                [...this.visitors, ...this.historicalData].forEach(v => {
+                const allVisitors = this.visitors.concat(this.historicalData);
+                allVisitors.forEach(v => {
                     countries[v.location.country] = (countries[v.location.country] || 0) + 1;
                 });
                 
                 const topCountries = Object.entries(countries)
-                    .sort(([,a], [,b]) => b - a)
+                    .sort((a, b) => b[1] - a[1])
                     .slice(0, 5);
                 
                 const countriesList = document.getElementById('topCountries');
                 if (countriesList) {
-                    countriesList.innerHTML = topCountries.map(([country, count]) => 
-                        `<li><span>${country}</span><span>${count}</span></li>`
+                    countriesList.innerHTML = topCountries.map(entry => 
+                        '<li><span>' + entry[0] + '</span><span>' + entry[1] + '</span></li>'
                     ).join('');
                 }
 
-                // Device Types
                 const devices = {};
-                [...this.visitors, ...this.historicalData].forEach(v => {
+                allVisitors.forEach(v => {
                     devices[v.device] = (devices[v.device] || 0) + 1;
                 });
                 
                 const devicesList = document.getElementById('deviceTypes');
                 if (devicesList) {
                     devicesList.innerHTML = Object.entries(devices)
-                        .sort(([,a], [,b]) => b - a)
-                        .map(([device, count]) => 
-                            `<li><span>${device}</span><span>${count}</span></li>`
+                        .sort((a, b) => b[1] - a[1])
+                        .map(entry => 
+                            '<li><span>' + entry[0] + '</span><span>' + entry[1] + '</span></li>'
                         ).join('');
                 }
 
-                // Browsers
                 const browsers = {};
-                [...this.visitors, ...this.historicalData].forEach(v => {
+                allVisitors.forEach(v => {
                     browsers[v.browser] = (browsers[v.browser] || 0) + 1;
                 });
                 
                 const browsersList = document.getElementById('topBrowsers');
                 if (browsersList) {
                     browsersList.innerHTML = Object.entries(browsers)
-                        .sort(([,a], [,b]) => b - a)
-                        .map(([browser, count]) => 
-                            `<li><span>${browser}</span><span>${count}</span></li>`
+                        .sort((a, b) => b[1] - a[1])
+                        .map(entry => 
+                            '<li><span>' + entry[0] + '</span><span>' + entry[1] + '</span></li>'
                         ).join('');
                 }
 
-                // Top Pages
                 const pages = {};
-                [...this.visitors, ...this.historicalData].forEach(v => {
+                allVisitors.forEach(v => {
                     const page = v.currentPage || v.entryPage;
                     pages[page] = (pages[page] || 0) + 1;
                 });
@@ -1123,10 +1072,10 @@
                 const pagesList = document.getElementById('topPages');
                 if (pagesList) {
                     pagesList.innerHTML = Object.entries(pages)
-                        .sort(([,a], [,b]) => b - a)
+                        .sort((a, b) => b[1] - a[1])
                         .slice(0, 5)
-                        .map(([page, count]) => 
-                            `<li><span>${page}</span><span>${count}</span></li>`
+                        .map(entry => 
+                            '<li><span>' + entry[0] + '</span><span>' + entry[1] + '</span></li>'
                         ).join('');
                 }
             }
@@ -1140,22 +1089,16 @@
                 const ipArray = Array.from(this.ipDatabase.values());
                 ipArray.slice(0, 50).forEach(ipData => {
                     const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td><span class="ip-address">${ipData.ip}</span></td>
-                        <td>${this.formatTimestamp(ipData.firstVisit)}</td>
-                        <td>${this.formatTimestamp(ipData.lastVisit)}</td>
-                        <td>${ipData.totalVisits}</td>
-                        <td>
-                            <div class="location">
-                                <span class="flag">${ipData.location.flag}</span>
-                                <span>${ipData.location.city}, ${ipData.location.country}</span>
-                            </div>
-                        </td>
-                        <td>${ipData.location.isp}</td>
-                        <td>${ipData.totalPages}</td>
-                        <td>${this.formatDuration(ipData.totalTime)}</td>
-                        <td><span class="status ${ipData.status}">${ipData.status}</span></td>
-                    `;
+                    row.innerHTML = 
+                        '<td><span class="ip-address">' + ipData.ip + '</span></td>' +
+                        '<td>' + this.formatTimestamp(ipData.firstVisit) + '</td>' +
+                        '<td>' + this.formatTimestamp(ipData.lastVisit) + '</td>' +
+                        '<td>' + ipData.totalVisits + '</td>' +
+                        '<td><div class="location"><span class="flag">' + ipData.location.flag + '</span><span>' + ipData.location.city + ', ' + ipData.location.country + '</span></div></td>' +
+                        '<td>' + ipData.location.isp + '</td>' +
+                        '<td>' + ipData.totalPages + '</td>' +
+                        '<td>' + this.formatDuration(ipData.totalTime) + '</td>' +
+                        '<td><span class="status ' + ipData.status + '">' + ipData.status + '</span></td>';
                     tbody.appendChild(row);
                 });
             }
@@ -1167,33 +1110,34 @@
                 
                 pagination.innerHTML = '';
                 
-                // Previous button
                 if (this.currentPage > 1) {
                     const prevBtn = document.createElement('button');
                     prevBtn.className = 'page-btn';
                     prevBtn.textContent = '← Previous';
-                    prevBtn.onclick = () => this.changePage(this.currentPage - 1);
+                    const self = this;
+                    prevBtn.onclick = function() { self.changePage(self.currentPage - 1); };
                     pagination.appendChild(prevBtn);
                 }
                 
-                // Page numbers
                 const startPage = Math.max(1, this.currentPage - 2);
                 const endPage = Math.min(totalPages, this.currentPage + 2);
                 
                 for (let i = startPage; i <= endPage; i++) {
                     const pageBtn = document.createElement('button');
-                    pageBtn.className = `page-btn ${i === this.currentPage ? 'active' : ''}`;
+                    pageBtn.className = 'page-btn' + (i === this.currentPage ? ' active' : '');
                     pageBtn.textContent = i;
-                    pageBtn.onclick = () => this.changePage(i);
+                    const self = this;
+                    const pageNum = i;
+                    pageBtn.onclick = function() { self.changePage(pageNum); };
                     pagination.appendChild(pageBtn);
                 }
                 
-                // Next button
                 if (this.currentPage < totalPages) {
                     const nextBtn = document.createElement('button');
                     nextBtn.className = 'page-btn';
                     nextBtn.textContent = 'Next →';
-                    nextBtn.onclick = () => this.changePage(this.currentPage + 1);
+                    const self = this;
+                    nextBtn.onclick = function() { self.changePage(self.currentPage + 1); };
                     pagination.appendChild(nextBtn);
                 }
             }
@@ -1219,34 +1163,36 @@
                 const secs = seconds % 60;
                 
                 if (hours > 0) {
-                    return `${hours}h ${mins}m ${secs}s`;
+                    return hours + 'h ' + mins + 'm ' + secs + 's';
                 } else if (mins > 0) {
-                    return `${mins}m ${secs}s`;
+                    return mins + 'm ' + secs + 's';
                 } else {
-                    return `${secs}s`;
+                    return secs + 's';
                 }
             }
 
             setupEventListeners() {
-                // Search functionality
                 const searchBox = document.getElementById('searchBox');
                 if (searchBox) {
-                    searchBox.addEventListener('input', (e) => {
-                        this.filterVisitors(e.target.value, 'realtime');
+                    const self = this;
+                    searchBox.addEventListener('input', function(e) {
+                        self.filterVisitors(e.target.value, 'realtime');
                     });
                 }
                 
                 const historicalSearch = document.getElementById('historicalSearch');
                 if (historicalSearch) {
-                    historicalSearch.addEventListener('input', (e) => {
-                        this.filterVisitors(e.target.value, 'historical');
+                    const self = this;
+                    historicalSearch.addEventListener('input', function(e) {
+                        self.filterVisitors(e.target.value, 'historical');
                     });
                 }
                 
                 const ipSearch = document.getElementById('ipSearch');
                 if (ipSearch) {
-                    ipSearch.addEventListener('input', (e) => {
-                        this.filterVisitors(e.target.value, 'ip');
+                    const self = this;
+                    ipSearch.addEventListener('input', function(e) {
+                        self.filterVisitors(e.target.value, 'ip');
                     });
                 }
             }
@@ -1254,35 +1200,33 @@
             filterVisitors(searchTerm, type) {
                 const tableId = type === 'realtime' ? 'realtimeData' : 
                               type === 'historical' ? 'historicalData' : 'ipTrackingData';
-                const rows = document.querySelectorAll(`#${tableId} tr`);
+                const rows = document.querySelectorAll('#' + tableId + ' tr');
                 
-                rows.forEach(row => {
+                rows.forEach(function(row) {
                     const text = row.textContent.toLowerCase();
                     row.style.display = text.includes(searchTerm.toLowerCase()) ? '' : 'none';
                 });
             }
         }
 
-        // Global variables
-        let tracker = null;
+        var tracker = null;
 
-        // Global functions with safety checks
         function showTab(tabName, clickedElement) {
-            // Hide all tab contents
             const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => content.classList.remove('active'));
+            tabContents.forEach(function(content) {
+                content.classList.remove('active');
+            });
             
-            // Remove active class from all tabs
             const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
+            tabs.forEach(function(tab) {
+                tab.classList.remove('active');
+            });
             
-            // Show selected tab content
             const selectedContent = document.getElementById(tabName);
             if (selectedContent) {
                 selectedContent.classList.add('active');
             }
             
-            // Add active class to clicked tab
             if (clickedElement) {
                 clickedElement.classList.add('active');
             }
@@ -1324,13 +1268,7 @@
                 return;
             }
 
-            const data = {
-                visitors: tracker.visitors,
-                historical: tracker.historicalData,
-                ipDatabase: Array.from(tracker.ipDatabase.values())
-            };
-            
-            alert(`📊 Exporting data in ${format.toUpperCase()} format...\n\nExport includes:\n• ${data.visitors.length} real-time sessions\n• ${data.historical.length} historical records\n• ${data.ipDatabase.length} unique IP addresses\n• Complete visitor analytics\n• Geographic data\n• Device & browser statistics`);
+            alert('📊 Exporting data in ' + format.toUpperCase() + ' format...\n\nExport includes:\n• ' + tracker.visitors.length + ' real-time sessions\n• ' + tracker.historicalData.length + ' historical records\n• ' + tracker.ipDatabase.size + ' unique IP addresses\n• Complete visitor analytics\n• Geographic data\n• Device & browser statistics');
         }
 
         function exportHistorical() {
@@ -1339,7 +1277,7 @@
                 return;
             }
 
-            alert(`📊 Exporting historical data...\n\nIncludes:\n• All ${tracker.historicalData.length} historical visits\n• IP address records\n• Geographic distribution\n• Time-based analytics\n• Session details`);
+            alert('📊 Exporting historical data...\n\nIncludes:\n• All ' + tracker.historicalData.length + ' historical visits\n• IP address records\n• Geographic distribution\n• Time-based analytics\n• Session details');
         }
 
         function exportIPData() {
@@ -1348,7 +1286,7 @@
                 return;
             }
 
-            alert(`🌐 Exporting IP database...\n\nIncludes:\n• ${Array.from(tracker.ipDatabase.values()).length} unique IP addresses\n• Visit history for each IP\n• Geographic locations\n• ISP information\n• Activity patterns`);
+            alert('🌐 Exporting IP database...\n\nIncludes:\n• ' + tracker.ipDatabase.size + ' unique IP addresses\n• Visit history for each IP\n• Geographic locations\n• ISP information\n• Activity patterns');
         }
 
         function filterByDate() {
@@ -1360,7 +1298,7 @@
                 return;
             }
             
-            alert(`🔍 Filtering data from ${fromDate} to ${toDate}...\n\nThis would filter all historical data within the specified date range.`);
+            alert('🔍 Filtering data from ' + fromDate + ' to ' + toDate + '...\n\nThis would filter all historical data within the specified date range.');
         }
 
         function viewVisitorDetails(visitorId) {
@@ -1369,45 +1307,43 @@
                 return;
             }
 
-            const visitor = tracker.visitors.find(v => v.id === visitorId) || 
-                           tracker.historicalData.find(v => v.id === visitorId);
+            var visitor = tracker.visitors.find(function(v) { return v.id === visitorId; }) || 
+                         tracker.historicalData.find(function(v) { return v.id === visitorId; });
             
             if (visitor) {
-                alert(`🔍 Detailed Analytics for ${visitorId}:\n\n` +
-                     `IP Address: ${visitor.ip}\n` +
-                     `Location: ${visitor.location.city}, ${visitor.location.country}\n` +
-                     `Device: ${visitor.device} (${visitor.browser} on ${visitor.os})\n` +
-                     `Current/Last Page: ${visitor.currentPage || visitor.exitPage}\n` +
-                     `Session Time: ${tracker.formatDuration(visitor.sessionTime || visitor.sessionDuration || 0)}\n` +
-                     `Pages Viewed: ${visitor.pageViews}\n` +
-                     `Referrer: ${visitor.referrer}\n` +
-                     `User Agent: ${visitor.userAgent.substring(0, 50)}...`);
+                alert('🔍 Detailed Analytics for ' + visitorId + ':\n\n' +
+                     'IP Address: ' + visitor.ip + '\n' +
+                     'Location: ' + visitor.location.city + ', ' + visitor.location.country + '\n' +
+                     'Device: ' + visitor.device + ' (' + visitor.browser + ' on ' + visitor.os + ')\n' +
+                     'Current/Last Page: ' + (visitor.currentPage || visitor.exitPage) + '\n' +
+                     'Session Time: ' + tracker.formatDuration(visitor.sessionTime || visitor.sessionDuration || 0) + '\n' +
+                     'Pages Viewed: ' + visitor.pageViews + '\n' +
+                     'Referrer: ' + visitor.referrer + '\n' +
+                     'User Agent: ' + visitor.userAgent.substring(0, 50) + '...');
             }
         }
 
         function blockIP() {
             const ip = prompt('Enter IP address to block:');
             if (ip) {
-                alert(`🚫 IP address ${ip} has been blocked.\n\nThis IP will no longer be able to access your website.`);
+                alert('🚫 IP address ' + ip + ' has been blocked.\n\nThis IP will no longer be able to access your website.');
             }
         }
 
         function lookupIP() {
             const ip = prompt('Enter IP address to lookup:');
             if (ip) {
-                alert(`🔍 IP Lookup for ${ip}:\n\nLocation: New Delhi, India\nISP: Airtel Broadband\nConnection: Fiber\nThreat Level: Low\nVPN/Proxy: No\nLast Seen: 2 minutes ago\nTotal Visits: 5`);
+                alert('🔍 IP Lookup for ' + ip + ':\n\nLocation: New Delhi, India\nISP: Airtel Broadband\nConnection: Fiber\nThreat Level: Low\nVPN/Proxy: No\nLast Seen: 2 minutes ago\nTotal Visits: 5');
             }
         }
 
-        // Initialize the system when DOM is ready
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Initializing visitor tracking system...');
             tracker = new AdvancedVisitorTracker();
             console.log('Visitor tracking system initialized successfully!');
         });
 
-        // Track page visibility changes
-        document.addEventListener('visibilitychange', () => {
+        document.addEventListener('visibilitychange', function() {
             if (document.hidden) {
                 console.log('Visitor left the page');
             } else {
@@ -1415,20 +1351,18 @@
             }
         });
 
-        // Track mouse movements and clicks for engagement analysis
-        let mouseMovements = 0;
-        let clicks = 0;
+        var mouseMovements = 0;
+        var clicks = 0;
         
-        document.addEventListener('mousemove', () => {
+        document.addEventListener('mousemove', function() {
             mouseMovements++;
         });
         
-        document.addEventListener('click', () => {
+        document.addEventListener('click', function() {
             clicks++;
         });
 
-        // Send analytics data every 30 seconds (in real implementation)
-        setInterval(() => {
+        setInterval(function() {
             if (!tracker) return;
             
             const analyticsData = {
@@ -1438,27 +1372,18 @@
                 scrollDepth: Math.round((window.pageYOffset / (document.body.scrollHeight - window.innerHeight)) * 100) || 0
             };
             
-            // In real implementation, send to server
             console.log('Analytics data:', analyticsData);
             
-            // Reset counters
             mouseMovements = 0;
             clicks = 0;
         }, 30000);
 
-        // Handle errors gracefully
         window.addEventListener('error', function(e) {
             console.error('Application error:', e.error);
         });
     </script>
 </body>
-</html>
-                    
-                    const visitor = {
-                        id: 'RT' + (1000 + i),
-                        ip: ip,
-                        location: location,
-                        browser: browsers[Math.floor(Math.random() * browsers.length)],
+</html>Math.floor(Math.random() * browsers.length)],
                         os: os[Math.floor(Math.random() * os.length)],
                         device: devices[Math.floor(Math.random() * devices.length)],
                         currentPage: pages[Math.floor(Math.random() * pages.length)],
@@ -1490,8 +1415,14 @@
                 const devices = ['Desktop', 'Mobile', 'Tablet'];
                 const pages = ['/home', '/services', '/about', '/contact', '/energy-audit'];
 
-                // Generate historical data for the past year
                 for (let i = 0; i < 1000; i++) {
                     const location = locations[Math.floor(Math.random() * locations.length)];
                     const sessionDuration = Math.floor(Math.random() * 3600) + 30;
                     const ip = this.generateIP();
+                    const visitDate = new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000);
+                    
+                    const visitor = {
+                        id: 'H' + (10000 + i),
+                        ip: ip,
+                        location: location,
+                        browser: browsers[
