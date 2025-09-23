@@ -461,7 +461,7 @@
         </div>
 
         <div class="tabs">
-            <button class="tab active" onclick="showTab('realtime')">⚡ Real-time</button>
+<button class="tab active" onclick="showTab('realtime', this)">⚡ Real-time</button>
             <button class="tab" onclick="showTab('historical')">📊 Historical Data</button>
             <button class="tab" onclick="showTab('analytics')">📈 Analytics</button>
             <button class="tab" onclick="showTab('ip-tracking')">🌐 IP Tracking</button>
@@ -1259,24 +1259,29 @@
         }
 
         // Global functions
-        function showTab(tabName) {
-            // Hide all tab contents
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => content.classList.remove('active'));
-            
-            // Remove active class from all tabs
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Show selected tab content
-            const selectedContent = document.getElementById(tabName);
-            if (selectedContent) {
-                selectedContent.classList.add('active');
-            }
-            
-            // Add active class to clicked tab
-            const clickedTab = event.target;
-            clickedTab.classList.add('active');
+    function showTab(tabName) {
+    // Hide all tab contents
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach(content => content.classList.remove('active'));
+    
+    // Remove active class from all tabs
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    // Show selected tab content
+    const selectedContent = document.getElementById(tabName);
+    if (selectedContent) {
+        selectedContent.classList.add('active');
+    }
+    
+    // Find and activate the correct tab by matching the onclick parameter
+    tabs.forEach(tab => {
+        if (tab.onclick && tab.onclick.toString().includes(`'${tabName}'`)) {
+            tab.classList.add('active');
+        }
+    });
+
+   
         }
 
         function refreshData() {
@@ -1366,7 +1371,12 @@
         }
 
         // Initialize the tracking system
-        const tracker = new AdvancedVisitorTracker();
+      let tracker; // Declare globally first
+
+// Then initialize it
+document.addEventListener('DOMContentLoaded', function() {
+    tracker = new AdvancedVisitorTracker();
+});
 
         // Track page visibility changes
         document.addEventListener('visibilitychange', () => {
