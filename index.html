@@ -2002,18 +2002,17 @@ useEffect(() => {
       const root = ReactDOM.createRoot(rootElement);
       root.render(<App />);
     </script>
-<!-- AK Energy Consultant - Independent Visitor Tracking -->
+<!-- AK Energy Consultant - Enhanced Tracking with IP & Location -->
 <script>
 (function() {
     'use strict';
     
-    // Configuration
     const config = {
-        respectDoNotTrack: true,
-        debug: true  // Enable for testing, set to false later
+        endpoint: '/.netlify/functions/track',
+        debug: true,
+        respectDoNotTrack: true
     };
     
-    // Check if we should track
     function shouldTrack() {
         if (config.respectDoNotTrack && navigator.doNotTrack === '1') return false;
         const ua = navigator.userAgent.toLowerCase();
@@ -2021,55 +2020,83 @@ useEffect(() => {
         return true;
     }
     
-    // Main tracking function
-    function trackVisit() {
+    function getSessionId() {
+        let sid = sessionStorage.getItem('ak_sid');
+        if (!sid) {
+            sid = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            sessionStorage.setItem('ak_sid', sid);
+        }
+        return sid;
+    }
+    
+    function getVisitorId() {
+        let vid = localStorage.getItem('ak_vid');
+        if (!vid) {
+            vid = 'vis_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('ak_vid', vid);
+        }
+        return vid;
+    }
+    
+    function trackEvent(eventName, customData = {}) {
         if (!shouldTrack()) return;
         
-        const data = {
-            page_url: window.location.pathname + window.location.search,
+        const payload = {
+            event: eventName,
+            session_id: getSessionId(),
+            visitor_id: getVisitorId(),
+            page_url: window.location.href,
+            page_path: window.location.pathname + window.location.search,
             referrer: document.referrer,
             title: document.title,
             timestamp: new Date().toISOString(),
             screen_resolution: `${screen.width}x${screen.height}`,
             viewport_size: `${window.innerWidth}x${window.innerHeight}`,
-            language: navigator.language
+            language: navigator.language,
+            user_agent: navigator.userAgent,
+            ...customData
         };
         
-        // Try POST request first
-        fetch('/.netlify/functions/track', {
+        fetch(config.endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: JSON.stringify(payload),
+            keepalive: true
         })
-        .then(response => {
-            if (config.debug) console.log('✅ AK Tracker: POST successful');
+        .then(response => response.json())
+        .then(result => {
+            if (config.debug) {
+                console.log('✅ AK Tracker:', eventName, result.location || '');
+            }
         })
-        .catch(() => {
-            // Fallback to pixel tracking
-            const params = new URLSearchParams({
-                page: data.page_url,
-                ref: data.referrer || '',
-                t: Date.now()
-            });
-            
-            const img = new Image();
-            img.src = '/.netlify/functions/track-pixel?' + params.toString();
-            
-            if (config.debug) console.log('🔄 AK Tracker: Using pixel fallback');
+        .catch(err => {
+            if (config.debug) console.error('❌ Track failed:', err);
         });
     }
     
-    // Track when page loads
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', trackVisit);
-    } else {
-        trackVisit();
-    }
+    trackEvent('page_view');
     
-    // Expose global API
-    window.AKTracker = { track: trackVisit };
+    let startTime = Date.now();
+    window.addEventListener('beforeunload', () => {
+        const timeOnPage = Math.floor((Date.now() - startTime) / 1000);
+        trackEvent('page_exit', { time_on_page: timeOnPage });
+    });
     
-    if (config.debug) console.log('🚀 AK Tracker: Loaded successfully');
+    document.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+            trackEvent('click', {
+                element: e.target.tagName,
+                text: e.target.textContent.substring(0, 50),
+                href: e.target.href || ''
+            });
+        }
+    });
+    
+    window.AKTracker = { 
+        track: (name, data) => trackEvent(name, data)
+    };
+    
+    if (config.debug) console.log('🚀 AK Tracker initialized with IP capture');
 })();
 </script>
 </body>
