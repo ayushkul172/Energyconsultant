@@ -1,88 +1,52 @@
-const https = require('https');
+const fetch = require('node-fetch');
 
-exports.handler = async (event, context) => {
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS'
-      },
-      body: ''
-    };
-  }
-
+exports.handler = async (event) => {
+  // Only accept POST requests
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
+    return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
   try {
-    const ip = event.headers['x-forwarded-for']?.split(',')[0].trim() || 
-                event.headers['x-real-ip'] || 
-                'unknown';
-
-    const trackingData = JSON.parse(event.body);
-    let location = { ip };
+    const data = JSON.parse(event.body);
+    const clientIP = event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'unknown';
     
-    if (ip !== 'unknown') {
-      try {
-        const geoData = await new Promise((resolve, reject) => {
-          https.get(`https://ipapi.co/${ip}/json/`, (res) => {
-            let data = '';
-            res.on('data', chunk => data += chunk);
-            res.on('end', () => {
-              try {
-                resolve(JSON.parse(data));
-              } catch (e) {
-                reject(e);
-              }
-            });
-          }).on('error', reject);
-        });
-
-        location = {
-          ip: geoData.ip,
-          city: geoData.city,
-          country: geoData.country_name,
-          region: geoData.region,
-          isp: geoData.org
-        };
-      } catch (error) {
-        console.error('Geo lookup failed:', error.message);
-      }
+    // Get location data from IP
+    let locationData = {};
+    try {
+      const geoResponse = await fetch(`http://ip-api.com/json/${clientIP}`);
+      locationData = await geoResponse.json();
+    } catch (err) {
+      console.error('Location fetch failed:', err);
     }
 
-    const fullData = {
-      ...trackingData,
-      location,
-      server_timestamp: new Date().toISOString()
+    // Combine all tracking data
+    const trackingData = {
+      ...data,
+      ip_address: clientIP,
+      location: locationData.city || 'Unknown',
+      country: locationData.country || 'Unknown',
+      region: locationData.regionName || 'Unknown',
+      isp: locationData.isp || 'Unknown',
+      timezone: locationData.timezone || 'Unknown'
     };
 
-    console.log('📊 Visitor tracked:', JSON.stringify(fullData, null, 2));
+    // Log to console (you can send to analytics service here)
+    console.log('📊 Visitor tracked:', trackingData);
 
+    // Return success with location info
     return {
       statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.stringify({
-        success: true,
-        ip: location.ip,
-        location: location.city ? `${location.city}, ${location.country}` : 'Unknown'
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        success: true, 
+        location: `${locationData.city}, ${locationData.country}` 
       })
     };
-
   } catch (error) {
-    console.error('Tracking error:', error.message);
+    console.error('Tracking error:', error);
     return {
       statusCode: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.stringify({ success: false, error: error.message })
+      body: JSON.stringify({ error: 'Tracking failed' })
     };
   }
 };
