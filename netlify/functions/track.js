@@ -1,3 +1,5 @@
+const https = require('https');
+
 exports.handler = async (event, context) => {
   if (event.httpMethod === 'OPTIONS') {
     return {
@@ -12,10 +14,7 @@ exports.handler = async (event, context) => {
   }
 
   if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      body: JSON.stringify({ error: 'Method not allowed' })
-    };
+    return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
 
   try {
@@ -24,23 +23,33 @@ exports.handler = async (event, context) => {
                 'unknown';
 
     const trackingData = JSON.parse(event.body);
-
     let location = { ip };
     
     if (ip !== 'unknown') {
       try {
-        const response = await fetch(`https://ipapi.co/${ip}/json/`);
-        const geo = await response.json();
-        
+        const geoData = await new Promise((resolve, reject) => {
+          https.get(`https://ipapi.co/${ip}/json/`, (res) => {
+            let data = '';
+            res.on('data', chunk => data += chunk);
+            res.on('end', () => {
+              try {
+                resolve(JSON.parse(data));
+              } catch (e) {
+                reject(e);
+              }
+            });
+          }).on('error', reject);
+        });
+
         location = {
-          ip: geo.ip,
-          city: geo.city,
-          country: geo.country_name,
-          region: geo.region,
-          isp: geo.org
+          ip: geoData.ip,
+          city: geoData.city,
+          country: geoData.country_name,
+          region: geoData.region,
+          isp: geoData.org
         };
       } catch (error) {
-        console.error('Geo lookup failed:', error);
+        console.error('Geo lookup failed:', error.message);
       }
     }
 
@@ -50,7 +59,7 @@ exports.handler = async (event, context) => {
       server_timestamp: new Date().toISOString()
     };
 
-    console.log('Visitor tracked:', JSON.stringify(fullData, null, 2));
+    console.log('📊 Visitor tracked:', JSON.stringify(fullData, null, 2));
 
     return {
       statusCode: 200,
@@ -60,23 +69,20 @@ exports.handler = async (event, context) => {
       },
       body: JSON.stringify({
         success: true,
+        ip: location.ip,
         location: location.city ? `${location.city}, ${location.country}` : 'Unknown'
       })
     };
 
   } catch (error) {
-    console.error('Tracking error:', error);
-    
+    console.error('Tracking error:', error.message);
     return {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
       },
-      body: JSON.stringify({
-        success: false,
-        error: error.message
-      })
+      body: JSON.stringify({ success: false, error: error.message })
     };
   }
 };
