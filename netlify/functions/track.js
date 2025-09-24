@@ -1,7 +1,4 @@
-const fetch = require('node-fetch');
-
 exports.handler = async (event) => {
-  // Only accept POST requests
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
@@ -10,7 +7,7 @@ exports.handler = async (event) => {
     const data = JSON.parse(event.body);
     const clientIP = event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'unknown';
     
-    // Get location data from IP
+    // Get location data from IP (using native fetch)
     let locationData = {};
     try {
       const geoResponse = await fetch(`http://ip-api.com/json/${clientIP}`);
@@ -19,7 +16,6 @@ exports.handler = async (event) => {
       console.error('Location fetch failed:', err);
     }
 
-    // Combine all tracking data
     const trackingData = {
       ...data,
       ip_address: clientIP,
@@ -30,10 +26,8 @@ exports.handler = async (event) => {
       timezone: locationData.timezone || 'Unknown'
     };
 
-    // Log to console (you can send to analytics service here)
     console.log('📊 Visitor tracked:', trackingData);
 
-    // Return success with location info
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
