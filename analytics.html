@@ -6,141 +6,347 @@
     <title>Analytics Dashboard - AK Energy Consultant</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .stat-card { transition: transform 0.2s; }
+        .stat-card:hover { transform: translateY(-5px); }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
 </head>
-<body class="bg-gray-50">
-    <div class="min-h-screen p-8">
-        <div class="max-w-7xl mx-auto">
-            <!-- Header -->
-            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">
-                    <i class="fas fa-chart-line text-blue-600"></i> Analytics Dashboard
-                </h1>
-                <p class="text-gray-600">Real-time visitor tracking and analytics</p>
+<body class="bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-6 mb-8 border border-white/20">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-4xl font-bold text-white mb-2">
+                        <i class="fas fa-chart-line text-cyan-400"></i> Analytics Dashboard
+                    </h1>
+                    <p class="text-gray-300">Real-time comprehensive visitor tracking</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-gray-400">Last Updated</div>
+                    <div class="text-white font-mono" id="lastUpdate">--:--:--</div>
+                    <button onclick="loadData()" class="mt-2 px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
             </div>
+        </div>
 
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-                <div class="bg-white rounded-lg shadow p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm">Total Visits</p>
-                            <p class="text-3xl font-bold text-blue-600" id="totalVisits">0</p>
-                        </div>
-                        <i class="fas fa-users text-4xl text-blue-200"></i>
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Visits -->
+            <div class="stat-card bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl shadow-xl p-6 border border-white/20">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-blue-200 text-sm font-medium">Total Visits</p>
+                        <p class="text-4xl font-bold text-white mt-2" id="totalVisits">0</p>
+                        <p class="text-blue-200 text-xs mt-1">All time</p>
                     </div>
-                </div>
-                <div class="bg-white rounded-lg shadow p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm">Unique Visitors</p>
-                            <p class="text-3xl font-bold text-green-600" id="uniqueVisitors">0</p>
-                        </div>
-                        <i class="fas fa-user-check text-4xl text-green-200"></i>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm">Countries</p>
-                            <p class="text-3xl font-bold text-purple-600" id="totalCountries">0</p>
-                        </div>
-                        <i class="fas fa-globe text-4xl text-purple-200"></i>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm">Avg Time</p>
-                            <p class="text-3xl font-bold text-orange-600" id="avgTime">0s</p>
-                        </div>
-                        <i class="fas fa-clock text-4xl text-orange-200"></i>
+                    <div class="bg-white/20 p-3 rounded-lg">
+                        <i class="fas fa-eye text-3xl text-white"></i>
                     </div>
                 </div>
             </div>
 
-            <!-- Export Button -->
-            <div class="bg-white rounded-lg shadow p-6 mb-6">
-                <button onclick="exportToCSV()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
+            <!-- Unique Visitors -->
+            <div class="stat-card bg-gradient-to-br from-green-600 to-green-800 rounded-xl shadow-xl p-6 border border-white/20">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-green-200 text-sm font-medium">Unique Visitors</p>
+                        <p class="text-4xl font-bold text-white mt-2" id="uniqueVisitors">0</p>
+                        <p class="text-green-200 text-xs mt-1">Unique IPs</p>
+                    </div>
+                    <div class="bg-white/20 p-3 rounded-lg">
+                        <i class="fas fa-users text-3xl text-white"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Countries -->
+            <div class="stat-card bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl shadow-xl p-6 border border-white/20">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-purple-200 text-sm font-medium">Countries</p>
+                        <p class="text-4xl font-bold text-white mt-2" id="totalCountries">0</p>
+                        <p class="text-purple-200 text-xs mt-1">Geographic reach</p>
+                    </div>
+                    <div class="bg-white/20 p-3 rounded-lg">
+                        <i class="fas fa-globe text-3xl text-white"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Avg Session -->
+            <div class="stat-card bg-gradient-to-br from-orange-600 to-orange-800 rounded-xl shadow-xl p-6 border border-white/20">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-orange-200 text-sm font-medium">Avg Time on Page</p>
+                        <p class="text-4xl font-bold text-white mt-2" id="avgTime">0s</p>
+                        <p class="text-orange-200 text-xs mt-1">Session duration</p>
+                    </div>
+                    <div class="bg-white/20 p-3 rounded-lg">
+                        <i class="fas fa-clock text-3xl text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="bg-white/10 backdrop-blur-md rounded-xl shadow-xl p-6 mb-8 border border-white/20">
+            <div class="flex flex-wrap gap-4">
+                <button onclick="exportToCSV()" class="px-6 py-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition font-medium">
                     <i class="fas fa-download mr-2"></i> Export to CSV
                 </button>
-                <button onclick="clearData()" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition ml-4">
-                    <i class="fas fa-trash mr-2"></i> Clear All Data
+                <button onclick="exportToJSON()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                    <i class="fas fa-file-code mr-2"></i> Export to JSON
+                </button>
+                <button onclick="filterToday()" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium">
+                    <i class="fas fa-calendar-day mr-2"></i> Today Only
+                </button>
+                <button onclick="showAllData()" class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium">
+                    <i class="fas fa-list mr-2"></i> Show All
+                </button>
+                <button onclick="clearData()" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium">
+                    <i class="fas fa-trash mr-2"></i> Clear Data
                 </button>
             </div>
+        </div>
 
-            <!-- Visitors Table -->
-            <div class="bg-white rounded-lg shadow overflow-hidden">
-                <div class="p-6 border-b">
-                    <h2 class="text-xl font-bold text-gray-800">Recent Visitors</h2>
+        <!-- Top Countries -->
+        <div class="bg-white/10 backdrop-blur-md rounded-xl shadow-xl p-6 mb-8 border border-white/20">
+            <h2 class="text-2xl font-bold text-white mb-4">
+                <i class="fas fa-map-marked-alt text-cyan-400"></i> Top Countries
+            </h2>
+            <div id="topCountries" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Will be populated dynamically -->
+            </div>
+        </div>
+
+        <!-- Visitor Table -->
+        <div class="bg-white/10 backdrop-blur-md rounded-xl shadow-xl overflow-hidden border border-white/20">
+            <div class="p-6 border-b border-white/20">
+                <h2 class="text-2xl font-bold text-white">
+                    <i class="fas fa-table text-cyan-400"></i> Detailed Visitor Log
+                </h2>
+                <p class="text-gray-300 text-sm mt-1">Comprehensive tracking data with 40+ metrics per visitor</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-white/5">
+                        <tr class="text-left">
+                            <th class="px-6 py-4 text-cyan-400 font-semibold">Timestamp</th>
+                            <th class="px-6 py-4 text-cyan-400 font-semibold">IP Address</th>
+                            <th class="px-6 py-4 text-cyan-400 font-semibold">Location</th>
+                            <th class="px-6 py-4 text-cyan-400 font-semibold">Device</th>
+                            <th class="px-6 py-4 text-cyan-400 font-semibold">Browser</th>
+                            <th class="px-6 py-4 text-cyan-400 font-semibold">ISP</th>
+                            <th class="px-6 py-4 text-cyan-400 font-semibold">Page</th>
+                            <th class="px-6 py-4 text-cyan-400 font-semibold">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="visitorTable" class="divide-y divide-white/10">
+                        <tr>
+                            <td colspan="8" class="px-6 py-12 text-center text-gray-400">
+                                <i class="fas fa-spinner fa-spin text-3xl mb-3"></i>
+                                <p>Loading visitor data...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for detailed view -->
+    <div id="detailModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-white/20">
+            <div class="p-6 border-b border-white/20 sticky top-0 bg-slate-800">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-bold text-white">Visitor Details</h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-white transition">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Time</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">IP Address</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Device</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Page</th>
-                            </tr>
-                        </thead>
-                        <tbody id="visitorTable" class="divide-y divide-gray-200">
-                            <!-- Data will be inserted here -->
-                        </tbody>
-                    </table>
-                </div>
+            </div>
+            <div id="detailContent" class="p-6">
+                <!-- Will be populated with detailed visitor info -->
             </div>
         </div>
     </div>
 
     <script>
-        // This would normally fetch from a database
-        // For now, we'll show how to structure it
-        function loadAnalytics() {
-            // In production, this would call your Netlify function to get stored data
-            // For demo purposes, showing structure
-            const mockData = [
-                {
-                    timestamp: new Date().toISOString(),
-                    ip_address: '44.203.82.108',
-                    location: 'Virginia',
-                    country: 'United States',
-                    device_type: 'Desktop',
-                    page_title: 'Home Page'
-                }
-            ];
-            
-            displayData(mockData);
+        let allVisitorData = [];
+        let filteredData = [];
+
+        function loadData() {
+            // In production, this would fetch from Netlify function
+            // For now, simulate with sample data structure
+            const sampleData = {
+                timestamp: new Date().toISOString(),
+                ip_address: '203.0.113.45',
+                city: 'Mumbai',
+                country: 'India',
+                region: 'Maharashtra',
+                timezone: 'Asia/Kolkata',
+                isp: 'Reliance Jio',
+                browser_name: 'Chrome',
+                os_name: 'Windows 10',
+                screen_resolution: '1920x1080',
+                device_type: 'Desktop',
+                page_title: 'Home Page',
+                time_on_page: 45
+            };
+
+            allVisitorData = [sampleData];
+            filteredData = [...allVisitorData];
+            displayData();
+            updateLastUpdate();
         }
 
-        function displayData(data) {
+        function displayData() {
+            const data = filteredData;
+            
+            // Update stats
             document.getElementById('totalVisits').textContent = data.length;
             document.getElementById('uniqueVisitors').textContent = new Set(data.map(d => d.ip_address)).size;
             document.getElementById('totalCountries').textContent = new Set(data.map(d => d.country)).size;
             
+            const avgTime = data.reduce((sum, d) => sum + (d.time_on_page || 0), 0) / data.length;
+            document.getElementById('avgTime').textContent = Math.round(avgTime) + 's';
+
+            // Top countries
+            const countries = {};
+            data.forEach(d => {
+                if (d.country) {
+                    countries[d.country] = (countries[d.country] || 0) + 1;
+                }
+            });
+            const topCountries = Object.entries(countries)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            document.getElementById('topCountries').innerHTML = topCountries.map(([country, count]) => `
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                    <div class="flex justify-between items-center">
+                        <span class="text-white font-medium">${country}</span>
+                        <span class="text-cyan-400 font-bold">${count}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Visitor table
             const tbody = document.getElementById('visitorTable');
-            tbody.innerHTML = data.map(visit => `
-                <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 text-sm">${new Date(visit.timestamp).toLocaleString()}</td>
-                    <td class="px-6 py-4 text-sm font-mono">${visit.ip_address}</td>
-                    <td class="px-6 py-4 text-sm">${visit.location}, ${visit.country}</td>
-                    <td class="px-6 py-4 text-sm">${visit.device_type || 'Unknown'}</td>
-                    <td class="px-6 py-4 text-sm">${visit.page_title || 'N/A'}</td>
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="px-6 py-12 text-center text-gray-400">
+                            <i class="fas fa-inbox text-3xl mb-3"></i>
+                            <p>No visitor data available</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = data.map((visitor, index) => `
+                <tr class="hover:bg-white/5 transition">
+                    <td class="px-6 py-4 text-gray-300 text-sm">${new Date(visitor.timestamp).toLocaleString()}</td>
+                    <td class="px-6 py-4 text-gray-300 font-mono text-sm">${visitor.ip_address}</td>
+                    <td class="px-6 py-4 text-gray-300 text-sm">${visitor.city}, ${visitor.country}</td>
+                    <td class="px-6 py-4 text-gray-300 text-sm">${visitor.device_type || 'Unknown'}</td>
+                    <td class="px-6 py-4 text-gray-300 text-sm">${visitor.browser_name || 'Unknown'}</td>
+                    <td class="px-6 py-4 text-gray-300 text-sm">${visitor.isp || 'Unknown'}</td>
+                    <td class="px-6 py-4 text-gray-300 text-sm">${visitor.page_title || 'N/A'}</td>
+                    <td class="px-6 py-4">
+                        <button onclick="showDetails(${index})" class="px-3 py-1 bg-cyan-600 text-white rounded hover:bg-cyan-700 transition text-sm">
+                            <i class="fas fa-info-circle"></i> View
+                        </button>
+                    </td>
                 </tr>
             `).join('');
         }
 
+        function showDetails(index) {
+            const visitor = filteredData[index];
+            const modal = document.getElementById('detailModal');
+            const content = document.getElementById('detailContent');
+            
+            content.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    ${Object.entries(visitor).map(([key, value]) => `
+                        <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                            <div class="text-cyan-400 text-sm font-semibold mb-1">${key.replace(/_/g, ' ').toUpperCase()}</div>
+                            <div class="text-white font-mono text-sm break-all">${value || 'N/A'}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
         function exportToCSV() {
-            alert('CSV export would download your analytics data');
+            const headers = Object.keys(filteredData[0] || {});
+            const csv = [
+                headers.join(','),
+                ...filteredData.map(row => headers.map(h => JSON.stringify(row[h] || '')).join(','))
+            ].join('\n');
+            
+            downloadFile(csv, 'analytics_export.csv', 'text/csv');
+        }
+
+        function exportToJSON() {
+            const json = JSON.stringify(filteredData, null, 2);
+            downloadFile(json, 'analytics_export.json', 'application/json');
+        }
+
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function filterToday() {
+            const today = new Date().toDateString();
+            filteredData = allVisitorData.filter(d => new Date(d.timestamp).toDateString() === today);
+            displayData();
+        }
+
+        function showAllData() {
+            filteredData = [...allVisitorData];
+            displayData();
         }
 
         function clearData() {
-            if (confirm('Are you sure you want to clear all analytics data?')) {
-                alert('Data cleared (in production, this would clear the database)');
+            if (confirm('Are you sure you want to clear all analytics data? This cannot be undone.')) {
+                allVisitorData = [];
+                filteredData = [];
+                displayData();
             }
         }
 
-        loadAnalytics();
+        function updateLastUpdate() {
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(loadData, 30000);
+
+        // Initial load
+        loadData();
     </script>
 </body>
 </html>
