@@ -245,6 +245,81 @@
         border-right: 2px solid rgba(6, 182, 212, 0.8);
         animation: typing 2s steps(20, end), blink-cursor 1s step-end infinite;
       }
+      
+      .floating-service-icon {
+        position: fixed;
+        top: 100px;
+        left: 20px;
+        z-index: 100;
+        cursor: pointer;
+        animation: float 3s ease-in-out infinite, glow-pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(5deg); }
+      }
+
+      @keyframes glow-pulse {
+        0%, 100% { 
+          box-shadow: 0 0 20px rgba(6, 182, 212, 0.6),
+                      0 0 40px rgba(6, 182, 212, 0.4),
+                      inset 0 0 20px rgba(6, 182, 212, 0.2);
+        }
+        50% { 
+          box-shadow: 0 0 30px rgba(6, 182, 212, 0.8),
+                      0 0 60px rgba(6, 182, 212, 0.6),
+                      inset 0 0 30px rgba(6, 182, 212, 0.4);
+        }
+      }
+
+      .floating-service-icon:hover {
+        animation: float 1s ease-in-out infinite, glow-pulse 1s ease-in-out infinite, spin 0.5s ease-in-out;
+        transform: scale(1.1);
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg) scale(1); }
+        100% { transform: rotate(360deg) scale(1.1); }
+      }
+      
+      .service-tooltip {
+        position: fixed;
+        top: 105px;
+        left: 90px;
+        z-index: 99;
+        animation: tooltip-bounce 2s ease-in-out infinite, tooltip-glow 1.5s ease-in-out infinite;
+        pointer-events: none;
+      }
+      
+      @keyframes tooltip-bounce {
+        0%, 100% { 
+          transform: translateX(0px) translateY(0px) scale(1);
+          opacity: 1;
+        }
+        50% { 
+          transform: translateX(10px) translateY(-5px) scale(1.05);
+          opacity: 0.9;
+        }
+      }
+      
+      @keyframes tooltip-glow {
+        0%, 100% { 
+          filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.5));
+        }
+        50% { 
+          filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.9));
+        }
+      }
+      
+      @keyframes arrow-pulse {
+        0%, 100% { 
+          transform: translateX(0px);
+        }
+        50% { 
+          transform: translateX(5px);
+        }
+      }
     </style>
 </head>
 <body class="bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text transition-colors duration-300">
@@ -1058,42 +1133,6 @@ href="https://www.akenergyconsultant.org/services"
             id="services" 
             className="bg-light-bg/75 dark:bg-dark-bg/75 backdrop-blur-md ring-1 ring-white/10"
           >
-              <div className="text-center mb-16">
-                  <p className="font-montserrat font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-widest mb-2">Our Services</p>
-                  <h2 className="font-montserrat text-3xl md:text-4xl font-bold text-primary-light dark:text-primary-dark mb-4">Comprehensive Energy Analytics Solutions</h2>
-                  <p className="max-w-2xl mx-auto text-light-subtle dark:text-dark-subtle">Transform your energy operations with AI-powered analytics, market intelligence, and strategic insights that deliver measurable competitive advantages.</p>
-              </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-                  {services.map((service, index) => <ServiceCard key={index} service={service} />)}
-              </div>
-              <div className="text-center bg-light-card dark:bg-dark-card p-8 rounded-xl shadow-lg ring-1 ring-slate-200 dark:ring-slate-700">
-                  <h3 className="font-montserrat text-2xl font-bold text-primary-light dark:text-primary-dark mb-4">Ready to Transform Your Energy Analytics?</h3>
-                  <p className="text-light-subtle dark:text-dark-subtle mb-6">Get detailed information about our service offerings, methodologies, and success stories.</p>
-                  <div className="flex flex-wrap justify-center gap-4">
-                      <a 
-                          href="https://www.akenergyconsultant.org/services"
- 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-3 bg-secondary-light dark:bg-secondary-dark text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-md hover:bg-primary-light dark:hover:bg-primary-dark"
-                      >
-                          <i className="fa-solid fa-external-link-alt"></i>
-                          <span>View Detailed Services</span>
-                      </a>
-                      <a 
-                          href="#contact"
-                          onClick={(e) => {
-                              e.preventDefault();
-                              smoothScrollTo('#contact');
-                          }}
-                          className="inline-flex items-center gap-3 bg-light-card dark:bg-dark-card text-secondary-light dark:text-secondary-dark py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-md ring-2 ring-inset ring-secondary-light dark:ring-secondary-dark hover:bg-secondary-light/10 dark:hover:bg-secondary-dark/10"
-                      >
-                          <i className="fa-solid fa-calendar-check"></i>
-                          <span>Schedule Consultation</span>
-                      </a>
-                  </div>
-              </div>
-              <NextSectionLink href="#spotlight" text="See our work in action" />
           </Section>
       );
 
@@ -1946,20 +1985,6 @@ I transform complex data challenges into streamlined, intelligent solutions!`;
         
   const [showServicesPopup, setShowServicesPopup] = useState(false);
 
-
-
-useEffect(() => {
-  const hasSeenServicesPopup = sessionStorage.getItem('hasSeenServicesPopup');
-  if (!hasSeenServicesPopup) {
-    const timer = setTimeout(() => {
-      setShowServicesPopup(true);
-      sessionStorage.setItem('hasSeenServicesPopup', 'true');
-    }, 5000); // Shows after 5 seconds
-    
-    return () => clearTimeout(timer);
-  }
-}, []);
-
         useEffect(() => {
           const sectionIds = ['home', 'about', 'services', 'spotlight', 'projects', 'expertise', 'experience', 'certifications', 'contact'];
           const sections = sectionIds.map(id => document.getElementById(id));
@@ -2028,6 +2053,29 @@ useEffect(() => {
             <Footer />
             <ScrollToTopButton />
             <IronManNavigator visible={showGuide} onClose={() => setShowGuide(false)} />
+            
+            {/* Floating Animated Service Icon */}
+            <a
+              href="https://www.akenergyconsultant.org/services"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="floating-service-icon w-16 h-16 bg-gradient-to-br from-cyan-500 via-blue-500 to-purple-600 rounded-2xl flex items-center justify-center border-2 border-cyan-300 shadow-2xl group"
+              aria-label="View Detailed Services"
+            >
+              <div className="relative">
+                <i className="fa-solid fa-briefcase text-white text-2xl group-hover:scale-125 transition-transform duration-300"></i>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+              </div>
+            </a>
+            
+            {/* Animated Tooltip Prompt */}
+            <div className="service-tooltip bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-full shadow-2xl border-2 border-cyan-300 flex items-center gap-2 font-mono text-sm font-bold">
+              <i className="fa-solid fa-hand-pointer animate-pulse"></i>
+              <span>Click for Details</span>
+              <i className="fa-solid fa-arrow-right" style={{animation: 'arrow-pulse 1s ease-in-out infinite'}}></i>
+            </div>
+            
             <button
               className="fixed left-4 bottom-8 z-50 bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-6 py-3 rounded-full shadow-2xl shadow-cyan-400/30 flex items-center gap-3 font-mono font-bold hover:scale-110 hover:shadow-cyan-400/50 transition-all duration-300 border border-cyan-400/30 group"
               style={{ pointerEvents: 'auto' }}
